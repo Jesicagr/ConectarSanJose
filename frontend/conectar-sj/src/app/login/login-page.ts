@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
+import { LoggerService } from '../shared/logger.service';
 
 @Component({
   selector: 'app-login-page',
@@ -16,6 +17,7 @@ export class LoginPage implements OnInit {
   private router = inject(Router);
   private http = inject(HttpClient);
   private auth = inject(AuthService);
+  private logger = inject(LoggerService);
 
   showPassword = false;
 
@@ -57,7 +59,7 @@ export class LoginPage implements OnInit {
         this.router.navigate(['/admin/dashboard']);
       },
       error: (err) => {
-        console.error('Error en la autenticación:', err);
+        this.logger.error('Error en la autenticación:', err);
         if (err.status === 401) {
           alert('Usuario o contraseña incorrectos.');
         } else {

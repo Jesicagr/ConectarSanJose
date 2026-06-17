@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { AreaService, Area, TelefonoItem } from '../../../services/area.service';
 import { getAreaTone, sortByAreaOrder } from '../../../shared/area-tones';
 import { ToastService } from '../../../shared/toast.service';
+import { LoggerService } from '../../../shared/logger.service';
 
 interface AreaCard {
   id: number;
@@ -34,6 +35,7 @@ export class AreasPage implements OnInit {
   private areaService = inject(AreaService);
   private cdr = inject(ChangeDetectorRef);
   private toast = inject(ToastService);
+  private logger = inject(LoggerService);
 
   loading = true;
   searchTerm = '';
@@ -103,7 +105,7 @@ export class AreasPage implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error al cargar áreas', err);
+        this.logger.error('Error al cargar áreas', err);
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -232,7 +234,7 @@ export class AreasPage implements OnInit {
           this.toast.show('Área actualizada con éxito', 'success');
         },
         error: (err) => {
-          console.error('Error al actualizar área', err);
+          this.logger.error('Error al actualizar área', err);
           this.saving = false;
           this.toast.show('Error al actualizar el área', 'error');
         },
@@ -248,7 +250,7 @@ export class AreasPage implements OnInit {
           this.toast.show('Área creada con éxito', 'success');
         },
         error: (err) => {
-          console.error('Error al crear área', err);
+          this.logger.error('Error al crear área', err);
           this.saving = false;
           this.toast.show('Error al crear el área', 'error');
         },
@@ -271,7 +273,7 @@ export class AreasPage implements OnInit {
         this.toast.show('Área eliminada con éxito', 'success');
       },
       error: (err) => {
-        console.error('Error al eliminar área', err);
+        this.logger.error('Error al eliminar área', err);
         this.toast.show('Error al eliminar el área', 'error');
       },
     });

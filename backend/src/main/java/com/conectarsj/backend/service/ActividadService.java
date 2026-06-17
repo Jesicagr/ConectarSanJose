@@ -9,6 +9,7 @@ package com.conectarsj.backend.service;
 import com.conectarsj.backend.dto.ActividadResumenDTO;
 import com.conectarsj.backend.model.Actividad;
 import com.conectarsj.backend.repository.ActividadRepository;
+import com.conectarsj.backend.exceptions.FechaInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -126,6 +127,9 @@ public class ActividadService {
     }
 
     public Actividad guardar(Actividad actividad) {
+        if (actividad.getFechaInicio() != null && actividad.getFechaInicio().isBefore(LocalDate.now())) {
+            throw new FechaInvalidaException("No se puede registrar una actividad con una fecha de inicio anterior a hoy.");
+        }
         if (actividad.getHorarios() != null) {
             actividad.getHorarios().forEach(horario -> horario.setActividad(actividad));
         }
@@ -134,117 +138,5 @@ public class ActividadService {
 
     public void eliminar(Long id) {
         actividadRepository.deleteById(id);
-    }
-
-    @PostConstruct
-    public void cleanDuplicateHorarios() {
-        try {
-            jdbcTemplate.update("""
-                DELETE FROM horarios_actividad h1
-                USING horarios_actividad h2
-                WHERE h1.id > h2.id
-                  AND h1.actividad_id = h2.actividad_id
-                  AND h1.dia_semana = h2.dia_semana
-                  AND h1.hora_inicio = h2.hora_inicio
-                  AND (h1.hora_fin IS NULL AND h2.hora_fin IS NULL OR h1.hora_fin = h2.hora_fin)
-            """);
-        } catch (Exception e) {
-            System.err.println("⚠ No se pudo limpiar duplicados: " + e.getMessage());
-        }
-
-        // Redistribuir horarios automáticos usando el ID para que queden en distintos días
-        try {
-            int actualizados = jdbcTemplate.update("""
-                UPDATE horarios_actividad h
-                SET dia_semana = CASE (a.id % 7)
-                    WHEN 0 THEN 'DOMINGO'
-                    WHEN 1 THEN 'LUNES'
-                    WHEN 2 THEN 'MARTES'
-                    WHEN 3 THEN 'MIERCOLES'
-                    WHEN 4 THEN 'JUEVES'
-                    WHEN 5 THEN 'VIERNES'
-                    WHEN 6 THEN 'SABADO'
-                END
-                FROM actividades a
-                WHERE h.actividad_id = a.id
-                  AND a.fecha_inicio IS NOT NULL
-                  AND h.hora_inicio = '10:00:00'::time
-                  AND h.hora_fin = '12:00:00'::time
-            """);
-            if (actualizados > 0) {
-                System.out.println("✅ Horarios redistribuidos en " + actualizados + " actividad(es)");
-            }
-        } catch (Exception e) {
-            System.err.println("⚠ No se pudieron redistribuir horarios: " + e.getMessage());
-        }
-
-        // Asignar horarios por defecto a actividades que aún no tengan ninguno
-        try {
-            int asignados = jdbcTemplate.update("""
-                INSERT INTO horarios_actividad (actividad_id, dia_semana, hora_inicio, hora_fin)
-                SELECT a.id,
-                       CASE (a.id % 7)
-                           WHEN 0 THEN 'DOMINGO'
-                           WHEN 1 THEN 'LUNES'
-                           WHEN 2 THEN 'MARTES'
-                           WHEN 3 THEN 'MIERCOLES'
-                           WHEN 4 THEN 'JUEVES'
-                           WHEN 5 THEN 'VIERNES'
-                           WHEN 6 THEN 'SABADO'
-                       END,
-                       '10:00:00'::time,
-                       '12:00:00'::time
-                FROM actividades a
-                WHERE a.fecha_inicio IS NOT NULL
-                  AND NOT EXISTS (SELECT 1 FROM horarios_actividad h WHERE h.actividad_id = a.id)
-            """);
-            if (asignados > 0) {
-                System.out.println("✅ Horarios asignados automáticamente a " + asignados + " actividad(es)");
-            }
-        } catch (Exception e) {
-            System.err.println("⚠ No se pudieron asignar horarios automáticos: " + e.getMessage());
-        }
-    }
-
-    @Transactional
-    public Actividad actualizar(Long id, Actividad datosNuevos) {
-        Actividad existente = actividadRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Actividad no encontrada con id: " + id));
-
-        existente.setTitulo(datosNuevos.getTitulo());
-        existente.setDescripcion(datosNuevos.getDescripcion());
-        existente.setDescripcion_corta(datosNuevos.getDescripcion_corta());
-        existente.setSede(datosNuevos.getSede());
-
-        if (datosNuevos.getFechaInicio() != null) {
-            existente.setFechaInicio(datosNuevos.getFechaInicio());
-        }
-        if (datosNuevos.getFechaFin() != null) {
-            existente.setFechaFin(datosNuevos.getFechaFin());
-        }
-        existente.setRepetirTodoAnio(datosNuevos.getRepetirTodoAnio());
-        if (datosNuevos.getStatus() != null) {
-            existente.setStatus(datosNuevos.getStatus());
-        }
-        existente.setDia(datosNuevos.getDia());
-        existente.setEncargado(datosNuevos.getEncargado());
-        existente.setHorario(datosNuevos.getHorario());
-        existente.setTelefono(datosNuevos.getTelefono());
-
-        if (datosNuevos.getAreas() != null) {
-            existente.getAreas().clear();
-            existente.getAreas().addAll(datosNuevos.getAreas());
-        }
-
-        if (datosNuevos.getHorarios() != null) {
-            existente.getHorarios().clear();
-            datosNuevos.getHorarios().forEach(h -> {
-                h.setId(null);
-                h.setActividad(existente);
-                existente.getHorarios().add(h);
-            });
-        }
-
-        return actividadRepository.save(existente);
     }
 }

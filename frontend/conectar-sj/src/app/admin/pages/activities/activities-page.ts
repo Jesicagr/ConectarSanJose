@@ -8,6 +8,7 @@ import { AreaService } from '../../../services/area.service';
 import { VisitaService } from '../../../services/visita.service';
 import { getAreaTone, sortByAreaOrder } from '../../../shared/area-tones';
 import { ToastService } from '../../../shared/toast.service';
+import { LoggerService } from '../../../shared/logger.service';
 import { DateFormatPipe } from '../../../shared/date-format.pipe';
 import { ActividadModalComponent, ActividadModalData } from '../../shared/actividad-modal/actividad-modal.component';
 
@@ -44,6 +45,7 @@ export class ActivitiesPage implements OnInit, OnDestroy {
   private visitaService = inject(VisitaService);
   private cdr = inject(ChangeDetectorRef);
   private toast = inject(ToastService);
+  private logger = inject(LoggerService);
 
   loading = true;
   loadingMore = false;
@@ -87,7 +89,7 @@ export class ActivitiesPage implements OnInit, OnDestroy {
         });
         this.cdr.detectChanges();
       },
-      error: err => console.error('Error al cargar areas en activities:', err)
+      error: err => this.logger.error('Error al cargar areas en activities:', err)
     });
     this.cargarActividades();
   }
@@ -119,8 +121,12 @@ export class ActivitiesPage implements OnInit, OnDestroy {
     this.loading = true;
     this.cdr.detectChanges();
 
+    const PAGE_SIZE = 200;
+    if (PAGE_SIZE > 100) {
+      this.logger.warn('Solicitando {} actividades (excede el límite recomendado de 100)', PAGE_SIZE);
+    }
     forkJoin({
-      actividades: this.actividadService.obtenerPaginadas(0, 200),
+      actividades: this.actividadService.obtenerPaginadas(0, PAGE_SIZE),
       visitas: this.visitaService.visitasPorActividad()
     }).subscribe({
       next: ({ actividades, visitas }) => {
@@ -143,7 +149,7 @@ export class ActivitiesPage implements OnInit, OnDestroy {
         }
       },
       error: err => {
-        console.error('Error al cargar actividades:', err);
+        this.logger.error('Error al cargar actividades:', err);
         this.loading = false;
         this.cdr.detectChanges();
       }
@@ -235,7 +241,7 @@ export class ActivitiesPage implements OnInit, OnDestroy {
         this.toast.show('Actividad eliminada con éxito', 'success');
       },
       error: (err: unknown) => {
-        console.error('Error al eliminar actividad:', err);
+        this.logger.error('Error al eliminar actividad:', err);
         this.toast.show('Error al eliminar la actividad', 'error');
       }
     });

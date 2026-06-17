@@ -41,7 +41,7 @@ export class AreaComponent implements OnInit {
           return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
         });
       },
-      error: (err) => console.error('Error al cargar áreas:', err)
+      error: (err) => console.error('[ConectarSanJose] ERROR Error al cargar áreas:', err)
     });
   }
 
@@ -54,14 +54,14 @@ export class AreaComponent implements OnInit {
         this.areaSeleccionada = areaCompleta;
         this.mostrarModal = true;
       },
-      error: (err) => console.error('Error al traer detalles del área:', err)
+      error: (err) => console.error('[ConectarSanJose] ERROR Error al traer detalles del área:', err)
     });
 
     this.actividadService.obtenerActividadesPorArea(areaId).subscribe({
       next: (actividades) => {
         this.actividadesPorArea = actividades;
       },
-      error: (err) => console.error('Error al cargar actividades del área:', err)
+      error: (err) => console.error('[ConectarSanJose] ERROR Error al cargar actividades del área:', err)
     });
   }
 

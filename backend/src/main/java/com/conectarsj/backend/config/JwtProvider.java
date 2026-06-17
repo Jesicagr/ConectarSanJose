@@ -13,7 +13,6 @@ import java.util.Date;
 public class JwtProvider {
 
     private final String jwtSecret = "secretKeySanJose2026ConectarSJSeguraParaElProyectoBackend";
-
     private final int jwtExpirationMs = 86400000;
 
     public String generateToken(Authentication auth) {
@@ -26,16 +25,18 @@ public class JwtProvider {
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
-                .claim("rol", rol)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS256, jwtSecret)
                 .compact();
     }
 
-    public String getRolFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        return claims.get("rol", String.class);
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
     }
 
     public boolean validateToken(String token) {
@@ -45,10 +46,5 @@ public class JwtProvider {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public String getUsernameFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        return claims.getSubject();
     }
 }

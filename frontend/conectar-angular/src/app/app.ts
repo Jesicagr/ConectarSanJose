@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { AgendaComponent } from './components/agenda/agenda';
-import { AreaComponent } from './components/area/area';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [AgendaComponent, AreaComponent],
+  imports: [AgendaComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

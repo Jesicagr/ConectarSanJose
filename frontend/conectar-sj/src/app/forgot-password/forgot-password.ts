@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { LoggerService } from '../shared/logger.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -14,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
 export class ForgotPasswordPage {
   private router = inject(Router);
   private http = inject(HttpClient);
+  private logger = inject(LoggerService);
 
   email = '';
   submitted = false;
@@ -28,7 +30,7 @@ export class ForgotPasswordPage {
     this.submitted = true;
 
     this.http.post('/auth/forgot-password', { email: this.email }).subscribe({
-      error: (err) => console.error('Error sending email:', err)
+      error: (err) => this.logger.error('Error al enviar email de recuperación:', err)
     });
   }
 }

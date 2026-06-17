@@ -89,7 +89,7 @@ export class AgendaComponent implements OnInit {
   cargarActividadesDesdeBackend(): void {
     this.actividadService.obtenerActividades().subscribe({
       next: (data) => {
-        console.log('Actividades recibidas:', data.length);
+        console.info('[ConectarSanJose] INFO Actividades recibidas:', data.length);
         data.forEach(a => {
           console.log(`  - ${a.titulo} | horarios:`, JSON.stringify(a.horarios));
         });
@@ -97,10 +97,10 @@ export class AgendaComponent implements OnInit {
         this.filtrarActividades();
       },
       error: (err) => {
-        console.error('Error al conectar con Spring Boot:', err);
-        console.error('Status:', err.status, 'Mensaje:', err.message);
+        console.error('[ConectarSanJose] ERROR Error al conectar con Spring Boot:', err);
+        console.error('[ConectarSanJose] ERROR Status:', err.status, 'Mensaje:', err.message);
         if (err.status === 0) {
-          console.error('Esto puede ser un problema de CORS o de conexión con el backend.');
+          console.warn('[ConectarSanJose] WARN Posible problema de CORS o de conexión con el backend.');
         }
       }
     });

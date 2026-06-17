@@ -1,13 +1,14 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
 import { ActividadService } from '../../../services/actividad.service';
-import { AreaService, Area } from '../../../services/area.service';
+import { AreaService } from '../../../services/area.service';
 import { VisitaService } from '../../../services/visita.service';
 import { getAreaTone, sortByAreaOrder, WEBP_MAP } from '../../../shared/area-tones';
 import { DateFormatPipe } from '../../../shared/date-format.pipe';
 import { ToastService } from '../../../shared/toast.service';
+import { LoggerService } from '../../../shared/logger.service';
 import { ActividadModalComponent, ActividadModalData } from '../../shared/actividad-modal/actividad-modal.component';
 
 interface DashboardActivity {
@@ -21,6 +22,16 @@ interface DashboardActivity {
   status: string;
   statusTone: string;
   telefono?: string;
+}
+
+interface Metric {
+  label: string;
+  value: string;
+  icon: string;
+  tone: string;
+  detail: string;
+  change?: string;
+  badge?: string;
 }
 
 interface CategoryFilter {
@@ -39,29 +50,39 @@ export class DashboardPage implements OnInit {
   private actividadService = inject(ActividadService);
   private areaService = inject(AreaService);
   private visitaService = inject(VisitaService);
-  private cdr = inject(ChangeDetectorRef);
   private toast = inject(ToastService);
+  private logger = inject(LoggerService);
 
-  loading = true;
-  searchTerm = '';
-  selectedCategory = '';
-  menuOpenIndex: number | null = null;
-  modalOpen = false;
-  modalViewMode = false;
-  modalData?: ActividadModalData | null = null;
+  loading = signal(true);
+  searchTerm = signal('');
+  selectedCategory = signal('');
+  menuOpenIndex = signal<number | null>(null);
+  modalOpen = signal(false);
+  modalViewMode = signal(false);
+  modalData = signal<ActividadModalData | null>(null);
 
-  metrics = [
+  metrics = signal<Metric[]>([
     { label: 'Actividades Totales', value: '0', icon: 'confirmation_number', tone: 'primary', detail: 'Cargando...', change: '' },
     { label: 'En Revisión', value: '0', icon: 'history_edu', tone: 'warning', detail: 'Requieren validación técnica', badge: 'Pendientes' },
     { label: 'Visitas Hoy', value: '0', icon: 'visibility', tone: 'success', detail: 'Cargando...', change: '' },
-  ];
+  ]);
 
-  categories: CategoryFilter[] = [];
+  categories = signal<CategoryFilter[]>([]);
+  activities = signal<DashboardActivity[]>([]);
+  visitasActividad = signal<{ id: number; title: string; visits: number }[]>([]);
+  medals = ['🥇', '🥈', '🥉'];
+
   private areaToneMap: Record<string, string> = {};
 
-  activities: DashboardActivity[] = [];
-  visitasActividad: { id: number; title: string; visits: number }[] = [];
-  medals = ['🥇', '🥈', '🥉'];
+  filteredActivities = computed(() => {
+    const query = this.normalize(this.searchTerm());
+    return this.activities().filter((activity) => {
+      const matchesCategory = !this.selectedCategory() || activity.categories.includes(this.selectedCategory());
+      const searchable = this.normalize(`${activity.title} ${activity.place} ${activity.categories.join(' ')} ${activity.status}`);
+      const matchesSearch = !query || searchable.includes(query);
+      return matchesCategory && matchesSearch;
+    });
+  });
 
   ngOnInit(): void {
     forkJoin({
@@ -69,19 +90,22 @@ export class DashboardPage implements OnInit {
       areas: this.areaService.obtenerTodas(),
     }).subscribe({
       next: ({ visitStats, areas }) => {
-        this.metrics[2].value = String(visitStats.hoy);
-        this.metrics[2].detail = `${visitStats.total} visitas totales · ${visitStats.semana} esta semana`;
+        this.metrics.update(m => {
+          m[2].value = String(visitStats.hoy);
+          m[2].detail = `${visitStats.total} visitas totales · ${visitStats.semana} esta semana`;
+          return [...m];
+        });
 
         const sorted = sortByAreaOrder(areas);
         this.areaToneMap = {};
-        this.categories = sorted.map((a, i) => ({
-          label: a.nombre,
-          icon: WEBP_MAP[a.nombre] || 'assets/comunidad.webp',
-          tone: getAreaTone(a.nombre, i),
-        }));
-        sorted.forEach((a, i) => {
+        this.categories.set(sorted.map((a, i) => {
           this.areaToneMap[a.nombre] = getAreaTone(a.nombre, i);
-        });
+          return {
+            label: a.nombre,
+            icon: WEBP_MAP[a.nombre] || 'assets/comunidad.webp',
+            tone: getAreaTone(a.nombre, i),
+          };
+        }));
 
         this.cargarActividades();
       },
@@ -92,14 +116,17 @@ export class DashboardPage implements OnInit {
   private cargarActividades(): void {
     this.actividadService.contar().subscribe({
       next: (res) => {
-        this.metrics[0].value = String(res.total);
-        this.metrics[0].detail = 'Actividades registradas';
+        this.metrics.update(m => {
+          m[0].value = String(res.total);
+          m[0].detail = 'Actividades registradas';
+          return [...m];
+        });
       },
       error: () => {}
     });
     this.actividadService.obtenerPaginadas(0, 100).subscribe({
       next: (page) => {
-        this.activities = page.content.map((a: any) => ({
+        const mapped = page.content.map((a: any) => ({
           id: a.id,
           title: a.titulo,
           place: a.sedeNombre || 'Sin Sede',
@@ -111,18 +138,20 @@ export class DashboardPage implements OnInit {
           statusTone: 'success',
           telefono: a.telefono || '',
         }));
+        this.activities.set(mapped);
 
-        const enRevision = this.activities.filter(a => a.status === 'En Revisión').length;
-        this.metrics[1].value = String(enRevision);
+        const enRevision = mapped.filter(a => a.status === 'En Revisión').length;
+        this.metrics.update(m => {
+          m[1].value = String(enRevision);
+          return [...m];
+        });
 
         this.cargarVisitas();
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.loading.set(false);
       },
       error: (err) => {
-        console.error('Error al cargar actividades', err);
-        this.loading = false;
-        this.cdr.detectChanges();
+        this.logger.error('Error al cargar actividades', err);
+        this.loading.set(false);
       },
     });
   }
@@ -130,12 +159,12 @@ export class DashboardPage implements OnInit {
   private cargarVisitas(): void {
     this.visitaService.visitasPorActividad().subscribe({
       next: (visitas) => {
-        this.visitasActividad = this.activities
+        const ordenadas = this.activities()
           .map(a => ({ id: a.id, title: a.title, visits: visitas[a.id] || 0 }))
           .filter(v => v.visits > 0)
           .sort((a, b) => b.visits - a.visits)
           .slice(0, 10);
-        this.cdr.detectChanges();
+        this.visitasActividad.set(ordenadas);
       },
       error: () => {},
     });
@@ -145,38 +174,26 @@ export class DashboardPage implements OnInit {
     return this.areaToneMap[category] || 'surface-variant';
   }
 
-  get filteredActivities(): DashboardActivity[] {
-    const query = this.normalize(this.searchTerm);
-
-    return this.activities.filter((activity) => {
-      const matchesCategory = !this.selectedCategory || activity.categories.includes(this.selectedCategory);
-      const searchable = this.normalize(`${activity.title} ${activity.place} ${activity.categories.join(' ')} ${activity.status}`);
-      const matchesSearch = !query || searchable.includes(query);
-
-      return matchesCategory && matchesSearch;
-    });
-  }
-
   selectCategory(category: string): void {
-    this.selectedCategory = this.selectedCategory === category ? '' : category;
+    this.selectedCategory.update(c => c === category ? '' : category);
   }
 
   clearFilters(): void {
-    this.searchTerm = '';
-    this.selectedCategory = '';
+    this.searchTerm.set('');
+    this.selectedCategory.set('');
   }
 
   toggleMenu(index: number): void {
-    this.menuOpenIndex = this.menuOpenIndex === index ? null : index;
+    this.menuOpenIndex.update(i => i === index ? null : index);
   }
 
   closeMenu(): void {
-    this.menuOpenIndex = null;
+    this.menuOpenIndex.set(null);
   }
 
   viewActivity(activity: DashboardActivity): void {
     this.closeMenu();
-    this.modalData = {
+    this.modalData.set({
       id: activity.id,
       title: activity.title,
       category: activity.categories[0],
@@ -188,14 +205,14 @@ export class DashboardPage implements OnInit {
       location: activity.place,
       telefono: activity.telefono,
       status: activity.status,
-    };
-    this.modalViewMode = true;
-    this.modalOpen = true;
+    });
+    this.modalViewMode.set(true);
+    this.modalOpen.set(true);
   }
 
   editActivity(activity: DashboardActivity): void {
     this.closeMenu();
-    this.modalData = {
+    this.modalData.set({
       id: activity.id,
       title: activity.title,
       category: activity.categories[0],
@@ -206,22 +223,22 @@ export class DashboardPage implements OnInit {
       endDate: activity.endDate,
       location: activity.place,
       telefono: activity.telefono,
-    };
-    this.modalViewMode = false;
-    this.modalOpen = true;
+    });
+    this.modalViewMode.set(false);
+    this.modalOpen.set(true);
   }
 
   onModalSaved(): void {
-    this.modalOpen = false;
-    this.modalData = null;
-    this.modalViewMode = false;
+    this.modalOpen.set(false);
+    this.modalData.set(null);
+    this.modalViewMode.set(false);
     this.cargarActividades();
   }
 
   onModalClosed(): void {
-    this.modalOpen = false;
-    this.modalData = null;
-    this.modalViewMode = false;
+    this.modalOpen.set(false);
+    this.modalData.set(null);
+    this.modalViewMode.set(false);
   }
 
   deleteActivity(activity: DashboardActivity): void {
@@ -230,25 +247,25 @@ export class DashboardPage implements OnInit {
     this.toast.show('Eliminando actividad…', 'info');
     this.actividadService.eliminar(activity.id).subscribe({
       next: () => {
-        this.activities = this.activities.filter((a) => a.id !== activity.id);
+        this.activities.update(list => list.filter(a => a.id !== activity.id));
         this.toast.show('Actividad eliminada con éxito', 'success');
-        this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error al eliminar actividad:', err);
+        this.logger.error('Error al eliminar actividad:', err);
         this.toast.show('Error al eliminar la actividad', 'error');
       },
     });
   }
 
   onVisitaClick(v: { id: number; title: string }): void {
-    const activity = this.activities.find(a => a.id === v.id);
+    const activity = this.activities().find(a => a.id === v.id);
     if (activity) this.viewActivity(activity);
   }
 
   barWidth(visits: number): number {
-    if (this.visitasActividad.length === 0) return 0;
-    const max = this.visitasActividad[0].visits;
+    const top = this.visitasActividad();
+    if (top.length === 0) return 0;
+    const max = top[0].visits;
     return max > 0 ? (visits / max) * 100 : 0;
   }
 

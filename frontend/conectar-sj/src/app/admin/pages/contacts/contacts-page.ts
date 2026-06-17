@@ -2,6 +2,7 @@ import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ContactoService, Contacto } from '../../../services/contacto.service';
 import { ToastService } from '../../../shared/toast.service';
+import { LoggerService } from '../../../shared/logger.service';
 
 interface PhoneItem {
   numero: string;
@@ -29,6 +30,7 @@ export class ContactsPage implements OnInit {
   private contactoService = inject(ContactoService);
   private cdr = inject(ChangeDetectorRef);
   private toast = inject(ToastService);
+  private logger = inject(LoggerService);
 
   loading = true;
   searchTerm = '';
@@ -74,7 +76,7 @@ export class ContactsPage implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error al cargar contactos', err);
+        this.logger.error('Error al cargar contactos', err);
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -193,7 +195,7 @@ export class ContactsPage implements OnInit {
           this.toast.show('Contacto actualizado con éxito', 'success');
         },
         error: (err) => {
-          console.error('Error al actualizar contacto', err);
+          this.logger.error('Error al actualizar contacto', err);
           this.saving = false;
           this.toast.show('Error al actualizar el contacto', 'error');
         },
@@ -209,7 +211,7 @@ export class ContactsPage implements OnInit {
           this.toast.show('Contacto creado con éxito', 'success');
         },
         error: (err) => {
-          console.error('Error al crear contacto', err);
+          this.logger.error('Error al crear contacto', err);
           this.saving = false;
           this.toast.show('Error al crear el contacto', 'error');
         },
@@ -232,7 +234,7 @@ export class ContactsPage implements OnInit {
         this.toast.show('Contacto eliminado con éxito', 'success');
       },
       error: (err) => {
-        console.error('Error al eliminar contacto', err);
+        this.logger.error('Error al eliminar contacto', err);
         this.toast.show('Error al eliminar el contacto', 'error');
       },
     });

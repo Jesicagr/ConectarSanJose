@@ -1,4 +1,4 @@
-@if (loading) {
+@if (loading()) {
   <div class="loading-screen">
     <span class="spinner"></span>
     <p>Cargando panel...</p>
@@ -18,7 +18,7 @@
   </header>
 
   <section class="metrics-grid" aria-label="Métricas de rendimiento">
-    @for (metric of metrics; track metric.label) {
+    @for (metric of metrics(); track metric.label) {
       <article class="metric-card" [class]="'metric-card tone-' + metric.tone">
         <div class="metric-head">
           <p>{{ metric.label }}</p>
@@ -38,17 +38,17 @@
     }
   </section>
 
-  @if (visitasActividad.length > 0) {
+  @if (visitasActividad().length > 0) {
     <section class="visitas-section" aria-label="Actividades más visitadas">
       <div class="section-heading">
         <div class="section-heading-left">
           <span class="material-symbols-outlined section-icon">leaderboard</span>
           <h2>Más Visitadas</h2>
         </div>
-        <span class="visitas-subtitle">{{ visitasActividad.length }} actividades · {{ visitasActividad[0].visits }} visitas máx</span>
+        <span class="visitas-subtitle">{{ visitasActividad().length }} actividades · {{ visitasActividad()[0].visits }} visitas máx</span>
       </div>
       <div class="visitas-card">
-        @for (v of visitasActividad; track v.id; let i = $index) {
+        @for (v of visitasActividad(); track v.id; let i = $index) {
           <div class="visita-row" (click)="onVisitaClick(v)">
             @if (i < 3) {
               <span class="visita-medal">{{ medals[i] }}</span>
@@ -77,11 +77,11 @@
       <button type="button" (click)="clearFilters()">Limpiar filtros</button>
     </div>
     <div class="category-grid">
-      @for (category of categories; track category.label) {
+      @for (category of categories(); track category.label) {
         <button
           type="button"
           class="category-card"
-          [class.active]="selectedCategory === category.label"
+          [class.active]="selectedCategory() === category.label"
           [class]="'category-card tone-' + category.tone"
           (click)="selectCategory(category.label)"
         >
@@ -100,8 +100,8 @@
         <h2>Listado de Actividades</h2>
         <p>
           Filtrando por:
-          <strong>{{ selectedCategory || 'Todas las categorías' }}</strong>
-          <span class="result-count">({{ filteredActivities.length }})</span>
+          <strong>{{ selectedCategory() || 'Todas las categorías' }}</strong>
+          <span class="result-count">({{ filteredActivities().length }})</span>
         </p>
       </div>
       <label class="search-field">
@@ -110,13 +110,14 @@
           type="search"
           placeholder="Buscar actividad o recinto..."
           aria-label="Buscar actividad o recinto"
-          [(ngModel)]="searchTerm"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
         >
       </label>
     </div>
 
     <div class="activities-grid" (click)="closeMenu()">
-      @for (activity of filteredActivities; track $index) {
+      @for (activity of filteredActivities(); track $index) {
         <article class="activity-card" [class]="'activity-card border-tone-' + categoryTone(activity.categories[0])">
           <div class="card-top">
             <div class="category-pills">
@@ -131,7 +132,7 @@
               <button type="button" class="icon-btn" aria-label="Ver acciones" (click)="toggleMenu($index); $event.stopPropagation()">
                 <span class="material-symbols-outlined">more_horiz</span>
               </button>
-              @if (menuOpenIndex === $index) {
+              @if (menuOpenIndex() === $index) {
                 <div class="menu-dropdown" (click)="$event.stopPropagation()">
                   <button type="button" class="menu-item" (click)="viewActivity(activity)">
                     <span class="material-symbols-outlined">visibility</span>
@@ -173,9 +174,9 @@
 </section>
 
 <app-actividad-modal
-  [isOpen]="modalOpen"
-  [data]="modalData"
-  [viewMode]="modalViewMode"
+  [isOpen]="modalOpen()"
+  [data]="modalData()"
+  [viewMode]="modalViewMode()"
   (isOpenChange)="onModalClosed()"
   (saved)="onModalSaved()"
 />

@@ -2,6 +2,8 @@ package com.conectarsj.backend.service;
 
 import com.conectarsj.backend.model.Administrador;
 import com.conectarsj.backend.repository.AdministradorRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import java.util.UUID;
 
 @Service
 public class AdministradorService {
+
+    private static final Logger log = LoggerFactory.getLogger(AdministradorService.class);
 
     @Autowired
     private AdministradorRepository administradorRepository;
@@ -87,12 +91,10 @@ public class AdministradorService {
 
         try {
             emailService.enviarEmail(emailDestino, asunto, cuerpo);
-            System.out.println("Email de recuperación enviado a: " + emailDestino);
+            log.info("Email de recuperación enviado a: {}", emailDestino);
         } catch (Exception e) {
-            System.err.println("Error al enviar email a " + emailDestino + ": " + e.getMessage());
-            System.out.println("\n=======================================================");
-            System.out.println("Fallo el envio real. Enlace de recuperacion: " + urlRecuperacion);
-            System.out.println("=======================================================\n");
+            log.error("Error al enviar email de recuperación a {}: {}", emailDestino, e.getMessage(), e);
+            log.warn("Fallo el envío real. Enlace de recuperación: {}", urlRecuperacion);
         }
     }
 }

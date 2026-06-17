@@ -8,6 +8,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/visitas")
+@CrossOrigin(origins = "http://localhost:4200")
 public class VisitaController {
 
     @Autowired

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { SedeService, Sede } from '../../../services/sede.service';
 import { ToastService } from '../../../shared/toast.service';
+import { LoggerService } from '../../../shared/logger.service';
 import * as L from 'leaflet';
 
 @Component({
@@ -17,6 +18,7 @@ export class SedesPage implements OnInit {
   private sedeService = inject(SedeService);
   private cdr = inject(ChangeDetectorRef);
   private toast = inject(ToastService);
+  private logger = inject(LoggerService);
 
   loading = true;
   searchTerm = '';
@@ -78,7 +80,7 @@ export class SedesPage implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error al cargar las sedes:', err);
+        this.logger.error('Error al cargar las sedes:', err);
         this.loading = false;
         this.cdr.detectChanges();
       }
@@ -406,7 +408,7 @@ openEditModal(sede: Sede): void {
         this.toast.show(this.editingId ? 'Sede actualizada con éxito' : 'Sede creada con éxito', 'success');
       },
       error: (err: unknown) => {
-        console.error('Error al guardar la sede:', err);
+        this.logger.error('Error al guardar la sede:', err);
         this.saving = false;
         this.toast.show('Error al guardar la sede', 'error');
       }
@@ -423,7 +425,7 @@ openEditModal(sede: Sede): void {
         this.toast.show('Sede eliminada con éxito', 'success');
       },
       error: (err) => {
-        console.error('Error al eliminar sede:', err);
+        this.logger.error('Error al eliminar sede:', err);
         this.toast.show('Error al eliminar la sede', 'error');
       }
     });

@@ -4,38 +4,30 @@
     box-sizing: border-box;
 }
 
-body{
+html {
+    scroll-behavior: smooth;
+}
+
+body {
     font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
+    background: #f8f8f8;
+    color: #333;
 }
 
-.content-wrapper {
-    padding-top: 145px;
-}
+/* NAVBAR */
 
-@media (max-width: 968px) {
-    .content-wrapper {
-        padding-top: 145px;
-    }
-}
-
-/* ==========================================================================
-   HEADER / NAVBAR
-   ========================================================================== */
-.main-header{
+.navbar {
     width: 100%;
-    height: 145px;
+    height: 120px;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
-
-    background: #FFFFFF;
-
+    background: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 0 50px;
 }
 
@@ -45,7 +37,7 @@ body{
     object-fit: contain;
 }
 
-.main-nav{
+.nav-links {
     background: #dfeceb;
     padding: 28px 45px;
     border-radius: 30px;
@@ -53,43 +45,39 @@ body{
     gap: 40px;
 }
 
-.main-nav a{
+.nav-links a {
     text-decoration: none;
     color: black;
     font-size: 16px;
     font-weight: 400;
 }
 
-/* ==========================================================================
-   HERO SECTION
-   ========================================================================== */
-.hero{
+.content-wrapper {
+    padding-top: 145px;
+}
+
+/* HERO */
+
+.hero-section {
     width: 100%;
     min-height: calc(100vh - 145px);
-    height: auto;
-
     background: linear-gradient(90deg, #71e0dd, #e2e3e3);
-
     display: flex;
     align-items: center;
     justify-content: space-around;
-
-    position: relative;
+    padding: 10px 50px;
     overflow: hidden;
-
-    padding: 40px 20px;
 }
 
-.contenedor-texto{
+.hero-text {
     position: relative;
-    width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
     transform: translateX(70px);
 }
 
-.decoracion-gotas{
+.decoracion-gotas {
     position: absolute;
     width: 1000px;
     left: 50%;
@@ -99,316 +87,369 @@ body{
     pointer-events: none;
 }
 
-.texto{
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    top: -40px;
-}
-
-.texto h1{
+.hero-titulo {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(40px, 8vw, 85px);
+    font-size: 78px;
+    line-height: 0.8;
     color: white;
     letter-spacing: 2px;
+    text-align: center;
     text-shadow: 4px 4px 0 rgba(0,0,0,0.18);
-    margin-bottom: -10px;
-}
-
-.hero-subtitulo{
-    font-size: clamp(22px, 4vw, 42px);
-    font-weight: 300;
-    color: white;
-    text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
-    margin-bottom: -5px;
-}
-
-.texto h2{
-    font-size: clamp(40px, 7vw, 75px);
-    font-weight: 700;
-    color: #0057d8;
-    text-shadow: 5px 5px 0 rgba(0,0,0,0.18);
-    margin-bottom: -5px;
-}
-
-.hero-subtitulo2{
-    font-size: clamp(22px, 4.5vw, 52px);
-    font-weight: 300;
-    color: white;
-    text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
-}
-
-.hero-imagen-wrapper {
     position: relative;
     z-index: 2;
 }
 
-.hero-imagen-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 100%;
-    height: 100%;
-    border-radius: 30px;
-    background: linear-gradient(135deg, #71e0dd 0%, #b8d4f0 100%);
-    z-index: -1;
+.hero-titulo .subtitulo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 40px;
+    font-weight: 300;
 }
 
-.hero-imagen{
-    width: 580px;
-    height: 680px;
-    object-fit: cover;
-    border-radius: 30px;
+.hero-titulo .resaltado {
+    font-family: 'Montserrat', sans-serif;
+    color: #0057d8;
+    font-size: 68px;
+    font-weight: 800;
+    text-shadow: 5px 5px 0 rgba(0,0,0,0.18);
+}
+
+.hero-titulo .subtitulo2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 50px;
+    font-weight: 280;
     display: block;
+    margin-top: 10px;
+}
+
+
+.hero-image-container {
     position: relative;
-    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
-    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s ease;
+    z-index: 2;
+    margin-left: 180px;
 }
 
-.hero-imagen:hover {
-    transform: scale(1.03) translateY(-6px);
-    box-shadow: 0 40px 80px -12px rgba(0, 0, 0, 0.35);
+.hero-img {
+    width: 400px;
+    height: 480px;
+    object-fit: cover;
+    border-radius: 70px;
+    display: block;
+    box-shadow: none;
 }
 
-@media (max-width: 768px) {
-    .hero-imagen-wrapper {
-        width: 100%;
-        max-width: 400px;
-    }
+/* NO ESTÁS SOLO */
 
-    .hero-imagen-wrapper::before {
-        top: 12px;
-        left: 12px;
-        border-radius: 20px;
-    }
-
-    .hero-imagen{
-        width: 100%;
-        height: auto;
-        aspect-ratio: 580 / 680;
-        margin-top: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-imagen-wrapper {
-        max-width: 300px;
-    }
-}
-
-/* ==========================================================================
-   AYUDA (NO ESTÁS SOLO)
-   ========================================================================== */
-.ayuda{
+.banner-emergencia {
     width: 100%;
-    min-height: 100vh;
+    min-height:  calc(100vh - 145px);
     background: #f8f8f8;
-    padding: 50px;
+    padding: 20px 50px;
+    overflow: hidden;
 }
 
-.contenido-ayuda{
+.emergencia-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     gap: 0;
     width: 100%;
 }
 
-.texto-ayuda{
+.emergencia-texto {
     width: 520px;
     z-index: 2;
 }
 
-.texto-ayuda h1{
-    font-size: 85px;
-    font-weight: 700;
-    transform: translateX(-30px);
-    color: #444;
-    line-height: 1;
+.emergencia-texto h1 {
+    font-size: 60px;
+    font-weight: 800;
+    color: #4a4a4a;
+    line-height: 0.95;
     white-space: nowrap;
     margin-bottom: 20px;
 }
-
-.texto-ayuda h1 span{
+.emergencia-texto h1 span {
     color: #9BCB97;
 }
 
 .corazon-icono {
-    width: 250px;
-    margin-left: -70px;
-    vertical-align: middle;
-    position: relative;
-    top: -8px;
-}
-
-.texto-ayuda p{
-    font-size: 23px;
-    line-height: 1.5;
-    color: #222;
-    margin-bottom: 30px;
+    width: 130px;
     margin-left: -25px;
+    position: relative;
+    top: 15px;
 }
 
-.verde-text{
+.emergencia-texto p {
+    font-size: 21px;
+    line-height: 1.45;
+    color: #222;
+    margin-bottom: 25px;
+    max-width: 390px;
+}
+
+.verde-text {
     color: #9BCB97;
-    font-weight: bold;
+    font-weight: 700;
 }
 
-.btn-ayuda{
+.btn-ayuda {
     background: #ff5757;
     border: none;
     border-radius: 60px;
-    padding: 16px 30px;
+    padding: 14px 32px;
+    width: 380px;
+    height: 75px;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 18px;
     cursor: pointer;
-    width: fit-content;
-    transition: transform 0.2s;
+    box-shadow: none;
 }
 
-.btn-ayuda:hover{
-    transform: scale(1.05);
+.icono-ayuda-wrapper {
+    background: transparent;
+    padding: 0;
+    margin: 0;
 }
 
-.icono-ayuda-wrapper img{
-    width: 60px;
+.icono-ayuda-wrapper img {
+    width: 65px;
     height: auto;
     display: block;
 }
 
-.texto-btn{
+.texto-btn {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-.titulo-btn{
-    font-family: 'Montserrat', sans-serif;
-    font-size: 30px;
-    font-weight: 700;
+.titulo-btn {
+    font-size: 24px;
+    font-weight: 800;
     color: white;
     line-height: 1;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
 }
 
-.sub-btn{
-    font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+.sub-btn {
+    font-size: 17px;
     color: white;
-    opacity: 0.95;
-    margin-top: 4px;
+    margin-top: 5px;
 }
 
-.imagen-ayuda img{
-    width: 620px;
-    height: 430px;
+.emergencia-image-box {
+    width: 700px;
+    height: 330px;
+    overflow: hidden;
+}
+
+.img-abrazo {
+    width: 700px;
+    height: 330px;
     object-fit: cover;
-    border-radius: 0;
     display: block;
 }
 
-.cards-ayuda-grid{
-    margin-top: 50px;
+.emergencia-cards-grid {
+    width: 100%;
+    margin: 0 auto;
     background: white;
-    border-radius: 40px;
-    padding: 40px;
+    border: 3px solid #f3e8dd;
+    border-radius: 45px;
+    margin-top: 15px;
+    padding: 20px 30px;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: nowrap;
-    gap: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    gap: 25px;
 }
 
-.card-ayuda{
-    width: 350px;
+.mini-card {
+    width: 25%;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 14px;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
 }
 
-.card-ayuda h3{
-    font-size: 23px;
-    color: #25354A;
-    margin-bottom: 10px;
-}
-
-.card-ayuda p{
-    font-size: 19px;
-    color: #444;
-    line-height: 1.4;
-}
-
-.texto-card-ayuda{
-    display: flex;
-    flex-direction: column;
-    margin-left: -40px;
-}
-
-.texto-card-ayuda h3{
-    margin: 0;
-}
-
-.texto-card-ayuda p{
-    margin-top: 3px;
-    margin-bottom: 0;
-}
-
-.card-ayuda img{
-    width: 200px;
-    height: 200px;
+.mini-card img {
+    width: 70px;
+    height: 70px;
     object-fit: contain;
     flex-shrink: 0;
 }
 
-/* ==========================================================================
-   TURISMO
-   ========================================================================== */
-.turismo{
-    min-height: 100vh;
-    padding: 50px;
+.texto-card h3 {
+    font-size: 22px;
+    color: #25354A;
+    line-height: 1.1;
+    margin-bottom: 6px;
+}
+
+.texto-card p {
+    font-size: 18px;
+    color: #444;
+    line-height: 1.35;
+}
+
+/* ÁREAS */
+
+.categorias{
+    min-height: auto;
+    padding: 30px 60px;
+    padding-top: 35px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #6ee7df,
+        #b9d7ff,
+        #ffe5db
+    );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bloque-categorias{
+    width: 100%;
+}
+
+.seccion-titulo-centro{
+    text-align: center;
+    margin-bottom: 20px;
+    top: -20px;
+}
+
+.seccion-titulo-centro h2{
+    font-size: 25px;
+    color: #25354A;
+    margin-bottom: 5px;
+}
+
+.seccion-titulo-centro p{
+    font-size: 15px;
+    color: #25354A;
+}
+
+.grid-categorias{
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 40px;
+}
+
+.card{
+    width: 180px;
+    height: 170px;
+
+    border-radius: 35px;
+
+    border: 5px solid white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    box-shadow:
+    0 10px 20px rgba(0,0,0,0.10);
+
+    transition: 0.3s;
+
+    overflow: hidden;
+
+    text-decoration: none;
+    color: inherit;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+.card h4{
+    font-size: 15px;
+    font-weight: 700;
+    color: #222;
+
+    text-shadow:
+    -2px -2px 0 white,
+     2px -2px 0 white,
+    -2px  2px 0 white,
+     2px  2px 0 white;
+}
+
+.card:hover{
+    transform: translateY(-10px) scale(1.05);
+}
+
+.celeste{
+    background: #aee8e6;
+}
+
+.amarillo{
+    background: #f6db58;
+}
+
+.gris{
+    background: #e5e5e5;
+}
+
+.card img{
+    width: 65px;
+
+    margin-bottom: 10px;
+}
+
+
+/* TURISMO */
+
+.turismo {
+    min-height: calc(100vh - 145px);
+    padding: 15px 45px 20px;
     background: #f8f8f8;
 }
 
-.contenido-turismo{
+.contenido-turismo {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 50px;
+    gap: 35px;
 }
 
-.texto-turismo{
-    width: 35%;
-    margin-top: 80px;
+.texto-turismo {
+    width: 34%;
+    margin-top: 0px;
 }
 
-.texto-turismo h1{
-    font-size: 90px;
-    line-height: 0.9;
+.texto-turismo h1 {
+    font-size: 72px;
+    line-height: 0.85;
     color: #444;
     font-weight: 800;
 }
 
-.texto-turismo span{
+.texto-turismo span {
     color: #9acb92;
 }
 
-.decoracion-turismo img{
+.decoracion-turismo img {
     width: 200px;
     margin-left: 400px;
-    vertical-align: top;
     position: relative;
     top: -150px;
 }
 
-.texto-turismo p{
-    font-size: 30px;
-    line-height: 1.5;
-    margin-top: -50px;
+.texto-turismo p {
+    font-size: 23px;
+    line-height: 1.3;
+    margin-top: -70px;
     color: #737373;
 }
 
@@ -416,74 +457,67 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-top: 40px;
+    margin-top: 25px;
     width: 360px;
 }
 
-.iconos-turismo .item{
+.iconos-turismo .item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
 }
 
 .iconos-turismo .item img {
-    width: 130px;
-    height: 70px;
+    width: 80px;
+    height: 45px;
     object-fit: contain;
-    display: block;
 }
 
-.iconos-turismo .item p{
+.iconos-turismo .item p {
     margin-top: 8px;
     font-size: 14px;
     font-weight: 600;
     color: #38566b;
 }
 
-.cards-turismo{
+.cards-turismo {
     display: grid;
-    grid-template-columns: repeat(3, 260px);
-    gap: 25px;
+    grid-template-columns: repeat(3, 230px);
+    gap: 18px 24px;
 }
 
-.card-turismo{
-    width: 260px;
-    height: 310px;
+.card-turismo {
+    width: 230px;
+    height: 250px;
     background: white;
     border: 2px solid #eee3d7;
     overflow: hidden;
-    transition: transform 0.3s;
 }
 
-.card-turismo:hover{
-    transform: translateY(-10px);
-}
-
-.card-turismo img{
+.card-turismo img {
     width: 100%;
-    height: 170px;
+    height: 130px;
     object-fit: cover;
 }
 
-.card-turismo .info{
-    padding: 15px;
+.card-turismo .info {
+    padding: 10px 12px;
 }
 
-.card-turismo .info h3{
-    font-size: 18px;
-    font-weight: 700;
+.card-turismo .info h3 {
+    font-size: 16px;
     color: #4d4d4d;
     margin-bottom: 5px;
 }
 
-.card-turismo .info p{
-    margin-top: 10px;
+.card-turismo .info p {
+    font-size: 14px;
+    margin-top: 5px;
     color: #666;
-    line-height: 1.5;
+    line-height: 1.3;
 }
 
-.frase-final{
+.frase-final {
     background: #eef0e7;
     border-radius: 50px;
     padding: 15px 25px;
@@ -492,138 +526,80 @@ body{
     align-items: center;
     gap: 15px;
     margin: 40px auto 0;
-    flex-wrap: wrap;
-    justify-content: center;
 }
 
-.btn-turismo-web {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: #1e8c7d;
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 24px;
-    border-radius: 30px;
-    font-weight: 600;
-    font-size: 16px;
-    transition: background 0.3s, transform 0.2s;
-}
-
-.btn-turismo-web:hover {
-    background: #166b5f;
-    transform: scale(1.05);
-}
-
-.icono-link {
-    font-size: 20px;
-    line-height: 1;
-}
-
-.decoracion-frase img{
+.decoracion-frase img {
     width: 75px;
     height: 50px;
-    display: block;
 }
 
-.frase-final p{
+.frase-final p {
     margin: 0;
     color: #4f5a68;
     font-size: 18px;
 }
 
-.frase-final span{
+.frase-final span {
     color: #7da78c;
     font-weight: 700;
 }
 
-.detalle-item a {
-    color: #1e8c7d;
-    text-decoration: none;
-    font-weight: 500;
-    word-break: break-all;
-}
+/* CONTACTO */
 
-.detalle-item a:hover {
-    text-decoration: underline;
-}
-
-/* ==========================================================================
-   CONTACTO
-   ========================================================================== */
-.contacto-link {
-    color: inherit;
-    text-decoration: none;
-}
-.contacto-link:hover {
-    text-decoration: underline;
-    opacity: 0.8;
-}
-
-.actividad-link {
-    color: inherit;
-    text-decoration: none;
-}
-.actividad-link:hover {
-    text-decoration: underline;
-}
-
-.contacto{
+.contacto {
     background: linear-gradient(135deg, #b8efe7 0%, #dce8f6 100%);
     padding: 60px 50px;
 }
 
-.contenido-contacto{
+.contenido-contacto {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
 }
 
-.titulo-contacto{
+.titulo-contacto {
     width: 45%;
 }
 
-.titulo-contacto h1{
+.titulo-contacto h1 {
     font-size: 55px;
     font-weight: 300;
     color: #222;
 }
 
-.info-contacto{
+.info-contacto {
     width: 45%;
     display: flex;
     flex-wrap: wrap;
     gap: 60px;
 }
 
-.columna h3{
+.columna h3 {
     font-size: 18px;
-    font-weight: 700;
     margin-bottom: 20px;
     color: #222;
 }
 
-.columna p{
+.columna p {
     font-size: 18px;
     line-height: 1.8;
     color: #333;
 }
 
-.email{
+.email {
     width: 100%;
     margin-top: 80px;
 }
 
-.email p{
+.email p {
     font-size: 20px;
     font-weight: 700;
     color: #222;
 }
 
-/* ==========================================================================
-   BOTTOM SHEET (MODAL AYUDA)
-   ========================================================================== */
-.overlay-ayuda{
+/* MODAL */
+
+.overlay-ayuda {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,.35);
@@ -636,12 +612,12 @@ body{
     z-index: 9999;
 }
 
-.overlay-ayuda.active{
+.overlay-ayuda.active {
     opacity: 1;
     pointer-events: auto;
 }
 
-.bottom-sheet{
+.bottom-sheet {
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
@@ -652,11 +628,11 @@ body{
     transition: .3s;
 }
 
-.overlay-ayuda.active .bottom-sheet{
+.overlay-ayuda.active .bottom-sheet {
     transform: translateY(0);
 }
 
-.barra{
+.barra {
     width: 70px;
     height: 6px;
     background: #d1d5db;
@@ -664,18 +640,17 @@ body{
     margin: 0 auto 20px;
 }
 
-.bottom-sheet h2{
+.bottom-sheet h2,
+.bottom-sheet > p {
     text-align: center;
-    margin-bottom: 5px;
 }
 
-.bottom-sheet > p{
-    text-align: center;
+.bottom-sheet > p {
     color: #666;
     margin-bottom: 25px;
 }
 
-.emergencia{
+.emergencia {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -685,45 +660,30 @@ body{
     margin-top: 15px;
 }
 
-.emergencia.azul{
+.emergencia.azul {
     background: #2563eb;
 }
 
-.emergencia.rojo{
+.emergencia.rojo {
     background: #ff0033;
 }
 
-.emergencia.violeta{
+.emergencia.violeta {
     background: #a020f0;
 }
 
-.emergencia .icono-emergencia{
+.img-emergencia-modal {
     width: 65px;
     height: 65px;
-    background: rgba(255,255,255,.2);
-    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 38px;
+    flex-shrink: 0;
 }
 
-.emergencia small{
-    font-size: 0.75rem;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}
 
-.emergencia h3{
-    font-size: 1.1rem;
-    margin: 2px 0;
-}
-
-.emergencia strong{
-    font-size: 1.3rem;
-}
-
-.cerrar-modal{
+.cerrar-modal {
     width: 100%;
     border: none;
     background: #e5e7eb;
@@ -734,398 +694,76 @@ body{
     cursor: pointer;
 }
 
-/* ==========================================================================
-   SECCIONES GENÉRICAS
-   ========================================================================== */
-.seccion-bloque, .seccion-bloque-agenda {
-    padding: 60px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+/* RESPONSIVE */
 
-.seccion-titulo-centro {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.seccion-titulo-centro h2 {
-    font-size: 2.5rem;
-    color: #1e3a8a;
-    margin-bottom: 10px;
-}
-
-.seccion-titulo-centro p {
-    color: #64748b;
-    font-size: 1.1rem;
-}
-
-/* ==========================================================================
-   HAMBURGER MENU
-   ========================================================================== */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    gap: 5px;
-    padding: 0;
-    z-index: 1001;
-}
-
-.hamburger span {
-    display: block;
-    width: 24px;
-    height: 2.5px;
-    background: #334155;
-    border-radius: 2px;
-    transition: transform 0.3s, opacity 0.3s;
-}
-
-.hamburger.abierto span:nth-child(1) {
-    transform: translateY(7.5px) rotate(45deg);
-}
-
-.hamburger.abierto span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.abierto span:nth-child(3) {
-    transform: translateY(-7.5px) rotate(-45deg);
-}
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-@media (max-width: 1024px){
-    .contenido-turismo,
-    .contenido-ayuda{
-        flex-direction: column;
-    }
-
-    .contenido-turismo {
-        align-items: center;
-    }
-}
-
-@media (max-width: 968px) {
-    header{
-        padding: 0 20px;
-    }
-
-    .hamburger {
-        display: flex;
-    }
-
-    .main-nav {
-        position: fixed;
-        top: 145px;
-        left: 0;
-        width: 100%;
-        background: #dfeceb;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px 0;
-        gap: 0;
-        border-radius: 0;
-        transform: translateY(-120%);
-        transition: transform 0.3s ease;
-        z-index: 999;
-    }
-
-    .main-nav.abierto {
-        transform: translateY(0);
-    }
-
-    .main-nav a {
-        padding: 15px 0;
-        width: 100%;
-        text-align: center;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .main-nav a:last-child {
-        border-bottom: none;
-    }
-}
-
-@media (max-width: 768px) {
-    .main-nav {
-        top: 0;
-    }
-}
-
-@media (max-width: 768px){
-    .main-header{
+@media (max-width: 900px) {
+    .navbar {
         height: auto;
-        padding: 10px 20px;
-        flex-wrap: wrap;
-    }
-
-    .content-wrapper {
-        padding-top: 130px;
-    }
-
-    .logo-img-nav {
-        width: 150px;
-    }
-
-    .hero{
+        padding: 15px 20px;
         flex-direction: column;
-        text-align: center;
-        padding: 30px 20px;
-        height: auto;
-        min-height: calc(100dvh - 130px);
-    }
-
-    .contenedor-texto {
-        transform: none;
-        margin-top: 40px;
-    }
-
-    .decoracion-gotas {
-        width: 500px;
-    }
-
-    .texto {
-        top: 0;
-    }
-
-    .texto h1{
-        font-size: 50px;
-    }
-
-    .hero-subtitulo {
-        font-size: 22px;
-    }
-
-    .texto h2{
-        font-size: 50px;
-    }
-
-    .hero-subtitulo2 {
-        font-size: 22px;
-    }
-
-    .ayuda {
-        padding: 30px 20px;
-    }
-
-    .texto-ayuda {
-        width: 100%;
-    }
-
-    .texto-ayuda h1 {
-        font-size: 50px;
-        transform: none;
-        white-space: normal;
-    }
-
-    .texto-ayuda p {
-        font-size: 18px;
-        margin-left: 0;
-    }
-
-    .cards-ayuda-grid {
-        flex-wrap: wrap;
-        flex-direction: column;
-        padding: 20px;
-    }
-
-    .card-ayuda {
-        width: 100%;
-    }
-
-    .card-ayuda img {
-        width: 120px;
-        height: 120px;
-    }
-
-    .imagen-ayuda img {
-        width: 100%;
-        height: auto;
-        max-width: 500px;
-    }
-
-    .turismo {
-        padding: 30px 20px;
-    }
-
-    .contenido-turismo {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .texto-turismo {
-        width: 100%;
-        margin-top: 20px;
-        text-align: center;
-    }
-
-    .texto-turismo h1 {
-        font-size: 50px;
-    }
-
-    .decoracion-turismo img {
-        width: 100px;
-        margin-left: 0;
-        top: -10px;
-    }
-
-    .texto-turismo p {
-        font-size: 20px;
-        margin-top: 0;
-    }
-
-    .iconos-turismo {
-        width: 100%;
-        justify-content: center;
-        gap: 20px;
-    }
-
-    .cards-turismo {
-        grid-template-columns: repeat(2, 1fr);
         gap: 15px;
     }
 
-    .card-turismo {
+    .content-wrapper {
+        padding-top: 170px;
+    }
+
+    .hero-section,
+    .emergencia-container,
+    .contenido-turismo,
+    .contenido-contacto {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-text {
+        transform: none;
+    }
+
+    .hero-img {
+        width: 100%;
+        max-width: 420px;
+        height: auto;
+    }
+
+    .emergencia-texto,
+    .texto-turismo,
+    .titulo-contacto,
+    .info-contacto {
+        width: 100%;
+    }
+
+    .emergencia-texto h1 {
+        font-size: 50px;
+        white-space: normal;
+    }
+
+    .corazon-icono {
+        width: 120px;
+        margin-left: -30px;
+    }
+
+    .img-abrazo {
         width: 100%;
         height: auto;
     }
 
-    .card-turismo img {
-        height: 140px;
-    }
-
-    .contacto {
-        padding: 40px 20px;
-    }
-
-    .contenido-contacto {
+    .emergencia-cards-grid {
         flex-direction: column;
     }
 
-    .titulo-contacto {
+    .mini-card {
         width: 100%;
-    }
-
-    .titulo-contacto h1 {
-        font-size: 36px;
-    }
-
-    .info-contacto {
-        width: 100%;
-        gap: 30px;
-        margin-top: 30px;
-    }
-
-    .email {
-        margin-top: 20px;
-    }
-
-    .frase-final {
-        flex-direction: column;
-        text-align: center;
-        padding: 20px;
-    }
-}
-
-@media (max-width: 600px) {
-    .texto h1,
-    .texto h2 {
-        font-size: 38px;
-    }
-
-    .hero-subtitulo,
-    .hero-subtitulo2 {
-        font-size: 18px;
-    }
-
-    .texto-ayuda h1 {
-        font-size: 36px;
-    }
-
-    .corazon-icono {
-        width: 160px;
-        margin-left: -40px;
     }
 
     .cards-turismo {
         grid-template-columns: 1fr;
+        justify-content: center;
     }
 
     .card-turismo {
+        width: 100%;
         max-width: 320px;
-        margin: 0 auto;
-    }
-
-    .contacto {
-        padding: 30px 16px;
-    }
-
-    .info-contacto {
-        flex-direction: column;
-        gap: 20px;
-    }
-}
-
-@media (max-width: 480px){
-    .logo-img-nav {
-        width: 130px;
-    }
-
-    .main-header {
-        padding: 8px 12px;
-    }
-
-    .content-wrapper {
-        padding-top: 120px;
-    }
-
-    .hero {
-        padding: 20px 16px;
-        min-height: calc(100dvh - 120px);
-    }
-
-    .texto-ayuda h1 {
-        font-size: 30px;
-    }
-
-    .card-ayuda img {
-        width: 90px;
-        height: 90px;
-    }
-
-    .texto-card-ayuda {
-        margin-left: -20px;
-    }
-
-    .cards-turismo {
-        grid-template-columns: 1fr;
-    }
-
-    .card-turismo {
-        max-width: 100%;
-    }
-
-    .iconos-turismo {
-        flex-wrap: wrap;
-    }
-
-    .iconos-turismo .item {
-        width: 45%;
-    }
-
-    .iconos-turismo .item img {
-        width: 90px;
-        height: 50px;
-    }
-
-    .titulo-contacto h1 {
-        font-size: 28px;
+        height: auto;
     }
 }

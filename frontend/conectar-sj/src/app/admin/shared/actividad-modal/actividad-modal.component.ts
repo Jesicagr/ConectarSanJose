@@ -1,10 +1,11 @@
-import { Component, inject, ChangeDetectorRef, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, input, output, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActividadService, ActividadPayload } from '../../../services/actividad.service';
 import { SedeService, Sede } from '../../../services/sede.service';
 import { AreaService, Area } from '../../../services/area.service';
 import { getAreaTone, sortByAreaOrder } from '../../../shared/area-tones';
 import { ToastService } from '../../../shared/toast.service';
+import { LoggerService } from '../../../shared/logger.service';
 import { DateFormatPipe } from '../../../shared/date-format.pipe';
 
 export interface ActividadModalData {
@@ -30,18 +31,18 @@ export interface ActividadModalData {
   templateUrl: './actividad-modal.component.html',
   styleUrl: './actividad-modal.component.css',
 })
-export class ActividadModalComponent implements OnInit, OnChanges {
+export class ActividadModalComponent {
   private actividadService = inject(ActividadService);
   private sedeService = inject(SedeService);
   private areaService = inject(AreaService);
-  private cdr = inject(ChangeDetectorRef);
   private toast = inject(ToastService);
+  private logger = inject(LoggerService);
 
-  @Input() data?: ActividadModalData | null = null;
-  @Input() isOpen = false;
-  @Input() viewMode = false;
-  @Output() isOpenChange = new EventEmitter<boolean>();
-  @Output() saved = new EventEmitter<void>();
+  data = input<ActividadModalData | null | undefined>(null);
+  isOpen = input(false);
+  viewMode = input(false);
+  isOpenChange = output<boolean>();
+  saved = output<void>();
 
   sedesBackend: Sede[] = [];
   categories: any[] = [];
@@ -66,10 +67,18 @@ export class ActividadModalComponent implements OnInit, OnChanges {
     status: 'Confirmado'
   };
 
+  constructor() {
+    effect(() => {
+      if (this.isOpen()) {
+        this.initForm();
+      }
+    });
+  }
+
   ngOnInit(): void {
     this.sedeService.obtenerTodas().subscribe({
-      next: sedes => { this.sedesBackend = sedes; this.sedesLoaded = true; this.cdr.detectChanges(); },
-      error: err => console.error('Error al cargar sedes:', err)
+      next: sedes => { this.sedesBackend = sedes; this.sedesLoaded = true; },
+      error: err => this.logger.error('Error al cargar sedes:', err)
     });
     this.areaService.obtenerTodas().subscribe({
       next: areas => {
@@ -81,34 +90,28 @@ export class ActividadModalComponent implements OnInit, OnChanges {
           tone: getAreaTone(a.nombre, i),
         }));
         this.categoriesLoaded = true;
-        this.cdr.detectChanges();
       },
-      error: err => console.error('Error al cargar areas:', err)
+      error: err => this.logger.error('Error al cargar areas:', err)
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isOpen'] && this.isOpen) {
-      this.initForm();
-    }
-  }
-
   private initForm(): void {
-    if (this.data && this.data.id) {
-      this.editingId = this.data.id;
-      const relatedSede = this.sedesBackend.find(s => s.nombre === this.data!.location);
+    const currentData = this.data();
+    if (currentData && currentData.id) {
+      this.editingId = currentData.id;
+      const relatedSede = this.sedesBackend.find(s => s.nombre === currentData.location);
       this.form = {
-        title: this.data.title,
-        descripcion: this.data.description || '',
-        encargado: this.data.encargado || '',
+        title: currentData.title,
+        descripcion: currentData.description || '',
+        encargado: currentData.encargado || '',
         sedeId: relatedSede?.id ?? null,
-        startDate: this.data.date || new Date().toISOString().split('T')[0],
-        endDate: this.data.endDate || '',
+        startDate: currentData.date || new Date().toISOString().split('T')[0],
+        endDate: currentData.endDate || '',
         repeatYearly: true,
         schedules: [{ day: 'Martes', startTime: '10:00', endTime: '12:00' }],
-        selectedCategories: this.data.categories?.length ? [...this.data.categories] : [],
-        whatsapp: this.data.telefono || '',
-        status: (this.data as any)?.status || 'Confirmado'
+        selectedCategories: currentData.categories?.length ? [...currentData.categories] : [],
+        whatsapp: currentData.telefono || '',
+        status: (currentData as any)?.status || 'Confirmado'
       };
       this.actividadService.obtenerPorId(this.editingId).subscribe({
         next: (actividad) => {
@@ -122,9 +125,8 @@ export class ActividadModalComponent implements OnInit, OnChanges {
           if (actividad.areas?.length) {
             this.form.selectedCategories = actividad.areas.map((a: any) => a.nombre);
           }
-          this.cdr.detectChanges();
         },
-        error: err => console.error('Error al cargar actividad completa:', err)
+        error: err => this.logger.error('Error al cargar actividad completa:', err)
       });
     } else {
       this.editingId = null;
@@ -144,7 +146,15 @@ export class ActividadModalComponent implements OnInit, OnChanges {
         status: 'Confirmado'
       };
     }
-    this.cdr.detectChanges();
+  }
+
+  get statusClass(): string {
+    const s = this.data()?.status || 'Confirmado';
+    return this.getStatusClass(s);
+  }
+
+  get statusLabel(): string {
+    return this.data()?.status || 'Confirmado';
   }
 
   private formatDayFromResponse(dia: string): string {
@@ -152,7 +162,6 @@ export class ActividadModalComponent implements OnInit, OnChanges {
   }
 
   closeModal(): void {
-    this.isOpen = false;
     this.isOpenChange.emit(false);
   }
 
@@ -184,15 +193,6 @@ export class ActividadModalComponent implements OnInit, OnChanges {
       input.value = filtered;
       this.form.whatsapp = filtered;
     }
-  }
-
-  get statusClass(): string {
-    const s = this.data?.status || 'Confirmado';
-    return this.getStatusClass(s);
-  }
-
-  get statusLabel(): string {
-    return this.data?.status || 'Confirmado';
   }
 
   getStatusClass(status: string): string {
@@ -248,7 +248,7 @@ export class ActividadModalComponent implements OnInit, OnChanges {
         this.toast.show(this.editingId ? 'Actividad actualizada con éxito' : 'Actividad creada con éxito', 'success');
       },
       error: (err) => {
-        console.error('Error al guardar:', err);
+        this.logger.error('Error al guardar:', err);
         this.saving = false;
         this.toast.show('Error al guardar la actividad', 'error');
       }

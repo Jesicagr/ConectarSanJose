@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/sedes")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SedeController {
 
     @Autowired
@@ -36,23 +37,8 @@ public class SedeController {
     public ResponseEntity<Sede> actualizar(@PathVariable Integer id, @RequestBody Sede sede) {
         return sedeService.obtenerPorId(id)
                 .map(existing -> {
-                    if (sede.getNombre() != null) existing.setNombre(sede.getNombre());
-                    if (sede.getDescripcion() != null) existing.setDescripcion(sede.getDescripcion());
-                    if (sede.getDireccion() != null) existing.setDireccion(sede.getDireccion());
-                    if (sede.getTelefono() != null) existing.setTelefono(sede.getTelefono());
-                    if (sede.getIcono() != null) existing.setIcono(sede.getIcono());
-                    if (sede.getEsWhatsapp() != null) existing.setEsWhatsapp(sede.getEsWhatsapp());
-                    if (sede.getLatitud() != null) existing.setLatitud(sede.getLatitud());
-                    if (sede.getLongitud() != null) existing.setLongitud(sede.getLongitud());
-                    if (sede.getHorarios() != null) {
-                        existing.getHorarios().clear();
-                        sede.getHorarios().forEach(h -> {
-                            h.setId(null);
-                            h.setSede(existing);
-                            existing.getHorarios().add(h);
-                        });
-                    }
-                    return ResponseEntity.ok(sedeService.guardar(existing));
+                    sede.setId(id);
+                    return ResponseEntity.ok(sedeService.guardar(sede));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

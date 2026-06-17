@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActividadService } from '../../services/actividad';
+import { ActividadService } from '../../services/actividad.service';
 import { VisitaService } from '../../services/visita.service';
 import { Actividad, DiaSemana } from '../../models/actividad.model';
 
@@ -87,7 +87,7 @@ export class AgendaComponent implements OnInit {
   }
 
   cargarActividadesDesdeBackend(): void {
-    this.actividadService.obtenerActividades().subscribe({
+    this.actividadService.obtenerTodas().subscribe({
       next: (data) => {
         console.info('[ConectarSanJose] INFO Actividades recibidas:', data.length);
         data.forEach(a => {

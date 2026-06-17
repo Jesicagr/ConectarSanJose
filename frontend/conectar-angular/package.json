@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "preview": "ng build --configuration production && http-server dist/conectar-angular/browser -p 4200 --proxy http://localhost:8080 -c-1"
   },
   "private": true,
   "packageManager": "npm@10.9.2",
@@ -17,14 +18,17 @@
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "leaflet": "^1.9.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "^0.16.2"
+    "zone.js": "~0.16.2"
   },
   "devDependencies": {
     "@angular/build": "^21.2.5",
     "@angular/cli": "^21.2.5",
     "@angular/compiler-cli": "^21.2.0",
+    "@types/leaflet": "^1.9.21",
+    "http-server": "^14.1.1",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",

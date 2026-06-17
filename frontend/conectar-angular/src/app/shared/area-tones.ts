@@ -1,3 +1,54 @@
+export const AREA_TONES = ['rose', 'amber', 'purple', 'teal', 'blue', 'emerald', 'indigo', 'orange', 'cyan', 'red', 'pink', 'violet'] as const;
+
+export const AREA_TONE_MAP: Record<string, string> = {
+  'Mujeres Género y Diversidad': 'rose',
+  'Mujer': 'rose',
+  'Niñez, Adolescencia y Familia': 'amber',
+  'Niñez': 'amber',
+  'Personas Mayores': 'purple',
+  'Desarrollo Comunitario': 'teal',
+  'Discapacidad': 'blue',
+  'Salud': 'emerald',
+  'Salud Social y Comunitaria': 'emerald',
+  'Trabajo y Producción': 'indigo',
+  'Trabajo': 'indigo',
+  'Deportes y Recreación': 'orange',
+  'Deportes': 'orange',
+  'Turismo': 'cyan',
+  'Cultura': 'red',
+  'Educación': 'pink',
+};
+
+export function getAreaTone(areaName: string, fallbackIndex: number): string {
+  return AREA_TONE_MAP[areaName] || AREA_TONES[fallbackIndex % AREA_TONES.length];
+}
+
+export const AREA_ORDER = [
+  'Mujeres Género y Diversidad',
+  'Niñez, Adolescencia y Familia',
+  'Niñez',
+  'Personas Mayores',
+  'Desarrollo Comunitario',
+  'Discapacidad',
+  'Salud',
+  'Salud Social y Comunitaria',
+  'Trabajo y Producción',
+  'Trabajo',
+  'Deportes y Recreación',
+  'Deportes',
+  'Turismo',
+  'Cultura',
+  'Educación',
+];
+
+export function sortByAreaOrder<T extends { nombre: string }>(items: T[]): T[] {
+  return [...items].sort((a, b) => {
+    const ai = AREA_ORDER.indexOf(a.nombre);
+    const bi = AREA_ORDER.indexOf(b.nombre);
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
+}
+
 export const WEBP_MAP: Record<string, string> = {
   'Mujeres Género y Diversidad': 'assets/mujer.webp',
   'Mujer': 'assets/mujer.webp',
@@ -16,39 +67,3 @@ export const WEBP_MAP: Record<string, string> = {
   'Cultura': 'assets/cultura.webp',
   'Educación': 'assets/educacion.webp',
 };
-
-export const AREA_TONE_MAP: Record<string, string> = {
-  'Mujeres Género y Diversidad': 'tone-rose',
-  'Niñez': 'tone-amber',
-  'Personas Mayores': 'tone-purple',
-  'Desarrollo Comunitario': 'tone-teal',
-  'Discapacidad': 'tone-blue',
-  'Salud': 'tone-emerald',
-  'Trabajo': 'tone-indigo',
-  'Deportes': 'tone-orange',
-  'Turismo': 'tone-cyan',
-  'Cultura': 'tone-red',
-  'Educación': 'tone-pink',
-};
-
-export function getAreaTone(areaName: string): string {
-  return AREA_TONE_MAP[areaName] || 'tone-gray';
-}
-
-export const AREA_ORDER = [
-  'Mujeres Género y Diversidad',
-  'Niñez',
-  'Niñez, Adolescencia y Familia',
-  'Personas Mayores',
-  'Desarrollo Comunitario',
-  'Discapacidad',
-  'Salud',
-  'Salud Social y Comunitaria',
-  'Trabajo',
-  'Trabajo y Producción',
-  'Deportes',
-  'Deportes y Recreación',
-  'Turismo',
-  'Cultura',
-  'Educación',
-];

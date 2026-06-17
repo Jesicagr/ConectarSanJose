@@ -3,7 +3,9 @@ package com.conectarsj.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 import java.time.LocalDate;
 import java.util.List;
@@ -12,7 +14,9 @@ import java.util.List;
 @Table(name = "actividades", indexes = {
     @Index(name = "idx_actividad_fecha_inicio", columnList = "fechaInicio")
 })
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"creadoPor", "areas", "horarios"})
 public class Actividad {
 
     @Id

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -134,6 +133,33 @@ public class ActividadService {
             actividad.getHorarios().forEach(horario -> horario.setActividad(actividad));
         }
         return actividadRepository.save(actividad);
+    }
+
+    @Transactional
+    public Actividad actualizar(Long id, Actividad actividad) {
+        return actividadRepository.findById(id)
+            .map(existente -> {
+                existente.setTitulo(actividad.getTitulo());
+                existente.setDescripcion(actividad.getDescripcion());
+                existente.setDescripcion_corta(actividad.getDescripcion_corta());
+                existente.setFechaInicio(actividad.getFechaInicio());
+                existente.setFechaFin(actividad.getFechaFin());
+                existente.setDia(actividad.getDia());
+                existente.setEncargado(actividad.getEncargado());
+                existente.setTelefono(actividad.getTelefono());
+                existente.setHorario(actividad.getHorario());
+                existente.setStatus(actividad.getStatus());
+                existente.setSede(actividad.getSede());
+                existente.setAreas(actividad.getAreas());
+                existente.setRepetirTodoAnio(actividad.getRepetirTodoAnio());
+                if (actividad.getHorarios() != null) {
+                    actividad.getHorarios().forEach(h -> h.setActividad(existente));
+                    existente.getHorarios().clear();
+                    existente.getHorarios().addAll(actividad.getHorarios());
+                }
+                return actividadRepository.save(existente);
+            })
+            .orElseThrow(() -> new RuntimeException("Actividad no encontrada con id: " + id));
     }
 
     public void eliminar(Long id) {

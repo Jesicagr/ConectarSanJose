@@ -4,6 +4,7 @@ import com.conectarsj.backend.model.Visita;
 import com.conectarsj.backend.repository.VisitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -15,7 +16,8 @@ public class VisitaService {
     @Autowired
     private VisitaRepository visitaRepository;
 
-    public void registrar(String pagina) {
+    @Transactional
+    public synchronized void registrar(String pagina) {
         LocalDate hoy = LocalDate.now();
         Visita visita = visitaRepository.findByPaginaAndFecha(pagina, hoy)
                 .orElseGet(() -> {

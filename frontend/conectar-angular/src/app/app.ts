@@ -1,32 +1,11 @@
 import { Component } from '@angular/core';
-import { AgendaComponent } from './components/agenda/agenda';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [AgendaComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-  title = 'conectar-angular';
-
-  mostrarModalAyuda: boolean = false;
-  menuAbierto: boolean = false;
-
-  abrirAyuda() {
-    this.mostrarModalAyuda = true;
-  }
-
-  cerrarAyuda() {
-    this.mostrarModalAyuda = false;
-  }
-
-  toggleMenu() {
-    this.menuAbierto = !this.menuAbierto;
-  }
-
-  cerrarMenu() {
-    this.menuAbierto = false;
-  }
-}
+export class App {}

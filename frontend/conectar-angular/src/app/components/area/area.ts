@@ -1,9 +1,9 @@
 // src/app/components/area/area.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AreaService } from '../../services/area';
-import { ActividadService } from '../../services/actividad';
-import { Area, Actividad } from '../../models/actividad.model';
+import { AreaService, Area } from '../../services/area.service';
+import { ActividadService } from '../../services/actividad.service';
+import { Actividad } from '../../models/actividad.model';
 import { WEBP_MAP, AREA_ORDER } from '../../shared/area-tones';
 
 @Component({
@@ -30,7 +30,7 @@ export class AreaComponent implements OnInit {
   }
 
   cargarAreas(): void {
-    this.areaService.obtenerAreas().subscribe({
+    this.areaService.obtenerTodas().subscribe({
       next: (data) => {
         this.listaAreas = [...data].sort((a, b) => {
           const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
@@ -49,7 +49,7 @@ export class AreaComponent implements OnInit {
   abrirModal(areaId: number | undefined): void {
     if (areaId === undefined) return;
   
-    this.areaService.obtenerAreaPorId(areaId).subscribe({
+    this.areaService.obtenerPorId(areaId).subscribe({
       next: (areaCompleta) => {
         this.areaSeleccionada = areaCompleta;
         this.mostrarModal = true;

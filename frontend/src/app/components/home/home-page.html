@@ -1,6 +1,6 @@
 <nav class="navbar">
   <div class="nav-logo">
-    <img src="logo.png" class="logo-img-nav" alt="Conectar San José">
+    <a href="#inicio"><img src="logo.png" class="logo-img-nav" alt="Conectar San José"></a>
   </div>
 
   <div class="nav-links">
@@ -29,59 +29,7 @@
     </div>
   </section>
 
-  <section class="ayuda">
-    <div class="contenido-ayuda">
-      <div class="texto-ayuda">
-        <h1>No estás <span>solo</span> <img src="corazon.png" class="corazon-icono" alt=""></h1>
-        <p>A veces hablar con alguien es el primer paso. En Conectar San José queremos <span class="verde-text">acompañarte.</span></p>
-        
-        <button class="btn-ayuda" (click)="abrirAyuda()">
-          <div class="icono-ayuda-wrapper">
-            <img src="icono-ayuda.png" alt="Ayuda">
-          </div>
-          <div class="texto-btn">
-            <span class="titulo-btn">Necesito ayuda</span>
-            <span class="sub-btn">Hablar con alguien</span>
-          </div>
-        </button>
-      </div>
-      
-      <div class="imagen-ayuda">
-        <img src="abrazo.jpg" alt="Abrazo">
-      </div>
-    </div>
 
-    <div class="cards-ayuda-grid">
-      <div class="card-ayuda">
-        <img src="bienestar.png" alt="Bienestar">
-        <div class="texto-card-ayuda"><h3>Bienestar emocional</h3><p>Recursos para cuidarte</p></div>
-      </div>
-      <div class="card-ayuda">
-        <img src="apoyo.png" alt="Apoyo">
-        <div class="texto-card-ayuda"><h3>Espacios de apoyo</h3><p>Grupos y lugares para acompañarte</p></div>
-      </div>
-      <div class="card-ayuda">
-        <img src="talleres.png" alt="Talleres">
-        <div class="texto-card-ayuda"><h3>Talleres para conectar</h3><p>Actividades para expresarte y crecer</p></div>
-      </div>
-      <div class="card-ayuda">
-        <img src="hablar.png" alt="Hablar">
-        <div class="texto-card-ayuda"><h3>Hablar con alguien</h3><p>Estamos para escucharte</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="areas-principales" class="seccion-bloque">
-    <div class="seccion-titulo-centro">
-      <h2>Nuestras Áreas de Coordinación</h2>
-      <p>Hacé clic en cualquiera de ellas para conocer más detalles</p>
-    </div>
-    <app-area></app-area>
-  </section>
-
-  <section id="agenda-principal" class="seccion-bloque-agenda">
-    <app-agenda></app-agenda>
-  </section>
 
   <section class="banner-emergencia">
     <div class="emergencia-container">
@@ -150,7 +98,7 @@
   </section>
 
 
-  <section id="areas" class="categorias">
+  <section id="areas-principales" class="categorias">
 
     <div class="bloque-categorias">
       <div class="seccion-titulo-centro">
@@ -219,6 +167,10 @@
     </div>
   </section>
 
+  <section id="agenda-principal" class="seccion-bloque-agenda">
+    <app-agenda></app-agenda>
+  </section>
+
   <section class="turismo">
     <div class="contenido-turismo">
       <div class="texto-turismo">
@@ -262,7 +214,7 @@
         <div class="card-turismo">
           <img src="granja.png" alt="Granja">
           <div class="info">
-            <h3>Granja “La Administración”</h3>
+            <h3>Granja "La Administración"</h3>
             <p>Naturaleza, animales y paseos para disfrutar en familia o con amigos.</p>
           </div>
         </div>
@@ -322,10 +274,6 @@
     
   </section>
 
-  <section id="agenda-secundaria" class="seccion-bloque-agenda">
-    <app-agenda></app-agenda>
-  </section>
-
   <section class="contacto">
     <div class="contenido-contacto">
       <div class="titulo-contacto">
@@ -353,7 +301,76 @@
 
 </div>
 
-<div class="overlay-ayuda" [class.active]="mostrarModalAyuda" (click)="cerrarAyuda()">
+<div class="modal-overlay" *ngIf="mostrarModalArea" (click)="cerrarModalArea()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+
+      <header class="modal-header">
+        <h2>Detalles del Área</h2>
+        <button class="btn-cerrar" (click)="cerrarModalArea()">×</button>
+      </header>
+
+      <main class="modal-body" *ngIf="areaSeleccionada">
+        <div class="area-avatar">
+          <img class="avatar-icono" [src]="getIconPath(areaSeleccionada)" alt="{{ areaSeleccionada.nombre }}" (error)="onImgError($event)">
+        </div>
+        <h3>{{ areaSeleccionada.nombre }}</h3>
+
+        <p class="area-descripcion" *ngIf="areaSeleccionada.descripcion">{{ areaSeleccionada.descripcion }}</p>
+
+        <div class="area-detalles">
+          <div class="detalle-item" *ngIf="areaSeleccionada.referente">
+            <strong>Referente:</strong> {{ areaSeleccionada.referente }}
+          </div>
+          <div class="detalle-item" *ngIf="areaSeleccionada.direccion">
+            <strong>Dirección:</strong> {{ areaSeleccionada.direccion }}
+          </div>
+          <div class="detalle-item" *ngIf="areaSeleccionada.telefono">
+            <strong>Teléfono:</strong> {{ areaSeleccionada.telefono }}
+          </div>
+          <div class="detalle-item" *ngIf="areaSeleccionada.email">
+            <strong>Email:</strong> {{ areaSeleccionada.email }}
+          </div>
+          <div class="detalle-item" *ngIf="areaSeleccionada.horarioAtencion">
+            <strong>Horario:</strong> {{ areaSeleccionada.horarioAtencion }}
+          </div>
+          <div class="detalle-item" *ngIf="areaSeleccionada.redes">
+            <strong>Redes:</strong> {{ areaSeleccionada.redes }}
+          </div>
+          <div class="detalle-item" *ngIf="areaSeleccionada.telefonos && areaSeleccionada.telefonos.length > 0">
+            <strong>Teléfonos adicionales:</strong>
+            <span *ngFor="let t of areaSeleccionada.telefonos" class="tag-telefono">
+              {{ t.etiqueta ? t.etiqueta + ': ' : '' }}{{ t.numero }}
+            </span>
+          </div>
+        </div>
+
+        <div class="actividades-seccion" *ngIf="actividadesPorArea.length > 0">
+          <h4>Actividades</h4>
+          <div class="actividad-item" *ngFor="let act of actividadesPorArea">
+            <div class="actividad-header">
+              <span class="actividad-titulo">{{ act.titulo }}</span>
+              <span class="actividad-sede" *ngIf="act.sede">{{ act.sede.nombre }}</span>
+            </div>
+            <p class="actividad-desc" *ngIf="act.descripcion_corta">{{ act.descripcion_corta }}</p>
+            <div class="actividad-info">
+              <span *ngIf="act.encargado">👤 {{ act.encargado }}</span>
+              <span *ngIf="act.telefono">📞 {{ act.telefono }}</span>
+              <span *ngIf="act.horarios && act.horarios.length > 0">
+                ⏰ {{ act.horarios[0].horaInicio.substring(0, 5) || '' }} - {{ act.horarios[0].horaFin.substring(0, 5) || '' }}hs
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p class="sin-actividades" *ngIf="actividadesPorArea.length === 0">
+          No hay actividades disponibles para esta área.
+        </p>
+      </main>
+
+    </div>
+  </div>
+
+  <div class="overlay-ayuda" [class.active]="mostrarModalAyuda" (click)="cerrarAyuda()">
   <div class="bottom-sheet" (click)="$event.stopPropagation()">
     <div class="barra"></div>
 

@@ -1,6 +1,17 @@
-# Sitio Público — Conectar San José
+# Conectar San José — Frontend
 
-Aplicación Angular 21 (standalone) orientada al ciudadano. Muestra la agenda de actividades, detalle de áreas municipales, sedes en mapa y contacto.
+Aplicación **Angular 21** (standalone) unificada que contiene el **sitio público** (agenda de actividades, áreas municipales, turismo) y el **panel administrativo** (gestión de actividades, sedes, áreas, contactos y usuarios).
+
+## Stack
+
+| Tecnología | Versión |
+|---|---|
+| Angular | 21.2 |
+| TypeScript | ~5.9 |
+| Tailwind CSS | 4.3 |
+| Leaflet | 1.9 |
+| RxJS | ~7.8 |
+| Vitest | 4.0 |
 
 ## Servidor de Desarrollo
 
@@ -8,54 +19,22 @@ Aplicación Angular 21 (standalone) orientada al ciudadano. Muestra la agenda de
 ng serve
 ```
 
-Abrir en `http://localhost:4200/`. Se recarga automáticamente al modificar archivos fuente.
+Abrir en `http://localhost:4200/`. El proxy configurado en `proxy.conf.json` redirige las rutas `/auth/**` y `/api/**` a `http://localhost:8080` (backend).
 
-### API
-
-Los servicios se conectan directamente a `http://localhost:8080/api/...` (CORS permitido desde puerto 4200).
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Build
 
 ```bash
-ng generate component component-name
+ng build         # Producción → dist/conectar-angular/browser/
+npm run preview  # Build + http-server con proxy
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Tests
 
 ```bash
-ng generate --help
+ng test   # Vitest (unitarios)
+ng e2e    # Playwright (E2E)
 ```
 
-## Building
+## Documentación Detallada
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Ver [docFrontend.md](docFrontend.md) para estructura de rutas, servicios y endpoints consumidos.

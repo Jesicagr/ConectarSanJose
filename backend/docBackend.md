@@ -2,7 +2,7 @@
 
 ## 1. Resumen del Proyecto
 
-Backend del sistema **Conectar San José**, desarrollado con **Spring Boot 3.5.14**, **Java 21**, **Maven**, **PostgreSQL** y **JWT** para autenticación. Expone una API RESTful consumida por el frontend Angular (panel administrativo en puerto 4201) y el sitio público (Angular en puerto 4200).
+Backend del sistema **Conectar San José**, desarrollado con **Spring Boot 3.5.14**, **Java 21**, **Maven**, **PostgreSQL (Supabase)** y **JWT** para autenticación. Expone una API RESTful consumida por el frontend Angular unificado (puerto 4200).
 
 ---
 
@@ -19,6 +19,7 @@ Backend del sistema **Conectar San José**, desarrollado con **Spring Boot 3.5.1
 | jjwt (JWT) | 0.11.5 |
 | Lombok | — |
 | Maven | — |
+| Springdoc OpenAPI | 2.8.6 |
 
 ---
 
@@ -26,21 +27,22 @@ Backend del sistema **Conectar San José**, desarrollado con **Spring Boot 3.5.1
 
 ```
 com.conectarsj.backend
-├── config/          → Seguridad (JWT, CORS, Filter Chain)
-├── controller/      → Endpoints REST
+├── config/          → Seguridad (JWT, CORS, Filter Chain, OpenAPI, DataSeeder, GlobalExceptionHandler)
+├── controller/      → Endpoints REST (7 controladores)
 ├── dto/             → Objetos de transferencia de datos
+├── exceptions/      → Excepciones personalizadas
 ├── model/           → Entidades JPA (modelo de datos)
 ├── repository/      → Capa de acceso a datos (Spring Data JPA)
-└── service/         → Lógica de negocio
+└── service/         → Lógica de negocio (7 servicios)
 ```
 
 ---
 
 ## 4. Configuración (`application.properties`)
 
-- **Base de datos:** PostgreSQL en Supabase (pooler transaction)
+- **Base de datos:** PostgreSQL en Supabase (Transaction Pooler, puerto 6543)
 - **DDL:** `spring.jpa.hibernate.ddl-auto=update`
-- **Mail:** SMTP Gmail (con app password)
+- **Mail:** SMTP Gmail (puerto 587, STARTTLS, app password)
 - **SQL logging:** habilitado
 
 ---
@@ -53,6 +55,7 @@ com.conectarsj.backend
 | id | Long (PK, auto) | |
 | email | String (unique, not null) | Login por email |
 | passwordHash | String (not null) | BCrypt |
+| rol | Rol (enum) | ADMIN o SUPER_ADMIN; default ADMIN |
 | tokenRecuperacion | String | Para reset de password |
 | tokenExpiracion | LocalDateTime | Expiración del token (15 min) |
 
@@ -113,6 +116,7 @@ com.conectarsj.backend
 | encargado | String (255) | |
 | horario | String (255) | |
 | telefono | String (50) | |
+| status | String (30) | Confirmado, En revisión, Cancelado |
 | areas | List\<Area\> | ManyToMany con tabla `actividad_areas` |
 | horarios | List\<HorarioActividad\> | OneToMany (cascade all) |
 
@@ -151,8 +155,11 @@ com.conectarsj.backend
 | fecha | LocalDate (not null) | |
 | contador | Integer (not null) | default 1 |
 
-### 5.10 `DiaSemana` (Enum)
-`LUNES`, `MARTES`, `MIERCOLES`, `JUEVES`, `VIERNES`, `SABADO`, `DOMINGO`
+### 5.10 Enums
+
+**`DiaSemana`**: `LUNES`, `MARTES`, `MIERCOLES`, `JUEVES`, `VIERNES`, `SABADO`, `DOMINGO`
+
+**`Rol`**: `ADMIN`, `SUPER_ADMIN`
 
 ---
 
@@ -161,7 +168,7 @@ com.conectarsj.backend
 ### 6.1 Arquitectura
 - **Stateless** (sin sesiones HTTP)
 - **JWT** en header `Authorization: Bearer <token>`
-- **CORS** permitido desde `http://localhost:4200` (sitio público) y `http://localhost:4201` (panel admin)
+- **CORS** permitido desde `http://localhost:4200` y `http://localhost:4201`
 - **CSRF** deshabilitado
 
 ### 6.2 `SecurityConfig`
@@ -183,7 +190,7 @@ com.conectarsj.backend
 ### 6.5 `UserDetailsServiceImpl`
 - Implementa `UserDetailsService`
 - Busca `Administrador` por email en la base de datos
-- Retorna un `User` de Spring Security (sin roles/authorities)
+- Retorna un `User` de Spring Security
 
 ---
 
@@ -239,7 +246,15 @@ com.conectarsj.backend
 | PUT | `/api/contactos/{id}` | Actualiza |
 | DELETE | `/api/contactos/{id}` | Elimina |
 
-### 7.6 Visitas (`/api/visitas`)
+### 7.6 Usuarios (Admin) — `/api/usuarios`
+
+| Método | Ruta | Body | Descripción |
+|---|---|---|---|
+| GET | `/api/usuarios` | — | Lista todos los administradores (requiere SUPER_ADMIN) |
+| POST | `/api/usuarios` | `{"email", "password", "rol"}` | Crea nuevo administrador (requiere SUPER_ADMIN) |
+| DELETE | `/api/usuarios/{id}` | — | Elimina administrador por ID (requiere SUPER_ADMIN) |
+
+### 7.7 Visitas (`/api/visitas`)
 
 | Método | Ruta | Body | Descripción |
 |---|---|---|---|
@@ -270,7 +285,7 @@ com.conectarsj.backend
 - `obtenerResumenPaginado(pageable)` — Paginación con SQL nativo y `ActividadResumenDTO`
 - `actualizar(id, datos)` — Merge manual de campos (transaccional)
 - `cleanDuplicateHorarios()` — Limpieza de duplicados al iniciar (`@PostConstruct`)
-- `asignarHorariosDefault()` — Migración automática (@PostConstruct): asigna un horario (10:00-12:00) a actividades sin horarios, distribuyendo el día según `id % 7`. Primero hace `UPDATE` de horarios existentes que coinciden con 10:00-12:00, luego `INSERT` para actividades que aún no tienen horarios.
+- `asignarHorariosDefault()` — Migración automática (`@PostConstruct`): asigna horario 10:00-12:00 a actividades sin horarios, distribuyendo día según `id % 7`
 
 ### 8.5 `ContactoEmergenciaService`
 - CRUD estándar
@@ -283,6 +298,10 @@ com.conectarsj.backend
 
 ### 8.7 `EmailService`
 - Envío asíncrono (`@Async`) de emails vía `JavaMailSender`
+
+### 8.8 `UserDetailsServiceImpl`
+- Implementa `UserDetailsService` de Spring Security
+- Busca `Administrador` por email
 
 ---
 
@@ -297,6 +316,19 @@ private String password;
 ### `JwtResponse`
 ```java
 private String token;
+```
+
+### `RegisterUserRequest`
+```java
+private String email;
+private String password;
+private String rol;    // "ADMIN" | "SUPER_ADMIN"
+```
+
+### `ErrorResponse`
+```java
+private int status;
+private String error;
 ```
 
 ### `ActividadResumenDTO` (Java Record)
@@ -327,14 +359,16 @@ record ActividadResumenDTO(
 
 ## 11. Inicialización de Datos
 
-Al arrancar la aplicación (`CommandLineRunner` en `ConectarSjBackendApplication`):
-- Se crean dos administradores por defecto:
-  - `admin@sanjose.com` / `admin123`
-  - `jesiagr@gmail.com` / `admin1919`
-- Solo se crean si no existen (por email único)
+**`CommandLineRunner` en `ConectarSjBackendApplication`:**
+- Crea dos administradores por defecto (solo si no existen):
+  - `admin@sanjose.com` / `admin123` (SUPER_ADMIN)
+  - `jesiagr@gmail.com` / `admin1919` (SUPER_ADMIN)
 
-Al arrancar (`ApplicationReadyEvent` en `ContactoEmergenciaService.seedData()`):
-- Se limpian y repueblan 8 contactos de emergencia (Policía, Bomberos, Hospital, Salud Mental, etc.)
+**`DataSeeder` (`CommandLineRunner`):**
+- Crea 11 áreas por defecto (Mujer, Niñez, Personas Mayores, etc.) si la tabla está vacía.
+
+**`ContactoEmergenciaService.seedData()` (`ApplicationReadyEvent`):**
+- Limpia y repuebla 8 contactos de emergencia (Policía, Bomberos, Hospital, Salud Mental, etc.)
 
 ---
 
@@ -343,25 +377,44 @@ Al arrancar (`ApplicationReadyEvent` en `ContactoEmergenciaService.seedData()`):
 - **Host:** smtp.gmail.com (puerto 587, STARTTLS)
 - **Usuario:** jesiagr@gmail.com (app password)
 - Envío asíncrono con `@Async`
-- Si falla el envío real, se imprime la URL de recuperación en consola
+- Si falla el envío, se imprime la URL de recuperación en consola
 
 ---
 
-## 13. Base de Datos
+## 13. OpenAPI / Swagger
+
+- **Endpoint:** `http://localhost:8080/swagger-ui.html`
+- Configurado via `OpenApiConfig` con título "ConectarSanJosé API", versión 1.0
+- Esquema de seguridad JWT (bearer) integrado
+
+---
+
+## 14. Global Exception Handler
+
+`GlobalExceptionHandler` (`@RestControllerAdvice`) maneja:
+- `FechaInvalidaException` → 400 Bad Request
+- `IllegalArgumentException` → 400 Bad Request
+- `RuntimeException` → 404 Not Found
+- `Exception` genérica → 500 Internal Server Error
+
+Todos retornan `ErrorResponse` con código y mensaje.
+
+---
+
+## 15. Base de Datos
 
 - **Motor:** PostgreSQL (Supabase)
-- **Pooler:** Transaction Pooler (`aws-1-us-east-1.pooler.supabase.com:6543`)
+- **Pooler:** Transaction Pooler (puerto 6543)
 - **DDL:** Automático (`update`)
-- **Esquema:** Tablas creadas automáticamente por Hibernate
 - Tablas: `administrador`, `sedes`, `horarios_sede`, `areas`, `area_telefonos`, `actividades`, `actividad_areas`, `horarios_actividad`, `contactos_emergencia`, `contacto_telefonos`, `visitas`
 
 ---
 
-## 14. CORS
+## 16. CORS
 
-Permitido desde `http://localhost:4200` (sitio público) y `http://localhost:4201` (panel administrativo) con métodos `GET, POST, PUT, DELETE, OPTIONS` y headers `Authorization, Cache-Control, Content-Type`.
+Permitido desde `http://localhost:4200` y `http://localhost:4201` con métodos `GET, POST, PUT, DELETE, OPTIONS` y headers `Authorization, Cache-Control, Content-Type`.
 
-Configurado en `SecurityConfig.java` mediante `CorsConfigurationSource`:
+Configurado en `SecurityConfig.java`:
 
 ```java
 configuration.setAllowedOrigins(List.of(
@@ -372,7 +425,7 @@ configuration.setAllowedOrigins(List.of(
 
 ---
 
-## 15. Compilación y Ejecución
+## 17. Compilación y Ejecución
 
 ```bash
 cd backend

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { AreaComponent } from './area';
-import { AreaService } from '../../services/area';
+import { AreaService } from '../../services/area.service';
 
 describe('AreaComponent', () => {
   let component: AreaComponent;
@@ -15,7 +15,7 @@ describe('AreaComponent', () => {
 
   beforeEach(async () => {
     const serviceMock = {
-      obtenerAreas: () => of(mockAreas),
+      obtenerTodas: () => of(mockAreas),
     };
 
     await TestBed.configureTestingModule({

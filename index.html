@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conectar San José</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <img src="img/logo.png" class="logo">
+
+        <nav>
+            <a href="#inicio">INICIO</a>
+            <a href="#categorias">ACTIVIDADES</a>
+            <a href="">AGENDA</a>
+        </nav>
+
+    </header>
+
+
+    <section id="inicio" class="hero">
+
+        <div class="contenedor-texto">
+
+            <img src="img/gotas.png" class="decoracion">
+        
+
+            <div class="texto">
+
+                <h1>DESCUBRÍ</h1>
+
+                <p class="subtitulo">lo que</p>
+
+                <h2>SAN JOSÉ</h2>
+
+                <p class="subtitulo2">tiene para vos</p>
+
+            </div>
+        </div>
+
+        <img src="img/monumento.jpg" class="imagen">
+
+    </section>
+
+    
+
+
+
+    <section id="ayuda" class="ayuda">
+
+        <div class="contenido">
+
+            <div class="texto-ayuda">
+
+                <h1>
+                    No estás <span>solo</span>
+
+                    <img src="img/corazon.png" class="corazon">
+                </h1>
+
+                <p>
+                    A veces hablar con alguien<br>
+                    es el primer paso.<br>
+                    En Conectar San José queremos<br>
+                    <span class="verde">acompañarte.</span>
+                </p>
+
+                <button class="btn-ayuda" onclick="abrirAyuda()">
+
+                    <div class="icono-ayuda">
+                        <img src="img/icono-ayuda.png" alt="Ayuda">
+                    </div>
+
+                    <div class="texto-btn">
+
+                        <span class="titulo-btn">
+                            Necesito ayuda
+                        </span>
+
+                        <span class="sub-btn">
+                            Hablar con alguien
+                        </span>
+
+                    </div>
+
+                </button>
+
+            </div>
+
+            <div class="imagen-ayuda">
+
+                <img src="img/abrazo.jpg">
+
+            </div>
+
+        </div>
+
+        <div class="cards">
+            <div class="card-ayuda">
+                <img src="img/bienestar.png">
+
+                <div class="texto-card">
+                    <h3>Bienestar emocional</h3>
+                    <p>Recursos para cuidarte</p>
+                </div>
+            </div>
+
+
+            <div class="card-ayuda">
+
+                <img src="img/apoyo.png">
+
+                <div class="texto-card">
+                    <h3>Espacios de apoyo</h3>
+                    <p>Grupos y lugares para acompañarte</p>
+                </div>
+            </div>
+
+            <div class="card-ayuda">
+                <img src="img/talleres.png">
+
+                <div class="texto-card">
+                    <h3>Talleres para conectar</h3>
+                    <p>Actividades para expresarte y crecer</p>
+                </div>
+
+            </div>
+
+            <div class="card-ayuda">
+                <img src="img/hablar.png">
+
+                <div class="texto-card">
+                    <h3>Hablar con alguien</h3>
+                    <p>Estamos para escucharte</p>
+                </div>
+            </div>
+    </section>
+
+    <section id="categorias" class="categorias">
+
+        <div class="grid-categorias">
+
+            <div class="card mujer" onclick="mostrarMujeres()">
+                <img src="img/mujer.png">
+                <h4>Mujer</h4>
+            </div>
+
+            <div class="card amarillo" onclick="mostrarNinez()">
+                <img src="img/ninez.png">
+                <h4>Niñez</h4>
+            </div>
+
+            <div class="card gris" onclick="mostrarMayores()">
+                <img src="img/mayores.png">
+                <h4>Personas <br> Mayores</h4>
+            </div>
+
+            <div class="card celeste" onclick="mostrarComunidad()">
+                <img src="img/comunidad.png">
+                <h4>Desarrollo <br> Comunitario</h4>
+            </div>
+
+            <div class="card amarillo" onclick="mostrarDiscapacidad()">
+                <img src="img/discapacidad.png">
+                <h4>Discapacidad</h4>
+            </div>
+
+            <div class="card gris" onclick="mostrarSalud()">
+                <img src="img/salud.png">
+                <h4>Salud</h4>
+            </div>
+
+            <div class="card celeste" onclick="mostrarTrabajo()">
+                <img src="img/trabajo.png">
+                <h4>Trabajo</h4>
+            </div>
+
+            <div class="card amarillo" onclick="mostrarDeportes()">
+                <img src="img/deportes.png">
+                <h4>Deportes</h4>
+            </div>
+
+            <div class="card gris" onclick="mostrarTurismo()">
+                <img src="img/turismo.png">
+                <h4>Turismo</h4>
+            </div>
+
+            <div class="card celeste" onclick="mostrarCultura()">
+                <img src="img/cultura.png">
+                <h4>Cultura</h4>
+            </div>
+
+            <div class="card amarillo" onclick="mostrarEducacion()">
+                <img src="img/educacion.png">
+                <h4>Educación</h4>
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <section class="seccion-mujeres" id="seccionMujeres">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Mujeres, <span>Género</span><br>y Diversidad</h1>
+
+        <p class="intro-mujeres">
+            Espacios de acompañamiento, escucha, contención y promoción de derechos.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Dirección:</strong> Centenario 2180</p>
+                <p><strong>Teléfono:</strong> 3447-438343</p>
+                <p><strong>Mail:</strong> generoydiversidad@sanjose.gob.ar</p>
+                <p><strong>Guardia:</strong> 24 hs</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Horarios</h3>
+                <p><strong>Lunes:</strong> 7:00 a 18:00 hs</p>
+                <p><strong>Martes a Viernes:</strong> 7:00 a 13:00 hs</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Espacios de Escucha</h3>
+                <p>Oficina de San José y CIC Barrio El Brillante.</p>
+                <p>Lunes a Viernes de 7:00 a 17:00 hs.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Programas</h3>
+                <p>Observatorio de Género y DDHH.</p>
+                <p>Destejer Masculinidades.</p>
+                <p>Ronda de Mujeres.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion-ninez" id="seccionNinez">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Niñez, <span>Adolescencia</span><br>y Familia</h1>
+
+        <p class="intro-mujeres">
+            Protección, promoción y prevención para acompañar a niños, niñas, adolescentes y familias.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Referente:</strong> Carolina Richard</p>
+                <p><strong>Dirección:</strong> Saavedra e/ Maipú y Remedios de Escalada</p>
+                <p><strong>Mail:</strong> anaf@sanjose.gob.ar</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Horarios y Contacto</h3>
+                <p><strong>Oficina:</strong> Lunes a Viernes de 7:00 a 13:00 hs</p>
+                <p><strong>Guardia:</strong> 24 hs, los 365 días del año</p>
+                <p><strong>Tel. Guardia:</strong> 3447-146499</p>
+                <p><strong>Tel. Oficina:</strong> 3447-438337</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Objetivos</h3>
+                <p><strong>Protección:</strong> restitución y reparación de derechos vulnerados.</p>
+                <p><strong>Promoción:</strong> propuestas para mejorar la calidad de vida.</p>
+                <p><strong>Prevención:</strong> acciones para evitar o minimizar riesgos.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Espacios de Escucha</h3>
+                <p>Encuentros de acompañamiento, orientación y apoyo emocional.</p>
+                <p><strong>ANAF:</strong> Lunes, miércoles y viernes de 8:00 a 13:00 hs.</p>
+                <p><strong>CIC El Brillante:</strong> Lunes de 12:00 a 16:00 y miércoles de 8:00 a 13:00 hs.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Trabajo Territorial</h3>
+                <p>Diagnósticos y planes de acción para mejorar las condiciones de vida de niños, niñas y adolescentes.</p>
+                <p><strong>San José:</strong> Martes y jueves de 7:00 a 13:00 hs.</p>
+                <p><strong>CIC El Brillante:</strong> Miércoles y viernes de 7:00 a 13:00 hs.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Talleres</h3>
+                <p>Crianza sin violencia, emociones en juego, ritmos latinos, arte terapia, reciclado, mini chef y más.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion-mayores" id="seccionMayores">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Personas <span>Mayores</span></h1>
+
+        <p class="intro-mujeres">
+            Promoviendo una vejez digna, activa, inclusiva y saludable.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Referente:</strong> Alberto Auban</p>
+                <p><strong>Dirección:</strong> Centenario 2180</p>
+                <p><strong>Teléfono:</strong> 3447-438386</p>
+                <p><strong>Mail:</strong> adultosmayores@sanjose.gob.ar</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Horario de Atención</h3>
+                <p><strong>Lunes a Viernes:</strong> 7:00 a 13:00 hs</p>
+                <p>Atención y acompañamiento para personas mayores, familias y comunidad.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Líneas de Acción</h3>
+                <p>Garantizar derechos y promover una vejez digna, activa, inclusiva y saludable.</p>
+                <p>Acompañamiento en situaciones de abuso, maltrato y estereotipos negativos sobre la vejez.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Acompañamiento Gerontológico</h3>
+                <p>Asesoramiento a cuidadores, familias y personas con demencias.</p>
+                <p><strong>Jueves:</strong> 10:00 a 12:00 hs</p>
+            </div>
+
+            <div class="card-info">
+                <h3>CIC El Brillante</h3>
+                <p>Recepción de demandas vinculadas a las vejeces de la comunidad.</p>
+                <p><strong>Lunes a Viernes:</strong> 7:00 a 13:00 hs</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Talleres y Actividades</h3>
+                <p>Pilates Mat, yoga, tejido, gimnasia, ritmos del recuerdo, canto colectivo, arte, reciclado, ajedrez y tejo.</p>
+                <p><strong>Actividades socio recreativas:</strong> Martes de 9:00 a 11:45 hs en Termas San José.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion-comunidad" id="seccionComunidad">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Desarrollo <span>Comunitario</span></h1>
+
+        <p class="intro-mujeres">
+            Políticas sociales integrales e inclusivas para mejorar la calidad de vida de las personas en situación de vulnerabilidad.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Referente:</strong> Mariel Galvalisi</p>
+                <p><strong>Dirección:</strong> Centenario 2180</p>
+                <p><strong>Teléfono:</strong> 3447-438354</p>
+                <p><strong>Mail:</strong> desarrollocomunitario@sanjose.gob.ar</p>
+                <p><strong>Redes:</strong> sjsaludybienestarsocial</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Atención Profesional</h3>
+                <p>Acompañamiento y asesoramiento ante problemáticas sociales y familiares.</p>
+                <p><strong>Lunes y Miércoles:</strong> 8:00 a 12:00 hs</p>
+                <p><strong>Viernes:</strong> 8:00 a 12:00 hs en CIC El Brillante</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Asesoramiento ANSES</h3>
+                <p>Créditos, asignaciones familiares, actualización de datos, turnos y trámites.</p>
+                <p><strong>Lunes, Martes, Jueves y Viernes:</strong> 8:00 a 12:00 hs</p>
+                <p><strong>Miércoles:</strong> CIC El Brillante</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Asistencia Alimentaria</h3>
+                <p>Módulos alimentarios y alimentos especiales para personas con diabetes o celiaquía.</p>
+                <p>Comedores en CIC El Brillante, Santa Teresita y Perucho Verne.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Comedores Comunitarios</h3>
+                <p><strong>Horario:</strong> Lunes a Viernes desde las 17:00 hs.</p>
+                <p>Espacios destinados al acompañamiento alimentario de la comunidad.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Asistencia Directa</h3>
+                <p>Sepelios, combustible, pasajes, traslados por salud, frazadas, colchones, zapatillas y otros recursos según cada situación.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion-discapacidad" id="seccionDiscapacidad">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Inclusión <span>Discapacidad</span></h1>
+
+        <p class="intro-mujeres">
+            Promoción de derechos, acompañamiento y acceso a recursos para personas en situación de discapacidad.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Referente:</strong> Claudia López</p>
+                <p><strong>Dirección:</strong> Centenario 2180</p>
+                <p><strong>Teléfono:</strong> 3447-640067</p>
+                <p><strong>Mail:</strong> inclusion@sanjose.gob.ar</p>
+                <p><strong>Redes:</strong> SJ Área de Inclusión</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Horarios de Atención</h3>
+                <p><strong>Oficina:</strong> Lunes, martes, miércoles y viernes de 8:00 a 12:00 hs</p>
+                <p><strong>CIC El Brillante:</strong> Lunes a viernes de 8:00 a 12:00 hs</p>
+                <p><strong>Junta Certificadora:</strong> Jueves de 13:00 a 17:00 hs</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Objetivo del Área</h3>
+                <p>
+                    Diseño, coordinación y ejecución de políticas públicas municipales, provinciales y nacionales en materia de discapacidad.
+                </p>
+                <p>
+                    Promoción del pleno ejercicio de los derechos de las personas en situación de discapacidad.
+                </p>
+            </div>
+
+            <div class="card-info">
+                <h3>Trámites y Acompañamiento</h3>
+                <p>Asesoramiento para el Certificado Único de Discapacidad.</p>
+                <p>Acompañamiento en pensiones no contributivas por invalidez.</p>
+                <p>Solicitud de pasajes con CUD o credencial INCUCAI.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Acceso y Apoyo</h3>
+                <p>Acceso a atención de salud a través del programa Incluir Salud.</p>
+                <p>Acompañamiento escolar en todos los niveles.</p>
+                <p>Gestión de obleas de libre estacionamiento.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Ayudas Técnicas</h3>
+                <p>
+                    Sillas de ruedas, andadores, botas ortopédicas, bastones, muletas,
+                    camas ortopédicas y colchones antiescaras.
+                </p>
+            </div>
+
+            <div class="card-info">
+                <h3>Talleres y Actividades</h3>
+                <p><strong>Teatro Inclusivo:</strong> Jueves de 15:30 a 17:00 hs en Salón Sindicato Municipal.</p>
+                <p><strong>Deporte adaptado:</strong> Lunes y miércoles 17:00 hs en Polideportivo Municipal.</p>
+                <p><strong>CIC El Brillante:</strong> Martes 10:30 hs.</p>
+                <p><strong>Tardecitas Bailables:</strong> Una vez al mes en Casa del Bicentenario.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion-salud" id="seccionSalud">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Salud Social <span>y Comunitaria</span></h1>
+
+        <p class="intro-mujeres">
+            La salud como derecho humano, garantizando acceso, acompañamiento y atención comunitaria.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Referente:</strong> Luz Gaillard</p>
+                <p><strong>Dirección:</strong> Centenario 2180 y C.I.C. El Brillante</p>
+                <p><strong>Teléfono:</strong> 3447-438374</p>
+                <p><strong>Redes:</strong> capssj</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Horario de Atención</h3>
+                <p><strong>Lunes a Viernes:</strong> 7:00 a 13:00 hs</p>
+                <p>Atención, orientación y acompañamiento desde el área de Salud Social y Comunitaria.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Acción Directa</h3>
+                <p>Cobertura de porcentaje de medicación cuando la persona tiene obra social pero no puede afrontar el costo restante.</p>
+                <p>Gestión de inclusión en programas provinciales para personas diabéticas sin obra social.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Asistencia en Salud</h3>
+                <p>Cobertura excepcional de medicación no cubierta por obras sociales.</p>
+                <p>Asistencia alimentaria y leches de fórmula indicadas por pediatras según criterios existentes.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Rescate en la Vía Pública</h3>
+                <p>Servicio de emergencia disponible las 24 hs, los 365 días del año.</p>
+                <p>Articula con Bomberos Voluntarios, médicos de guardia, Inspección Municipal, Policía y Hospital.</p>
+                <p><strong>Contacto:</strong> 470890 - 100 - 103</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Atención SEDRONAR</h3>
+                <p>Prevención, asistencia y acompañamiento ante consumos problemáticos de sustancias.</p>
+                <p><strong>Jueves:</strong> 8:00 a 16:00 hs en C.I.C. El Brillante</p>
+                <p><strong>Teléfono:</strong> 3447-497276</p>
+            </div>
+
+            <div class="card-info">
+                <h3>CAPS Municipales</h3>
+                <p>El municipio cuenta con 4 Centros de Atención Primaria de la Salud.</p>
+                <p>Brindan atención en distintas especialidades y trabajan en promoción y prevención.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion-trabajo" id="seccionTrabajo">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Trabajo <span>y Producción</span></h1>
+
+        <p class="intro-mujeres">
+            Acompañamiento laboral, fortalecimiento productivo y apoyo a emprendedores locales.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Referente:</strong> Tomás Daleves</p>
+                <p><strong>Dirección:</strong> Alejo Peyret y 25 de Mayo</p>
+                <p><strong>Teléfono Empleo:</strong> 3447-438355</p>
+                <p><strong>Teléfono:</strong> 3447-569734</p>
+                <p><strong>Horario:</strong> Lunes a Viernes de 7:00 a 13:00 hs</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Atención y Entrevistas</h3>
+                <p>Atención presencial y telefónica para personas en búsqueda de empleo.</p>
+                <p>Orientación en trámites, consultas y acompañamiento laboral.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Base de Datos Laboral</h3>
+                <p>Registro de trabajadores mediante entrevistas presenciales con DNI.</p>
+                <p>Se cargan datos personales, preferencias, experiencias laborales y formación académica.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Búsquedas Laborales</h3>
+                <p>Cuando un empleador solicita personal, se buscan perfiles adecuados en la base de datos.</p>
+                <p>Luego se facilita el contacto para que ambas partes acuerden condiciones laborales.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Currículum Vitae</h3>
+                <p>Armado de CV para personas que no cuentan con herramientas digitales o conocimientos para realizarlo.</p>
+                <p>Se entregan copias y también puede compartirse por WhatsApp o correo electrónico.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Emprendedores y Productores</h3>
+                <p>Asesoramiento y fortalecimiento mediante microcréditos y herramientas financieras accesibles.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>El Paseíto</h3>
+                <p>Mercado de buenos momentos ubicado en San Martín y 9 de Julio.</p>
+                <p>Espacio de promoción y venta para productores, emprendedores, manualistas y artesanos locales.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Huerta Comunitaria y RENAPA</h3>
+                <p>Fortalecimiento de huerta comunitaria, siembra, producción de alimentos frescos y entrega de semillas.</p>
+                <p>Inscripción y actualización en el Registro Nacional de Productores Apícolas.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion-deportes" id="seccionDeportes">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Área de <span>Deportes</span></h1>
+
+        <p class="intro-mujeres">
+            Promoción de la práctica deportiva, la vida saludable y la participación comunitaria.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Referente:</strong> Luciano Bonato</p>
+                <p><strong>Dirección:</strong> Polideportivo Municipal, Yapeyú y Av. Mitre</p>
+                <p><strong>Teléfono:</strong> 3447-640028</p>
+                <p><strong>Mail:</strong> areadedeportes.sj@gmail.com</p>
+                <p><strong>Redes:</strong> @sjdeportes</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Horario de Atención</h3>
+                <p><strong>Lunes a Viernes:</strong> 7:00 a 13:00 hs</p>
+                <p>Atención en el Polideportivo Municipal.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Objetivo del Área</h3>
+                <p>
+                    Fomentar y promover la práctica deportiva para mejorar la calidad de vida
+                    y promover estilos de vida saludables.
+                </p>
+            </div>
+
+            <div class="card-info">
+                <h3>Polideportivo Municipal</h3>
+                <p>
+                    Cuenta con pileta, cancha cerrada, cancha de básquet al aire libre,
+                    pista de atletismo, plaza saludable, cancha de tejo y canchas de fútbol.
+                </p>
+            </div>
+
+            <div class="card-info">
+                <h3>Talleres Deportivos</h3>
+                <p>Se dictan dentro del Polideportivo y en diferentes barrios de la ciudad.</p>
+                <p><strong>Gimnasia artística:</strong> Lunes y miércoles 17:00 hs / martes y jueves 18:00 hs.</p>
+                <p><strong>Mini Atletismo:</strong> Martes y jueves 18:00 hs.</p>
+                <p><strong>Atletismo:</strong> Martes y jueves 18:00 hs.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Más Actividades</h3>
+                <p><strong>Taller recreativo:</strong> Lunes y miércoles 16:00 hs en Santa Teresita.</p>
+                <p><strong>Voley:</strong> Lunes y miércoles 16:00 hs en Barrio El Brillante.</p>
+                <p><strong>Sanjo Corre:</strong> Martes y jueves 20:00 hs en el Polideportivo.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Actividades para Adultos</h3>
+                <p><strong>Newcom:</strong> Lunes 18:30 hs / martes y jueves 19:00 hs en el Polideportivo.</p>
+                <p><strong>Beach Voley:</strong> Martes 14:00 hs en el Polideportivo.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Contactos de Talleres</h3>
+                <p><strong>Gimnasia artística:</strong> 3446-370489</p>
+                <p><strong>Mini atletismo:</strong> 3447-505983</p>
+                <p><strong>Atletismo / Sanjo Corre:</strong> 3447-432885</p>
+                <p><strong>Voley:</strong> 3447-469025</p>
+                <p><strong>Newcom:</strong> 3447-461903 / 3447-466672</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion-cultura" id="seccionCultura">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Área de <span>Cultura</span></h1>
+
+        <p class="intro-mujeres">
+            Promoción, preservación y difusión de la identidad cultural local.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Referente:</strong> Maximiliano Brotzman</p>
+                <p><strong>Dirección:</strong> San Martín 1171, Casa del Bicentenario</p>
+                <p><strong>Teléfono:</strong> 3447-642238</p>
+                <p><strong>Redes:</strong> SJcultura</p>
+                <p><strong>Horario:</strong> Lunes a Viernes de 7:00 a 13:00 hs</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Objetivo del Área</h3>
+                <p>
+                    Garantizar el acceso de la comunidad a bienes y expresiones culturales,
+                    impulsando la creación artística y la participación ciudadana.
+                </p>
+            </div>
+
+            <div class="card-info">
+                <h3>Patrimonio e Identidad</h3>
+                <p>
+                    Fortalecimiento del patrimonio tangible e intangible de la región,
+                    preservando y difundiendo la identidad cultural local.
+                </p>
+            </div>
+
+            <div class="card-info">
+                <h3>Articulación Cultural</h3>
+                <p>
+                    Integración de la cultura con educación, turismo, desarrollo social
+                    y económico mediante políticas públicas.
+                </p>
+            </div>
+
+            <div class="card-info">
+                <h3>Talleres Gratuitos</h3>
+                <p>Órgano y piano, percusión, batería, teatro adultos y teatro adolescentes.</p>
+                <p>Coro adultos, coro niñas y niños, dibujo y pintura.</p>
+                <p>Folclore, acordeón e iniciación musical.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Espacios</h3>
+                <p>
+                    Los talleres se realizan en Casa del Bicentenario y C.I.C. El Brillante.
+                </p>
+                <p>
+                    También se acompaña a instituciones y asociaciones de la ciudad en sus actividades.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="seccion-educacion" id="seccionEducacion">
+
+        <button class="btn-volver" onclick="volverCategorias()">← Volver</button>
+
+        <h1>Área de <span>Educación</span></h1>
+
+        <p class="intro-mujeres">
+            Apoyo escolar, formación profesional, carreras universitarias y acompañamiento educativo para la comunidad.
+        </p>
+
+        <div class="cards-mujeres">
+
+            <div class="card-info">
+                <h3>Información General</h3>
+                <p><strong>Referente:</strong> Graciela Rodríguez</p>
+                <p><strong>Dirección:</strong> Alejo Peyret 1180</p>
+                <p><strong>Teléfono:</strong> 3447-438358</p>
+                <p><strong>Mail:</strong> educación@sanjose.gob.ar</p>
+                <p><strong>Redes:</strong> sjeducacion</p>
+                <p><strong>Horario:</strong> Lunes a Viernes de 8:00 a 14:00 hs</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Objetivos del Área</h3>
+                <p>Garantizar apoyo escolar durante todo el año.</p>
+                <p>Ofrecer carreras universitarias gratuitas para sanjosesinos y sanjosesinas.</p>
+                <p>Brindar información y gestión sobre becas y trámites similares.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Conectividad y Convenios</h3>
+                <p>Asegurar conectividad en los establecimientos escolares de San José.</p>
+                <p>Gestionar convenios con universidades, facultades e institutos para cursos y especializaciones.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Apoyo Escolar</h3>
+                <p>Se brinda en diferentes sedes barriales, acompañando tareas, refuerzo de contenidos y espacios de escucha.</p>
+                <p>También se ofrece merienda o desayuno según el horario.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Horarios de Apoyo Escolar</h3>
+                <p><strong>C.I.C. El Brillante:</strong> Miércoles 8:30 a 10:00 hs para primaria 1° y 2°.</p>
+                <p><strong>Primaria 3° a 6°:</strong> Lunes, miércoles y viernes de 16:30 a 18:30 hs.</p>
+                <p><strong>Secundaria 1° y 2°:</strong> Lunes y viernes de 9:00 a 11:00 hs.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Más Sedes de Apoyo</h3>
+                <p><strong>Cettour N°1966:</strong> Lunes, miércoles y viernes de 15:00 a 17:00 hs.</p>
+                <p><strong>Aula Satelital:</strong> Lunes y miércoles de 9:00 a 11:00 hs / martes y jueves de 15:00 a 17:00 hs.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Escuela Municipal de Artes y Oficios</h3>
+                <p>
+                    “José Gervasio Artigas” brinda formaciones profesionales con salida laboral.
+                </p>
+                <p>
+                    Sus certificaciones tienen validez provincial.
+                </p>
+                <p><strong>Formaciones:</strong> Estampas de Verano y Cuchillería Artesanal.</p>
+            </div>
+
+            <div class="card-info">
+                <h3>Tecnicaturas UTN</h3>
+                <p>
+                    Desde 2022 se mantienen convenios con la Universidad Tecnológica Nacional,
+                    siendo sede de extensión áulica para carreras universitarias.
+                </p>
+            </div>
+
+            <div class="card-info">
+                <h3>Instituciones Locales</h3>
+                <p>Entrega de útiles escolares y guardapolvos a estudiantes de escuelas de San José.</p>
+                <p>Gestión de necesidades escolares y asistencia en inscripciones a diplomaturas y tecnicaturas.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="turismo">
+
+        <div class="contenido-turismo">
+
+            <div class="texto-turismo">
+
+                <h1>
+                    Descubrí
+                    <span>San José</span>
+                </h1>
+
+                <div class="decoracion-turismo">
+                    <img src="img/corazon.png">
+                </div>    
+
+            
+
+                <p>
+                    Conocé los lugares, paisajes y experiencias
+                    que hacen única nuestra ciudad.
+                </p>
+
+                <div class="iconos-turismo">
+
+                    <div class="item">
+                        <img src="img/naturaleza.png" alt="Naturaleza">
+                        <p>Naturaleza</p>
+                    </div>
+
+                    <div class="item">
+                        <img src="img/historia.png" alt="Historia">
+                        <p>Historia</p>
+                    </div>
+
+                    <div class="item">
+                        <img src="img/gastronomia.png" alt="Gastronomía">
+                        <p>Gastronomía</p>
+                    </div>
+
+                    <div class="item">
+                        <img src="img/airelibre.png" alt="Aire libre">
+                        <p>Aire libre</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- CARDS -->
+            <div class="cards-turismo">
+
+                <div class="card-turismo">
+                    <img src="img/granja.png">
+
+                    <div class="info">
+                        <h3>Granja "La Administración"</h3>
+
+                        <p>
+                            Naturaleza, animales y paseos para disfrutar en familia o con amigos.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card-turismo">
+                    <img src="img/kayak.png">
+
+                    <div class="info">
+                        <h3>Tru Kayak</h3>
+
+                        <p>
+                            Aventuras en kayak y atardeceres únicos sobre el río.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card-turismo">
+                    <img src="img/molino.png">
+
+                    <div class="info">
+                        <h3>Molino Aventuras</h3>
+
+                        <p>
+                            Circuitos al aire libre, naturaleza y experiencias llenas de adrenalina.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card-turismo">
+                    <img src="img/termas.png">
+
+                    <div class="info">
+                        <h3>Termas San José</h3>
+
+                        <p>
+                            Relax, piscinas termales y diversión.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card-turismo">
+                    <img src="img/balneario.png">
+
+                    <div class="info">
+                        <h3>Balneario San José</h3>
+
+                        <p>
+                            Playa, río y atardeceres inolvidables.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card-turismo">
+                    <img src="img/molinoforclaz.png">
+
+                    <div class="info">
+                        <h3>Molino Forclaz</h3>
+
+                        <p>
+                            Historia, cultura y uno de los íconos más tradicionales de la región.
+                        </p>
+                    </div>
+                </div>
+
+                
+
+            </div>
+
+        </div>
+
+        
+
+        <div class="frase-final">
+
+                <div class="decoracion-frase">
+                    <img src="img/ubicacion.png" alt="Ubicación">
+                </div>
+            
+
+            <p>
+                Cada rincón tiene una historia para contar.
+                ¡Animate a <span>descubrirla</span>!
+            </p>
+
+        </div>
+
+    </section>
+
+    <section class="contacto">
+        <div class="contenido-contacto">
+
+            <div class="titulo-contacto">
+                <h1>Contacta con nosotros</h1>
+            </div>
+
+            <div class="info-contacto">
+
+                <div class="columna">
+                    <h3>OFICINA PRINCIPAL</h3>
+
+                    <p>
+                        Calle Alcoba, 12,<br>
+                        Sevilla, España<br>
+                        912 455 789
+                    </p>
+                </div>
+
+                <div class="columna">
+                    <h3>REDES SOCIALES</h3>
+
+                    <p>Facebook</p>
+                    <p>Instagram</p>
+                    <p>Twitter</p>
+                </div>
+
+                <div class="email">
+                    <p>hola@unsitiogenial.es</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+<script src="script.js"></script>
+
+<div class="overlay-ayuda" id="overlayAyuda" onclick="cerrarAyuda()">
+
+    <div class="bottom-sheet" onclick="event.stopPropagation()">
+
+        <div class="barra"></div>
+
+        <h2>No estás solo 💗</h2>
+
+        <p>Llamanos gratis, estamos para escucharte.</p>
+
+        <div class="emergencia azul">
+            <div class="icono">🧠</div>
+
+            <div>
+                <small>URGENCIAS 24HS</small>
+                <h3>Salud Mental ER</h3>
+                <strong>0800-777-2100</strong>
+            </div>
+        </div>
+
+        <div class="emergencia rojo">
+            <div class="icono">♡</div>
+
+            <div>
+                <small>GUARDIA 24HS</small>
+                <h3>Niñez y Familia</h3>
+                <strong>3447-146499</strong>
+            </div>
+        </div>
+
+        <div class="emergencia violeta">
+            <div class="icono">♀</div>
+
+            <div>
+                <small>GÉNERO / DIVERSIDAD</small>
+                <h3>Mujeres San José</h3>
+                <strong>3447-438343</strong>
+            </div>
+        </div>
+
+        <button class="cerrar-modal" onclick="cerrarAyuda()">
+            CERRAR
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+</html>

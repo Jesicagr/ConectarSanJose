@@ -125,7 +125,6 @@ body {
 .hero-image-container {
     position: relative;
     z-index: 2;
-    margin-left: 180px;
 }
 
 .hero-img {

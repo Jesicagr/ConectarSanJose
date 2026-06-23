@@ -15,6 +15,7 @@
   --warning-soft: #fdd0d0;
   --danger: #ba1a1a;
   --danger-soft: #ffdad6;
+  --active-accent: #0d7a6d;
   display: block;
 }
 
@@ -66,14 +67,15 @@
 .geo-all-btn {
   align-items: center;
   background: transparent;
-  border: 2px solid var(--primary);
+  border: 1px solid var(--outline-soft);
   border-radius: 999px;
-  color: var(--primary);
+  color: var(--text-muted);
   display: flex;
-  font-weight: 700;
-  gap: 8px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  gap: 6px;
   justify-content: center;
-  padding: 10px 20px;
+  padding: 8px 16px;
   white-space: nowrap;
   cursor: pointer;
   width: 100%;
@@ -81,7 +83,7 @@
 }
 
 .geo-all-btn:hover:not(:disabled) {
-  background: var(--primary-fixed);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .geo-all-btn:disabled {
@@ -725,6 +727,16 @@ textarea.form-input {
 }
 
 /* ───── Sede coords display ───── */
+.sede-phone-link {
+  text-decoration: none;
+  color: var(--text-muted);
+}
+
+.sede-phone-link:hover {
+  text-decoration: underline;
+  color: var(--primary);
+}
+
 .sede-coords {
   align-items: center;
   color: var(--text-muted);

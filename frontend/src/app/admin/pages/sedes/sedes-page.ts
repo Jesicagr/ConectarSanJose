@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { SedeService, Sede } from '../../../services/sede.service';
 import { ToastService } from '../../../shared/toast.service';
 import { LoggerService } from '../../../shared/logger.service';
+import { getPhoneLink } from '../../../shared/link-utils';
 import * as L from 'leaflet';
 
 @Component({
@@ -453,5 +454,9 @@ openEditModal(sede: Sede): void {
 
   soloNumeros(value: string): string {
     return value.replace(/\D/g, '');
+  }
+
+  phoneLink(numero: string, wa?: boolean): string {
+    return getPhoneLink(numero, wa);
   }
 }

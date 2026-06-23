@@ -51,7 +51,7 @@
 **Fecha:** Junio 2026  
 **Institución:** Municipalidad de San José, Entre Ríos  
 **Sitio público:** [http://localhost:4200](http://localhost:4200)  
-**Panel administrativo:** [http://localhost:4201](http://localhost:4201)
+**Panel administrativo:** [http://localhost:4200/admin](http://localhost:4200/admin)
 
 > Documento dirigido a ciudadanos y personal municipal que utilicen la plataforma Conectar San José.
 
@@ -79,10 +79,10 @@ Este manual está dirigido a dos perfiles:
 
 ### 2.4 Descripción general de la aplicación
 
-La aplicación se compone de dos interfaces web:
+La aplicación se compone de dos interfaces web integradas en una misma aplicación Angular:
 
-- **Frontend público (puerto 4200):** Página de una sola vista con secciones navegables mediante anclas. Incluye áreas municipales, agenda semanal de actividades, contactos de emergencia, sección de ayuda y promoción turística.
-- **Frontend administrativo (puerto 4201):** Panel con inicio de sesión seguro mediante JWT. Incluye dashboard con métricas, y módulos de gestión para actividades, sedes, áreas, contactos de emergencia y usuarios administrativos.
+- **Sitio público:** Página de inicio con secciones navegables mediante anclas. Incluye áreas municipales, agenda semanal de actividades, contactos de emergencia, sección de ayuda y promoción turística. No requiere autenticación.
+- **Panel administrativo:** Accesible en `/admin` con inicio de sesión seguro mediante JWT. Incluye dashboard con métricas y módulos de gestión para actividades, sedes, áreas, contactos de emergencia y usuarios administrativos.
 
 Ambos frentes se conectan a un backend central (puerto 8080) que provee una API RESTful y almacena los datos en una base de datos PostgreSQL.
 
@@ -125,11 +125,11 @@ El sistema es completamente responsivo y se adapta a cualquier tamaño de pantal
 | Interfaz | URL |
 |---|---|
 | Sitio público (ciudadanos) | [http://localhost:4200](http://localhost:4200) |
-| Panel administrativo | [http://localhost:4201](http://localhost:4201) |
+| Panel administrativo | [http://localhost:4200/admin](http://localhost:4200/admin) |
 
 ### 4.2 Proceso de inicio de sesión (Panel Administrativo)
 
-1. Abrir el navegador e ingresar a [http://localhost:4201](http://localhost:4201).
+1. Abrir el navegador e ingresar a [http://localhost:4200/admin](http://localhost:4200/admin) o presionar **Iniciar Sesión** en la página principal.
 2. Se mostrará la pantalla de inicio de sesión.
 
    *[IMAGEN: Pantalla de inicio de sesión — formulario con campos de email y contraseña, logo de Conectar San José]*
@@ -256,6 +256,8 @@ El panel administrativo cuenta con un diseño de barra lateral (sidebar) y área
    - Horario de atención
    - Actividades asociadas
 
+   > Los teléfonos, direcciones, correos electrónicos y sitios web son enlaces interactivos. Un clic en un teléfono inicia una llamada o abre WhatsApp (según corresponda); la dirección abre Google Maps; el email abre el cliente de correo.
+
    *[IMAGEN: Modal con detalle de un área municipal]*
 
 **Resultado esperado:** El ciudadano obtiene información completa del área seleccionada, incluyendo datos de contacto y actividades relacionadas.
@@ -274,10 +276,10 @@ El panel administrativo cuenta con un diseño de barra lateral (sidebar) y área
 
 4. Las tarjetas de actividad mostrarán:
    - Título de la actividad
-   - Lugar (sede)
+    - Lugar (sede) con enlace a Google Maps
    - Descripción breve
    - Persona encargada
-   - Teléfono de contacto
+   - Teléfono de contacto (llamada o WhatsApp según el ícono 💬 o 📞)
    - Horario
 
    *[IMAGEN: Tarjetas de actividad en la agenda]*
@@ -303,6 +305,8 @@ El panel administrativo cuenta con un diseño de barra lateral (sidebar) y área
    - Salud Mental: 0800-777-2100 (24 hs)
    - Niñez y Familia: 3447-146499 (24 hs)
    - Mujeres San José: 3447-438343 (Género/Diversidad)
+
+   > Los números de emergencia son enlaces directos: un clic inicia la llamada telefónica desde el dispositivo.
 
    *[IMAGEN: Panel de contactos de emergencia]*
 
@@ -434,6 +438,8 @@ Véase sección [4.3 Recuperación de contraseña](#43-recuperación-de-contrase
 
 4. Hacer clic en **Guardar**.
 5. El sistema mostrará un mensaje de confirmación.
+
+> En las tarjetas del listado, el número de teléfono de cada sede es un enlace interactivo: si está marcado como WhatsApp se abrirá `wa.me/…`; de lo contrario iniciará una llamada `tel:…`.
 
 **Ver en el mapa:**
 
@@ -630,3 +636,12 @@ Para consultas, reporte de errores o solicitudes de soporte técnico:
 ---
 
 *Fin del documento — Manual de Usuario v1.0 — Conectar San José*
+
+---
+
+### Control de versiones del documento
+
+| Versión | Fecha | Cambios |
+|---------|-------|---------|
+| 1.0 | Junio 2026 | Versión inicial del manual. |
+| 1.1 | Junio 2026 | Se actualizan URLs de acceso (unified app). Se agrega documentación de enlaces interactivos (teléfonos, WhatsApp, direcciones, emails, sitios web). Se unifican las secciones de interfaz pública y administrativa. |

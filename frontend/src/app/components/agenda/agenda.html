@@ -54,13 +54,16 @@
           </div>
 
           <div class="item-info" *ngIf="act.telefono">
-            <span class="icono">📞</span>
-            <span><strong>Contacto:</strong> {{ act.telefono }}</span>
+            <span class="icono">{{ act.sede.esWhatsapp ? '💬' : '📞' }}</span>
+            <a [href]="phoneLink(act.telefono, act.sede.esWhatsapp)" target="_blank" rel="noopener" class="link-item">              <strong>Contacto:</strong> {{ act.telefono }}
+            </a>
           </div>
 
           <div class="item-info" *ngIf="act.sede.direccion">
             <span class="icono">📍</span>
-            <span><strong>Dirección:</strong> {{ act.sede.direccion }}</span>
+            <a [href]="addressLink(act.sede.direccion)" target="_blank" rel="noopener" class="link-item">
+              <strong>Dirección:</strong> {{ act.sede.direccion }}
+            </a>
           </div>
         </div>
       </div>
@@ -100,12 +103,16 @@
 
           <div class="modal-field" *ngIf="actividadSeleccionada.telefono">
             <span class="modal-label">Contacto</span>
-            <span class="modal-value">📞 {{ actividadSeleccionada.telefono }}</span>
+            <a [href]="phoneLink(actividadSeleccionada.telefono, actividadSeleccionada.sede.esWhatsapp)" target="_blank" rel="noopener" class="link-value">
+              <span class="modal-value">{{ actividadSeleccionada.sede.esWhatsapp ? '💬' : '📞' }} {{ actividadSeleccionada.telefono }}</span>
+            </a>
           </div>
 
           <div class="modal-field" *ngIf="actividadSeleccionada.sede.direccion">
             <span class="modal-label">Dirección</span>
-            <span class="modal-value">📍 {{ actividadSeleccionada.sede.direccion }}</span>
+            <a [href]="addressLink(actividadSeleccionada.sede.direccion)" target="_blank" rel="noopener" class="link-value">
+              <span class="modal-value">📍 {{ actividadSeleccionada.sede.direccion }}</span>
+            </a>
           </div>
         </div>
 

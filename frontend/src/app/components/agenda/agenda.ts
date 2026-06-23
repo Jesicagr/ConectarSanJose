@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActividadService } from '../../services/actividad.service';
 import { VisitaService } from '../../services/visita.service';
 import { Actividad, DiaSemana } from '../../models/actividad.model';
+import { getPhoneLink, getAddressLink, isUrl } from '../../shared/link-utils';
 
 interface DiaAgenda {
   nombreCorto: string; // "LUN", "MAR"
@@ -148,6 +149,18 @@ export class AgendaComponent implements OnInit {
       if (!actividad.horarios || actividad.horarios.length === 0) return false;
       return actividad.horarios.some(h => h.diaSemana === enumDiaJava);
     });
+  }
+
+  phoneLink(numero: string, wa?: boolean): string {
+    return getPhoneLink(numero, wa);
+  }
+
+  addressLink(dir: string): string {
+    return getAddressLink(dir);
+  }
+
+  isUrl(str: string): boolean {
+    return isUrl(str);
   }
 
   //transforma un objeto Date al formato del HTML "YYYY-MM-DD"

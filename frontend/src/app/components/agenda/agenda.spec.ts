@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 import { AgendaComponent } from './agenda';
-import { ActividadService } from '../../services/actividad';
+import { ActividadService } from '../../services/actividad.service';
 import { Actividad, DiaSemana, Sede } from '../../models/actividad.model';
 
 function buildSede(overrides?: Partial<Sede>): Sede {
@@ -71,7 +71,7 @@ describe('AgendaComponent', () => {
 
   beforeEach(async () => {
     const serviceMock = {
-      obtenerActividades: () => of(mockActividades),
+      obtenerTodas: () => of(mockActividades),
     };
 
     await TestBed.configureTestingModule({

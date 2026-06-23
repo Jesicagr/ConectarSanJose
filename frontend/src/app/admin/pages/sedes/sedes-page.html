@@ -70,7 +70,7 @@
                   } @else {
                     <span class="material-symbols-outlined">phone</span>
                   }
-                  {{ sede.telefono }}
+                  <a [href]="phoneLink(sede.telefono, sede.esWhatsapp)" target="_blank" rel="noopener" class="sede-phone-link">{{ sede.telefono }}</a>
                 </p>
               }
               @if (sede.descripcion) {

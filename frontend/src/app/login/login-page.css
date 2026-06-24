@@ -251,16 +251,68 @@
 
 .login-footer {
   position: absolute;
-  bottom: 16px;
+  bottom: 12px;
   text-align: center;
   width: 100%;
   z-index: 10;
 }
 
+.login-footer .footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
 .login-footer p {
   color: rgba(85, 85, 85, 0.8);
-  font-size: 14px;
+  font-size: 13px;
   margin: 0;
+}
+
+.login-footer .footer-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+  color: rgba(85, 85, 85, 0.7);
+  font-size: 12px;
+}
+
+.login-footer .footer-contacto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.login-footer .footer-social {
+  display: flex;
+  gap: 12px;
+}
+
+.login-footer .footer-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(85, 85, 85, 0.7);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.login-footer .footer-item:hover {
+  color: rgba(85, 85, 85, 0.9);
+}
+
+.login-footer .footer-item .material-symbols-outlined {
+  font-size: 14px;
+  color: rgba(85, 85, 85, 0.6);
+}
+
+.login-footer .social-icon {
+  width: 14px;
+  height: 14px;
+  color: rgba(85, 85, 85, 0.6);
 }
 
 /* ───── ≥ 481px ───── */

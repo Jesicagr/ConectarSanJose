@@ -218,7 +218,7 @@ nav a {
   font-weight: 700;
   color: #444;
   line-height: 1;
-  white-space: normal;
+  white-space: nowrap;
   margin-bottom: 16px;
   transform: none;
 }
@@ -621,6 +621,29 @@ nav a {
   font-size: 16px;
   line-height: 1.8;
   color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contact-link {
+  color: #333;
+  text-decoration: none;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+}
+
+.contact-icon {
+  font-size: 18px;
+  color: #555;
+}
+
+.contact-social {
+  width: 18px;
+  height: 18px;
+  color: #555;
 }
 
 .email {
@@ -977,6 +1000,18 @@ nav a {
   .btn-volver {
     width: auto;
   }
+
+  .overlay-ayuda {
+    align-items: center;
+  }
+
+  .bottom-sheet {
+    width: auto;
+    max-width: 520px;
+    border-radius: 35px;
+    padding: 32px;
+    margin: 20px;
+  }
 }
 
 /* ========== TABLET LARGE / DESKTOP (768px+) ========== */
@@ -1041,6 +1076,13 @@ nav a {
     flex-direction: row;
     justify-content: center;
     gap: 0;
+    position: relative;
+  }
+
+  .texto-ayuda h1 {
+    position: relative;
+    z-index: 1;
+    margin-right: -20%;
   }
 
   .cards {
@@ -1175,7 +1217,11 @@ nav a {
   }
 
   .contenido {
-    gap: 20px;
+    gap: 0;
+  }
+
+  .texto-ayuda h1 {
+    margin-right: -30%;
   }
 
   .card-ayuda img {

@@ -110,62 +110,7 @@
     <h1>Áreas</h1>
     <p>Conocé las áreas municipales y sus servicios</p>
   </div>
-  <div class="grid-categorias">
-    <div class="card mujer" (click)="abrirModalArea('mujer')">
-      <img src="mujer.png">
-      <h4>Mujer</h4>
-    </div>
-
-    <div class="card amarillo" (click)="abrirModalArea('ninez')">
-      <img src="ninez.png">
-      <h4>Niñez</h4>
-    </div>
-
-    <div class="card gris" (click)="abrirModalArea('mayores')">
-      <img src="mayores.png">
-      <h4>Personas <br> Mayores</h4>
-    </div>
-
-    <div class="card celeste" (click)="abrirModalArea('comunidad')">
-      <img src="comunidad.png">
-      <h4>Desarrollo <br> Comunitario</h4>
-    </div>
-
-    <div class="card amarillo" (click)="abrirModalArea('discapacidad')">
-      <img src="discapacidad.png">
-      <h4>Discapacidad</h4>
-    </div>
-
-    <div class="card gris" (click)="abrirModalArea('salud')">
-      <img src="salud.png">
-      <h4>Salud</h4>
-    </div>
-
-    <div class="card celeste" (click)="abrirModalArea('trabajo')">
-      <img src="trabajo.png">
-      <h4>Trabajo</h4>
-    </div>
-
-    <div class="card amarillo" (click)="abrirModalArea('deportes')">
-      <img src="deportes.png">
-      <h4>Deportes</h4>
-    </div>
-
-    <div class="card gris" (click)="abrirModalArea('turismo')">
-      <img src="turismo.png">
-      <h4>Turismo</h4>
-    </div>
-
-    <div class="card celeste" (click)="abrirModalArea('cultura')">
-      <img src="cultura.png">
-      <h4>Cultura</h4>
-    </div>
-
-    <div class="card amarillo" (click)="abrirModalArea('educacion')">
-      <img src="educacion.png">
-      <h4>Educación</h4>
-    </div>
-  </div>
+  <app-area />
 </section>
 
 <section id="agenda" class="agenda">
@@ -319,6 +264,10 @@
   </div>
 </section>
 
+<a class="whatsapp-float" [href]="whatsappFlotanteNumero ? 'https://wa.me/' + whatsappFlotanteNumero : null" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" width="28" height="28" fill="#fff"><path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.4-.56-.41-.14-.01-.31-.01-.48-.01-.17 0-.44.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.28z"/></svg>
+</a>
+
 <div class="overlay-ayuda" [class.active]="mostrarModalAyuda" (click)="cerrarAyuda()">
   <div class="bottom-sheet" (click)="$event.stopPropagation()">
     <div class="barra"></div>
@@ -326,127 +275,17 @@
     <h2>No estás solo 💗</h2>
     <p>Llamanos gratis, estamos para escucharte.</p>
 
-    <a [href]="phoneLink('0800-777-2100')" target="_blank" rel="noopener" class="emergencia-link">
-      <div class="emergencia azul">
-        <div class="icono">🧠</div>
+    <a *ngFor="let c of contactosEmergencia" [href]="phoneLink(primerTelefono(c))" target="_blank" rel="noopener" class="emergencia-link">
+      <div class="emergencia" [class.azul]="contactoColor(c.icono) === 'azul'" [class.rojo]="contactoColor(c.icono) === 'rojo'" [class.violeta]="contactoColor(c.icono) === 'violeta'" [class.verde]="contactoColor(c.icono) === 'verde'" [class.amarillo]="contactoColor(c.icono) === 'amarillo'">
+        <div class="icono">{{ contactoEmoji(c.icono) }}</div>
         <div>
-          <small>URGENCIAS 24HS</small>
-          <h3>Salud Mental ER</h3>
-          <strong>0800-777-2100</strong>
-        </div>
-      </div>
-    </a>
-
-    <a [href]="phoneLink('3447-146499')" target="_blank" rel="noopener" class="emergencia-link">
-      <div class="emergencia rojo">
-        <div class="icono">♡</div>
-        <div>
-          <small>GUARDIA 24HS</small>
-          <h3>Niñez y Familia</h3>
-          <strong>3447-146499</strong>
-        </div>
-      </div>
-    </a>
-
-    <a [href]="phoneLink('3447-438343')" target="_blank" rel="noopener" class="emergencia-link">
-      <div class="emergencia violeta">
-        <div class="icono">♀</div>
-        <div>
-          <small>GÉNERO / DIVERSIDAD</small>
-          <h3>Mujeres San José</h3>
-          <strong>3447-438343</strong>
+          <small>{{ c.categoria }}</small>
+          <h3>{{ c.nombreInstitucion }}</h3>
+          <strong>{{ primerTelefono(c) }}</strong>
         </div>
       </div>
     </a>
 
     <button class="cerrar-modal" (click)="cerrarAyuda()">CERRAR</button>
-  </div>
-</div>
-
-<div class="modal-overlay" *ngIf="mostrarModalArea" (click)="cerrarModalArea()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <button class="btn-volver" (click)="cerrarModalArea()">← Volver</button>
-
-    <main class="modal-body" *ngIf="areaSeleccionada">
-      <div class="titulo-area">
-        <div class="area-avatar">
-          <img [src]="getIconPath(areaSeleccionada)" alt="{{ areaSeleccionada.nombre }}" (error)="onImgError($event)">
-        </div>
-        <h1>{{ areaSeleccionada.nombre }}</h1>
-        <div class="accent-line" [style.background]="getAccentColor(areaSeleccionada)"></div>
-      </div>
-
-      <p class="intro-area" *ngIf="areaSeleccionada.descripcion">{{ areaSeleccionada.descripcion }}</p>
-
-      <div class="cards-grid">
-        <div class="card-info" *ngIf="areaSeleccionada.referente">
-          <h3 [style.color]="getAccentColor(areaSeleccionada)">Referente</h3>
-          <p>{{ areaSeleccionada.referente }}</p>
-        </div>
-        <div class="card-info" *ngIf="areaSeleccionada.direccion">
-          <h3 [style.color]="getAccentColor(areaSeleccionada)">Dirección</h3>
-          <a [href]="addressLink(areaSeleccionada.direccion)" target="_blank" rel="noopener" class="link-card">
-            <p>📍 {{ areaSeleccionada.direccion }}</p>
-          </a>
-        </div>
-        <div class="card-info" *ngIf="areaSeleccionada.telefono">
-          <h3 [style.color]="getAccentColor(areaSeleccionada)">Teléfono</h3>
-          <a [href]="phoneLink(areaSeleccionada.telefono, areaSeleccionada.esWhatsapp)" target="_blank" rel="noopener" class="link-card">
-            <p>{{ areaSeleccionada.esWhatsapp ? '💬' : '📞' }} {{ areaSeleccionada.telefono }}</p>
-          </a>
-        </div>
-        <div class="card-info" *ngIf="areaSeleccionada.email">
-          <h3 [style.color]="getAccentColor(areaSeleccionada)">Email</h3>
-          <a [href]="emailLink(areaSeleccionada.email)" target="_blank" rel="noopener" class="link-card">
-            <p>✉️ {{ areaSeleccionada.email }}</p>
-          </a>
-        </div>
-        <div class="card-info" *ngIf="areaSeleccionada.sitioWeb">
-          <h3 [style.color]="getAccentColor(areaSeleccionada)">Sitio Web</h3>
-          <a [href]="webLink(areaSeleccionada.sitioWeb)" target="_blank" rel="noopener" class="link-card">
-            <p>🌐 {{ areaSeleccionada.sitioWeb }}</p>
-          </a>
-        </div>
-        <div class="card-info" *ngIf="areaSeleccionada.horarioAtencion">
-          <h3 [style.color]="getAccentColor(areaSeleccionada)">Horario</h3>
-          <p>🕐 {{ areaSeleccionada.horarioAtencion }}</p>
-        </div>
-        <div class="card-info" *ngIf="areaSeleccionada.redes">
-          <h3 [style.color]="getAccentColor(areaSeleccionada)">Redes</h3>
-          <p>{{ areaSeleccionada.redes }}</p>
-        </div>
-        <div class="card-info" *ngIf="areaSeleccionada.telefonos && areaSeleccionada.telefonos.length > 0">
-          <h3 [style.color]="getAccentColor(areaSeleccionada)">Teléfonos adicionales</h3>
-          <p>
-            <a *ngFor="let t of areaSeleccionada.telefonos" [href]="phoneLink(t.numero, t.esWhatsapp)" target="_blank" rel="noopener" class="tag-telefono link-tag">
-              {{ t.etiqueta ? t.etiqueta + ': ' : '' }}{{ t.esWhatsapp ? '💬' : '📞' }} {{ t.numero }}
-            </a>
-          </p>
-        </div>
-      </div>
-
-      <div class="actividades-seccion" *ngIf="actividadesPorArea.length > 0">
-        <h2 class="seccion-subtitle" [style.color]="getAccentColor(areaSeleccionada)">Actividades</h2>
-        <div class="cards-grid">
-          <div class="card-info actividad-card" *ngFor="let act of actividadesPorArea">
-            <h3 [style.color]="getAccentColor(areaSeleccionada)">{{ act.titulo }}</h3>
-            <p class="actividad-sede" *ngIf="act.sede">{{ act.sede.nombre }}</p>
-            <p class="actividad-desc" *ngIf="act.descripcion_corta">{{ act.descripcion_corta }}</p>
-            <div class="actividad-meta">
-              <span *ngIf="act.encargado">👤 {{ act.encargado }}</span>
-              <a *ngIf="act.telefono" [href]="phoneLink(act.telefono, act.sede.esWhatsapp)" target="_blank" rel="noopener" class="link-meta">{{ act.sede.esWhatsapp ? '💬' : '📞' }} {{ act.telefono }}</a>
-              <span *ngIf="act.horarios && act.horarios.length > 0">
-                ⏰ {{ act.horarios[0].horaInicio.substring(0, 5) || '' }} - {{ act.horarios[0].horaFin.substring(0, 5) || '' }}hs
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <p class="sin-actividades" *ngIf="actividadesPorArea.length === 0">
-        No hay actividades disponibles para esta área.
-      </p>
-    </main>
-
   </div>
 </div>

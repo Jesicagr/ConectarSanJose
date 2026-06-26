@@ -1,10 +1,8 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { forkJoin } from 'rxjs';
-
 import { ActividadService } from '../../../services/actividad.service';
 import { AreaService } from '../../../services/area.service';
-import { VisitaService } from '../../../services/visita.service';
+
 import { getAreaTone, sortByAreaOrder, WEBP_MAP } from '../../../shared/area-tones';
 import { DateFormatPipe } from '../../../shared/date-format.pipe';
 import { ToastService } from '../../../shared/toast.service';
@@ -38,6 +36,7 @@ interface CategoryFilter {
   label: string;
   icon: string;
   tone: string;
+  count: number;
 }
 
 @Component({
@@ -49,7 +48,6 @@ interface CategoryFilter {
 export class DashboardPage implements OnInit {
   private actividadService = inject(ActividadService);
   private areaService = inject(AreaService);
-  private visitaService = inject(VisitaService);
   private toast = inject(ToastService);
   private logger = inject(LoggerService);
 
@@ -64,13 +62,11 @@ export class DashboardPage implements OnInit {
   metrics = signal<Metric[]>([
     { label: 'Actividades Totales', value: '0', icon: 'confirmation_number', tone: 'primary', detail: 'Cargando...', change: '' },
     { label: 'En Revisión', value: '0', icon: 'history_edu', tone: 'warning', detail: 'Requieren validación técnica', badge: 'Pendientes' },
-    { label: 'Visitas Hoy', value: '0', icon: 'visibility', tone: 'success', detail: 'Cargando...', change: '' },
   ]);
 
   categories = signal<CategoryFilter[]>([]);
   activities = signal<DashboardActivity[]>([]);
-  visitasActividad = signal<{ id: number; title: string; visits: number }[]>([]);
-  medals = ['🥇', '🥈', '🥉'];
+
 
   private areaToneMap: Record<string, string> = {};
 
@@ -85,17 +81,8 @@ export class DashboardPage implements OnInit {
   });
 
   ngOnInit(): void {
-    forkJoin({
-      visitStats: this.visitaService.obtenerStats(),
-      areas: this.areaService.obtenerTodas(),
-    }).subscribe({
-      next: ({ visitStats, areas }) => {
-        this.metrics.update(m => {
-          m[2].value = String(visitStats.hoy);
-          m[2].detail = `${visitStats.total} visitas totales · ${visitStats.semana} esta semana`;
-          return [...m];
-        });
-
+    this.areaService.obtenerTodas().subscribe({
+      next: (areas) => {
         const sorted = sortByAreaOrder(areas);
         this.areaToneMap = {};
         this.categories.set(sorted.map((a, i) => {
@@ -104,6 +91,7 @@ export class DashboardPage implements OnInit {
             label: a.nombre,
             icon: WEBP_MAP[a.nombre] || 'assets/comunidad.webp',
             tone: getAreaTone(a.nombre, i),
+            count: 0,
           };
         }));
 
@@ -140,33 +128,26 @@ export class DashboardPage implements OnInit {
         }));
         this.activities.set(mapped);
 
+        const countMap: Record<string, number> = {};
+        for (const a of mapped) {
+          for (const cat of a.categories) {
+            countMap[cat] = (countMap[cat] || 0) + 1;
+          }
+        }
+        this.categories.update(cats => cats.map(c => ({ ...c, count: countMap[c.label] || 0 })));
+
         const enRevision = mapped.filter(a => a.status === 'En Revisión').length;
         this.metrics.update(m => {
           m[1].value = String(enRevision);
           return [...m];
         });
 
-        this.cargarVisitas();
         this.loading.set(false);
       },
       error: (err) => {
         this.logger.error('Error al cargar actividades', err);
         this.loading.set(false);
       },
-    });
-  }
-
-  private cargarVisitas(): void {
-    this.visitaService.visitasPorActividad().subscribe({
-      next: (visitas) => {
-        const ordenadas = this.activities()
-          .map(a => ({ id: a.id, title: a.title, visits: visitas[a.id] || 0 }))
-          .filter(v => v.visits > 0)
-          .sort((a, b) => b.visits - a.visits)
-          .slice(0, 10);
-        this.visitasActividad.set(ordenadas);
-      },
-      error: () => {},
     });
   }
 
@@ -255,18 +236,6 @@ export class DashboardPage implements OnInit {
         this.toast.show('Error al eliminar la actividad', 'error');
       },
     });
-  }
-
-  onVisitaClick(v: { id: number; title: string }): void {
-    const activity = this.activities().find(a => a.id === v.id);
-    if (activity) this.viewActivity(activity);
-  }
-
-  barWidth(visits: number): number {
-    const top = this.visitasActividad();
-    if (top.length === 0) return 0;
-    const max = top[0].visits;
-    return max > 0 ? (visits / max) * 100 : 0;
   }
 
   private normalize(value: string): string {

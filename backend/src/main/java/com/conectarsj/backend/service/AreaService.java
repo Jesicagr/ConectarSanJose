@@ -27,6 +27,9 @@ public class AreaService {
     }
 
     public void eliminar(Integer id) {
-        areaRepository.deleteById(id);
+        areaRepository.findById(id).ifPresent(a -> {
+            a.setActivo(false);
+            areaRepository.save(a);
+        });
     }
 }

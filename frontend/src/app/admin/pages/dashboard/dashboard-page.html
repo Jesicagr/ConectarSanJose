@@ -38,38 +38,7 @@
     }
   </section>
 
-  @if (visitasActividad().length > 0) {
-    <section class="visitas-section" aria-label="Actividades más visitadas">
-      <div class="section-heading">
-        <div class="section-heading-left">
-          <span class="material-symbols-outlined section-icon">leaderboard</span>
-          <h2>Más Visitadas</h2>
-        </div>
-        <span class="visitas-subtitle">{{ visitasActividad().length }} actividades · {{ visitasActividad()[0].visits }} visitas máx</span>
-      </div>
-      <div class="visitas-card">
-        @for (v of visitasActividad(); track v.id; let i = $index) {
-          <div class="visita-row" (click)="onVisitaClick(v)">
-            @if (i < 3) {
-              <span class="visita-medal">{{ medals[i] }}</span>
-            } @else {
-              <span class="visita-rank">{{ i + 1 }}</span>
-            }
-            <div class="visita-bar-wrap">
-              <div class="visita-bar-track">
-                <div class="visita-bar-fill" [style.width.%]="barWidth(v.visits)"></div>
-              </div>
-              <span class="visita-title">{{ v.title }}</span>
-            </div>
-            <span class="visita-count">
-              <span class="material-symbols-outlined">visibility</span>
-              <strong>{{ v.visits }}</strong>
-            </span>
-          </div>
-        }
-      </div>
-    </section>
-  }
+
 
   <section class="filters" aria-label="Filtros">
     <div class="section-heading">
@@ -88,7 +57,8 @@
           <span class="category-icon">
             <img [src]="category.icon" [alt]="category.label">
           </span>
-          <span>{{ category.label }}</span>
+          <span class="category-label">{{ category.label }}</span>
+          <span class="category-count">{{ category.count }}</span>
         </button>
       }
     </div>

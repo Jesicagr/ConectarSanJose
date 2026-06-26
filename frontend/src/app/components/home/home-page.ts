@@ -1,139 +1,63 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AreaService, Area } from '../../services/area.service';
-import { ActividadService } from '../../services/actividad.service';
-import { Actividad } from '../../models/actividad.model';
-import { WEBP_MAP, AREA_ORDER } from '../../shared/area-tones';
 import { AgendaComponent } from '../agenda/agenda';
-import { getPhoneLink, getAddressLink, getEmailLink, getWebLink, isUrl } from '../../shared/link-utils';
+import { AreaComponent } from '../area/area';
+import { ContactoService, Contacto } from '../../services/contacto.service';
+import { getPhoneLink } from '../../shared/link-utils';
+
+const ICON_MAP: Record<string, { emoji: string; color: string }> = {
+  local_police: { emoji: '👮', color: 'azul' },
+  fire_extinguisher: { emoji: '🔥', color: 'rojo' },
+  medical_services: { emoji: '🚑', color: 'rojo' },
+  local_hospital: { emoji: '🏥', color: 'rojo' },
+  ambulance: { emoji: '🚑', color: 'rojo' },
+  phone_in_talk: { emoji: '📞', color: 'azul' },
+  help_center: { emoji: '🆘', color: 'violeta' },
+  volunteer_activism: { emoji: '🤝', color: 'verde' },
+  water_drop: { emoji: '💧', color: 'azul' },
+  electric_bolt: { emoji: '⚡', color: 'amarillo' },
+  elderly: { emoji: '👴', color: 'violeta' },
+  child_friendly: { emoji: '👶', color: 'rojo' },
+  pets: { emoji: '🐾', color: 'verde' },
+  gavel: { emoji: '⚖️', color: 'violeta' },
+  psychology: { emoji: '🧠', color: 'azul' },
+  female: { emoji: '♀️', color: 'violeta' },
+};
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, AgendaComponent],
+  imports: [CommonModule, AgendaComponent, AreaComponent],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css'
 })
 export class HomePage implements OnInit {
   menuAbierto: boolean = false;
   mostrarModalAyuda: boolean = false;
-  mostrarModalArea: boolean = false;
-  listaAreas: Area[] = [];
-  areaSeleccionada: Area | null = null;
-  actividadesPorArea: Actividad[] = [];
+  contactosEmergencia: Contacto[] = [];
+  whatsappFlotanteNumero: string = '';
 
-  constructor(
-    private areaService: AreaService,
-    private actividadService: ActividadService,
-  ) {}
+  constructor(private contactoService: ContactoService) {}
 
   ngOnInit(): void {
-    this.cargarAreas();
-  }
-
-  cargarAreas(): void {
-    this.areaService.obtenerTodas().subscribe({
-      next: (data) => {
-        this.listaAreas = [...data].sort((a, b) => {
-          const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-          const aNorm = normalize(a.nombre);
-          const bNorm = normalize(b.nombre);
-          const ai = AREA_ORDER.findIndex(name => normalize(name) === aNorm);
-          const bi = AREA_ORDER.findIndex(name => normalize(name) === bNorm);
-          return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+    this.whatsappFlotanteNumero = this.contactoService.getWhatsappFlotanteNumero();
+    this.contactoService.obtenerTodos().subscribe({
+      next: (contactos) => {
+        this.contactosEmergencia = [...contactos].sort((a, b) => {
+          const aHas135 = a.telefonos?.some(t => t.numero === '135');
+          const bHas135 = b.telefonos?.some(t => t.numero === '135');
+          if (aHas135) return -1;
+          if (bHas135) return 1;
+          const pa = (a as any).ordenPrioridad;
+          const pb = (b as any).ordenPrioridad;
+          if (pa != null && pb != null) return pa - pb;
+          if (pa != null) return -1;
+          if (pb != null) return 1;
+          return 0;
         });
       },
-      error: (err) => console.error('[ConectarSanJose] Error al cargar áreas:', err)
+      error: () => this.contactosEmergencia = [],
     });
-  }
-
-  abrirModalArea(nombreClave: string): void {
-    const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-    const claveNorm = normalize(nombreClave);
-    const area = this.listaAreas.find(a => {
-      const aNorm = normalize(a.nombre);
-      return aNorm.includes(claveNorm) || claveNorm.includes(aNorm);
-    });
-    if (!area || area.id === undefined) return;
-
-    this.areaService.obtenerPorId(area.id).subscribe({
-      next: (areaCompleta) => {
-        this.areaSeleccionada = areaCompleta;
-        this.mostrarModalArea = true;
-      },
-      error: (err) => console.error('[ConectarSanJose] Error al traer detalles del área:', err)
-    });
-
-    this.actividadService.obtenerActividadesPorArea(area.id).subscribe({
-      next: (actividades) => {
-        this.actividadesPorArea = actividades;
-      },
-      error: (err) => console.error('[ConectarSanJose] Error al cargar actividades del área:', err)
-    });
-  }
-
-  cerrarModalArea(): void {
-    this.mostrarModalArea = false;
-    this.areaSeleccionada = null;
-    this.actividadesPorArea = [];
-  }
-
-  getIconPath(area: Area): string {
-    const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-    const aNorm = normalize(area.nombre);
-    const key = Object.keys(WEBP_MAP).find(k => normalize(k) === aNorm);
-    return WEBP_MAP[key || ''] || 'assets/comunidad.webp';
-  }
-
-  private ACCENT_COLORS: Record<string, string> = {
-    'Mujeres Género y Diversidad': '#9acb92',
-    'Mujer': '#9acb92',
-    'Niñez, Adolescencia y Familia': '#d6c75d',
-    'Niñez': '#d6c75d',
-    'Personas Mayores': '#9acb92',
-    'Desarrollo Comunitario': '#8fc6d9',
-    'Discapacidad': '#d6c75d',
-    'Salud': '#9acb92',
-    'Salud Social y Comunitaria': '#9acb92',
-    'Trabajo y Producción': '#8fc6d9',
-    'Trabajo': '#8fc6d9',
-    'Deportes y Recreación': '#d6c75d',
-    'Deportes': '#d6c75d',
-    'Turismo': '#8fc6d9',
-    'Cultura': '#8fc6d9',
-    'Educación': '#d6c75d',
-  };
-
-  getAccentColor(area: Area): string {
-    const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-    const aNorm = normalize(area.nombre);
-    const key = Object.keys(this.ACCENT_COLORS).find(k => normalize(k) === aNorm);
-    return this.ACCENT_COLORS[key || ''] || '#9acb92';
-  }
-
-  onImgError(event: Event): void {
-    const img = event.target as HTMLImageElement;
-    img.style.display = 'none';
-  }
-
-  phoneLink(numero: string, wa?: boolean): string {
-    return getPhoneLink(numero, wa);
-  }
-
-  addressLink(dir: string): string {
-    return getAddressLink(dir);
-  }
-
-  emailLink(email: string): string {
-    return getEmailLink(email);
-  }
-
-  webLink(sitio: string): string {
-    return getWebLink(sitio);
-  }
-
-  isUrl(str: string): boolean {
-    return isUrl(str);
   }
 
   toggleMenu(): void {
@@ -156,5 +80,21 @@ export class HomePage implements OnInit {
 
   cerrarAyuda() {
     this.mostrarModalAyuda = false;
+  }
+
+  phoneLink(numero: string): string {
+    return getPhoneLink(numero);
+  }
+
+  contactoEmoji(icono: string): string {
+    return ICON_MAP[icono]?.emoji || '📞';
+  }
+
+  contactoColor(icono: string): string {
+    return ICON_MAP[icono]?.color || 'azul';
+  }
+
+  primerTelefono(contacto: Contacto): string {
+    return contacto.telefonos?.[0]?.numero || '';
   }
 }

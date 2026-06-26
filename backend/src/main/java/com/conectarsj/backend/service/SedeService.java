@@ -27,6 +27,9 @@ public class SedeService {
     }
 
     public void eliminar(Integer id) {
-        sedeRepository.deleteById(id);
+        sedeRepository.findById(id).ifPresent(s -> {
+            s.setActivo(false);
+            sedeRepository.save(s);
+        });
     }
 }

@@ -3,11 +3,13 @@ package com.conectarsj.backend.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 
 @Entity
 @Table(name = "areas")
+@SQLRestriction("coalesce(activo, true) = true")
 @Data
 public class Area {
 
@@ -50,6 +52,8 @@ public class Area {
 
     @Column(length = 200)
     private String horarioAtencion;
+
+    private Boolean activo = true;
 
     @ElementCollection
     @BatchSize(size = 30)

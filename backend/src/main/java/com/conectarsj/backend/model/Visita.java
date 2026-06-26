@@ -2,10 +2,12 @@ package com.conectarsj.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.SQLRestriction;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "visitas")
+@SQLRestriction("coalesce(activo, true) = true")
 @Data
 public class Visita {
 
@@ -21,4 +23,6 @@ public class Visita {
 
     @Column(name = "contador", nullable = false)
     private Integer contador = 1;
+
+    private Boolean activo = true;
 }

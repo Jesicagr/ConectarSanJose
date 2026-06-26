@@ -38,6 +38,7 @@ export class ContactsPage implements OnInit {
   isModalOpen = false;
   editId: number | null = null;
   saving = false;
+  whatsappFlotanteNumero = '';
 
   iconos = [
     { icono: 'local_police', label: 'Policía' },
@@ -68,6 +69,7 @@ export class ContactsPage implements OnInit {
   private contactsBackend: Contacto[] = [];
 
   ngOnInit(): void {
+    this.whatsappFlotanteNumero = this.contactoService.getWhatsappFlotanteNumero();
     this.contactoService.obtenerTodos().subscribe({
       next: (data) => {
         this.contactsBackend = data;
@@ -139,6 +141,12 @@ export class ContactsPage implements OnInit {
       categoria: backend.categoria || '',
     };
     this.isModalOpen = true;
+  }
+
+  onOverlayMouseDown(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeModal();
+    }
   }
 
   closeModal(): void {
@@ -246,5 +254,9 @@ export class ContactsPage implements OnInit {
 
   soloNumeros(value: string): string {
     return value.replace(/\D/g, '');
+  }
+
+  onWhatsappFlotanteChange(): void {
+    this.contactoService.setWhatsappFlotanteNumero(this.whatsappFlotanteNumero);
   }
 }

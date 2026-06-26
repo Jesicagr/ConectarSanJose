@@ -48,7 +48,7 @@ export class AreasPage implements OnInit {
     { icono: 'child_care', label: 'Niñez' },
     { icono: 'elderly', label: 'Adulto Mayor' },
     { icono: 'diversity_3', label: 'Comunidad' },
-    { icono: 'accessible', label: 'Discapacidad' },
+    { icono: 'accessible', label: 'Inclusión' },
     { icono: 'monitor_heart', label: 'Salud' },
     { icono: 'work', label: 'Trabajo' },
     { icono: 'sports_soccer', label: 'Deportes' },

@@ -49,4 +49,18 @@ export class ContactoService {
   private invalidateCache(): void {
     this.cache$ = null;
   }
+
+  private static readonly WA_FLOAT_KEY = 'conectar_whatsapp_flotante_numero';
+
+  getWhatsappFlotanteNumero(): string {
+    return localStorage.getItem(ContactoService.WA_FLOAT_KEY) || '';
+  }
+
+  setWhatsappFlotanteNumero(numero: string): void {
+    if (numero) {
+      localStorage.setItem(ContactoService.WA_FLOAT_KEY, numero);
+    } else {
+      localStorage.removeItem(ContactoService.WA_FLOAT_KEY);
+    }
+  }
 }

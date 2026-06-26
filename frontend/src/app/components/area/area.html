@@ -14,60 +14,82 @@
   <div class="modal-overlay" *ngIf="mostrarModal" (click)="cerrarModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       
-      <header class="modal-header">
-        <h2>Detalles del Área</h2>
-        <button class="btn-cerrar" (click)="cerrarModal()">×</button>
-      </header>
+      <button class="btn-volver" (click)="cerrarModal()">← Volver</button>
 
       <main class="modal-body" *ngIf="areaSeleccionada">
-        <div class="area-avatar">
-          <img class="avatar-icono" [src]="getIconPath(areaSeleccionada)" alt="{{ areaSeleccionada.nombre }}" (error)="onImgError($event)">
+        <div class="titulo-area">
+          <div class="area-avatar">
+            <img [src]="getIconPath(areaSeleccionada)" alt="{{ areaSeleccionada.nombre }}" (error)="onImgError($event)">
+          </div>
+          <h1>{{ areaSeleccionada.nombre }}</h1>
+          <div class="accent-line" [style.background]="getAccentColor(areaSeleccionada)"></div>
         </div>
-        <h3>{{ areaSeleccionada.nombre }}</h3>
 
-        <p class="area-descripcion" *ngIf="areaSeleccionada.descripcion">{{ areaSeleccionada.descripcion }}</p>
+        <p class="intro-area" *ngIf="areaSeleccionada.descripcion">{{ areaSeleccionada.descripcion }}</p>
 
-        <div class="area-detalles">
-          <div class="detalle-item" *ngIf="areaSeleccionada.referente">
-            <strong>Referente:</strong> {{ areaSeleccionada.referente }}
+        <div class="cards-grid">
+          <div class="card-info" *ngIf="areaSeleccionada.referente">
+            <h3 [style.color]="getAccentColor(areaSeleccionada)">Referente</h3>
+            <p>{{ areaSeleccionada.referente }}</p>
           </div>
-          <div class="detalle-item" *ngIf="areaSeleccionada.direccion">
-            <strong>Dirección:</strong> {{ areaSeleccionada.direccion }}
+          <div class="card-info" *ngIf="areaSeleccionada.direccion">
+            <h3 [style.color]="getAccentColor(areaSeleccionada)">Dirección</h3>
+            <a [href]="addressLink(areaSeleccionada.direccion)" target="_blank" rel="noopener" class="link-card">
+              <p>📍 {{ areaSeleccionada.direccion }}</p>
+            </a>
           </div>
-          <div class="detalle-item" *ngIf="areaSeleccionada.telefono">
-            <strong>Teléfono:</strong> {{ areaSeleccionada.telefono }}
+          <div class="card-info" *ngIf="areaSeleccionada.telefono">
+            <h3 [style.color]="getAccentColor(areaSeleccionada)">Teléfono</h3>
+            <a [href]="phoneLink(areaSeleccionada.telefono, areaSeleccionada.esWhatsapp)" target="_blank" rel="noopener" class="link-card">
+              <p>{{ areaSeleccionada.esWhatsapp ? '💬' : '📞' }} {{ areaSeleccionada.telefono }}</p>
+            </a>
           </div>
-          <div class="detalle-item" *ngIf="areaSeleccionada.email">
-            <strong>Email:</strong> {{ areaSeleccionada.email }}
+          <div class="card-info" *ngIf="areaSeleccionada.email">
+            <h3 [style.color]="getAccentColor(areaSeleccionada)">Email</h3>
+            <a [href]="emailLink(areaSeleccionada.email)" target="_blank" rel="noopener" class="link-card">
+              <p>✉️ {{ areaSeleccionada.email }}</p>
+            </a>
           </div>
-          <div class="detalle-item" *ngIf="areaSeleccionada.horarioAtencion">
-            <strong>Horario:</strong> {{ areaSeleccionada.horarioAtencion }}
+          <div class="card-info" *ngIf="areaSeleccionada.sitioWeb">
+            <h3 [style.color]="getAccentColor(areaSeleccionada)">Sitio Web</h3>
+            <a [href]="webLink(areaSeleccionada.sitioWeb)" target="_blank" rel="noopener" class="link-card">
+              <p>🌐 {{ areaSeleccionada.sitioWeb }}</p>
+            </a>
           </div>
-          <div class="detalle-item" *ngIf="areaSeleccionada.redes">
-            <strong>Redes:</strong> {{ areaSeleccionada.redes }}
+          <div class="card-info" *ngIf="areaSeleccionada.horarioAtencion">
+            <h3 [style.color]="getAccentColor(areaSeleccionada)">Horario</h3>
+            <p>🕐 {{ areaSeleccionada.horarioAtencion }}</p>
           </div>
-          <div class="detalle-item" *ngIf="areaSeleccionada.telefonos && areaSeleccionada.telefonos.length > 0">
-            <strong>Teléfonos adicionales:</strong>
-            <span *ngFor="let t of areaSeleccionada.telefonos" class="tag-telefono">
-              {{ t.etiqueta ? t.etiqueta + ': ' : '' }}{{ t.numero }}
-            </span>
+          <div class="card-info" *ngIf="areaSeleccionada.redes">
+            <h3 [style.color]="getAccentColor(areaSeleccionada)">Redes</h3>
+            <p>{{ areaSeleccionada.redes }}</p>
+          </div>
+          <div class="card-info" *ngIf="areaSeleccionada.telefonos && areaSeleccionada.telefonos.length > 0">
+            <h3 [style.color]="getAccentColor(areaSeleccionada)">Teléfonos adicionales</h3>
+            <p>
+              <a *ngFor="let t of areaSeleccionada.telefonos" [href]="phoneLink(t.numero, t.esWhatsapp)" target="_blank" rel="noopener" class="tag-telefono link-tag">
+                {{ t.etiqueta ? t.etiqueta + ': ' : '' }}{{ t.esWhatsapp ? '💬' : '📞' }} {{ t.numero }}
+              </a>
+            </p>
           </div>
         </div>
 
         <div class="actividades-seccion" *ngIf="actividadesPorArea.length > 0">
-          <h4>Actividades</h4>
-          <div class="actividad-item" *ngFor="let act of actividadesPorArea">
-            <div class="actividad-header">
-              <span class="actividad-titulo">{{ act.titulo }}</span>
-              <span class="actividad-sede" *ngIf="act.sede">{{ act.sede.nombre }}</span>
-            </div>
-            <p class="actividad-desc" *ngIf="act.descripcion_corta">{{ act.descripcion_corta }}</p>
-            <div class="actividad-info">
-              <span *ngIf="act.encargado">👤 {{ act.encargado }}</span>
-              <span *ngIf="act.telefono">📞 {{ act.telefono }}</span>
-              <span *ngIf="act.horarios && act.horarios.length > 0">
-                ⏰ {{ act.horarios[0].horaInicio.substring(0, 5) || '' }} - {{ act.horarios[0].horaFin.substring(0, 5) || '' }}hs
-              </span>
+          <h2 class="seccion-subtitle" [style.color]="getAccentColor(areaSeleccionada)">Actividades</h2>
+          <div class="cards-grid">
+            <div class="card-info actividad-card" *ngFor="let act of actividadesPorArea">
+              <h3 [style.color]="getAccentColor(areaSeleccionada)">{{ act.titulo }}</h3>
+              <p class="actividad-sede" *ngIf="act.sede">{{ act.sede.nombre }}</p>
+              <p class="actividad-desc" *ngIf="act.descripcion_corta">{{ act.descripcion_corta }}</p>
+              <div class="actividad-meta">
+                <span *ngIf="act.encargado">👤 {{ act.encargado }}</span>
+                <a *ngIf="act.telefono" [href]="phoneLink(act.telefono, act.sede.esWhatsapp)" target="_blank" rel="noopener" class="link-meta">
+                  {{ act.sede.esWhatsapp ? '💬' : '📞' }} {{ act.telefono }}
+                </a>
+                <span *ngIf="act.horarios && act.horarios.length > 0">
+                  ⏰ {{ act.horarios[0].horaInicio.substring(0, 5) || '' }} - {{ act.horarios[0].horaFin.substring(0, 5) || '' }}hs
+                </span>
+              </div>
             </div>
           </div>
         </div>

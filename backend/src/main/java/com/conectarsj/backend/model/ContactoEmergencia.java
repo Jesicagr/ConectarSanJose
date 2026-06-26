@@ -2,11 +2,13 @@ package com.conectarsj.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.List;
 
 @Entity
 @Table(name = "contactos_emergencia")
+@SQLRestriction("coalesce(activo, true) = true")
 @Data
 public class ContactoEmergencia {
 
@@ -32,4 +34,6 @@ public class ContactoEmergencia {
 
     @Column(name = "orden_prioridad")
     private Integer ordenPrioridad;
+
+    private Boolean activo = true;
 }

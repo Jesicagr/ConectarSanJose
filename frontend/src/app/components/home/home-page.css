@@ -13,6 +13,11 @@ body {
   overflow-x: hidden;
 }
 
+:host {
+  display: block;
+  overflow-x: hidden;
+}
+
 /* ========== HEADER (mobile first) ========== */
 header {
   position: sticky;
@@ -126,6 +131,33 @@ nav a {
   overflow: hidden;
 }
 
+@media (max-width: 400px) {
+  .hero {
+    min-height: 460px;
+    padding: 60px 12px 30px;
+  }
+
+  .contenedor-texto {
+    transform: scale(0.85);
+  }
+}
+
+@media (max-width: 360px) {
+  .hero {
+    min-height: 400px;
+    padding: 40px 10px 20px;
+  }
+
+  .contenedor-texto {
+    transform: scale(0.78);
+  }
+
+  .imagen {
+    width: min(85vw, 280px);
+    border-radius: 24px;
+  }
+}
+
 .contenedor-texto {
   position: relative;
   display: flex;
@@ -218,7 +250,6 @@ nav a {
   font-weight: 700;
   color: #444;
   line-height: 1;
-  white-space: nowrap;
   margin-bottom: 16px;
   transform: none;
 }
@@ -233,6 +264,13 @@ nav a {
   vertical-align: middle;
   position: relative;
   top: -4px;
+}
+
+@media (max-width: 400px) {
+  .corazon {
+    width: 80px;
+    margin-left: -20px;
+  }
 }
 
 .texto-ayuda p {
@@ -259,6 +297,19 @@ nav a {
   cursor: pointer;
   width: fit-content;
   max-width: 100%;
+}
+
+@media (max-width: 400px) {
+  .btn-ayuda {
+    padding: 12px 18px;
+    gap: 10px;
+  }
+  .icono-ayuda img {
+    width: 40px;
+  }
+  .titulo-btn {
+    font-size: 18px;
+  }
 }
 
 .btn-ayuda:hover {
@@ -302,6 +353,15 @@ nav a {
   object-fit: cover;
   display: block;
   border-radius: 20px;
+}
+
+@media (max-width: 400px) {
+  .imagen-ayuda {
+    width: 100%;
+  }
+  .imagen-ayuda img {
+    border-radius: 14px;
+  }
 }
 
 .cards {
@@ -377,60 +437,10 @@ nav a {
   margin: 0;
 }
 
-.grid-categorias {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  width: 100%;
-  max-width: 600px;
-}
-
-.card {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 32px;
-  border: 4px solid #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.10);
-  transition: transform 0.3s;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  padding: 12px;
-}
-
-.card:hover {
-  transform: translateY(-6px) scale(1.03);
-}
-
-.card img {
-  width: clamp(40px, 12vw, 70px);
-  margin-bottom: 8px;
-}
-
-.card h4 {
-  font-size: clamp(12px, 3vw, 18px);
-  font-weight: 700;
-  color: #222;
-  text-shadow:
-    -1px -1px 0 rgba(255,255,255,0.9),
-     1px -1px 0 rgba(255,255,255,0.9),
-    -1px  1px 0 rgba(255,255,255,0.9),
-     1px  1px 0 rgba(255,255,255,0.9);
-}
-
-.celeste { background: #aee8e6; }
-.amarillo { background: #f6db58; }
-.gris { background: #e5e5e5; }
 
 /* ========== AGENDA ========== */
 .agenda {
-  scroll-margin-top: 60px;
+  scroll-margin-top: 90px;
   padding: 40px 0;
 }
 
@@ -484,6 +494,15 @@ nav a {
   margin-top: 24px;
   width: 100%;
   max-width: 360px;
+}
+
+@media (max-width: 400px) {
+  .iconos-turismo {
+    gap: 4px;
+  }
+  .item img {
+    width: clamp(50px, 20vw, 70px);
+  }
 }
 
 .item {
@@ -562,6 +581,20 @@ nav a {
   align-items: center;
   gap: 12px;
   margin: 30px auto 0;
+}
+
+@media (max-width: 400px) {
+  .frase-final {
+    padding: 12px 14px;
+    gap: 8px;
+    border-radius: 30px;
+  }
+  .decoracion-frase img {
+    width: 36px;
+  }
+  .frase-final p {
+    font-size: 13px;
+  }
 }
 
 .decoracion-frase img {
@@ -712,6 +745,8 @@ nav a {
 .azul { background: #2563eb; }
 .rojo { background: #ff0033; }
 .violeta { background: #a020f0; }
+.emergencia.verde { background: #16a34a; }
+.emergencia.amarillo { background: #ca8a04; }
 
 .icono {
   width: 50px;
@@ -737,155 +772,8 @@ nav a {
   font-size: 16px;
 }
 
-/* ========== AREA MODAL ========== */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  padding: 12px;
-}
 
-.modal-content {
-  background: #f8f8f8;
-  padding: 1.5rem;
-  border-radius: 24px;
-  width: 100%;
-  max-width: 750px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
-}
 
-.btn-volver {
-  background: #9acb92;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 30px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-.btn-volver:hover {
-  background: #84b87d;
-}
-
-.modal-body {
-  text-align: left;
-}
-
-.titulo-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.area-avatar {
-  width: 70px;
-  height: 70px;
-  background: #fff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-}
-
-.area-avatar img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.titulo-area h1 {
-  font-size: clamp(24px, 6vw, 55px);
-  color: #444;
-  line-height: 1.1;
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-.accent-line {
-  width: 60px;
-  height: 4px;
-  border-radius: 10px;
-}
-
-.intro-area {
-  color: #737373;
-  font-size: clamp(16px, 3vw, 22px);
-  line-height: 1.5;
-  margin-bottom: 24px;
-  text-align: center;
-}
-
-.cards-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.card-info {
-  background: #fff;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 10px 20px rgba(0,0,0,.06);
-}
-
-.card-info h3 {
-  font-size: clamp(18px, 3vw, 26px);
-  margin-bottom: 10px;
-}
-
-.card-info p {
-  color: #737373;
-  font-size: clamp(14px, 2.5vw, 17px);
-  line-height: 1.5;
-}
-
-.tag-telefono {
-  display: inline-block;
-  background: #e2e8f0;
-  padding: 0.2rem 0.5rem;
-  border-radius: 6px;
-  margin: 0.15rem 0.2rem;
-  font-size: 0.85rem;
-}
-
-.link-card,
-.link-value,
-.link-meta,
-.link-item {
-  text-decoration: none;
-  color: inherit;
-  display: inline-block;
-}
-
-.link-card:hover,
-.link-tag:hover,
-.link-value:hover span,
-.link-meta:hover {
-  text-decoration: underline;
-  opacity: 0.8;
-}
-
-.link-tag {
-  text-decoration: none;
-  color: inherit;
-}
-
-.link-meta {
-  color: #2563eb;
-}
 
 .emergencia-link {
   text-decoration: none;
@@ -897,47 +785,6 @@ nav a {
   opacity: 0.9;
 }
 
-.actividades-seccion {
-  margin-top: 8px;
-}
-
-.seccion-subtitle {
-  font-size: clamp(22px, 4vw, 32px);
-  margin-bottom: 12px;
-}
-
-.actividad-card h3 {
-  font-size: clamp(16px, 3vw, 22px);
-}
-
-.actividad-sede {
-  font-size: 14px;
-  color: #888;
-  margin-bottom: 6px;
-  font-weight: 600;
-}
-
-.actividad-desc {
-  color: #737373;
-  font-size: 14px;
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-
-.actividad-meta {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  font-size: 13px;
-  color: #555;
-}
-
-.sin-actividades {
-  text-align: center;
-  color: #94a3b8;
-  margin-top: 0.75rem;
-  font-size: 16px;
-}
 
 /* ========== TABLET (576px+) ========== */
 @media (min-width: 576px) {
@@ -976,29 +823,12 @@ nav a {
     padding: 50px 24px;
   }
 
-  .grid-categorias {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  .card {
-    border-radius: 40px;
-  }
-
   .turismo {
     padding: 50px 24px;
   }
 
   .contacto {
     padding: 50px 24px;
-  }
-
-  .modal-content {
-    padding: 2rem;
-  }
-
-  .btn-volver {
-    width: auto;
   }
 
   .overlay-ayuda {
@@ -1109,27 +939,6 @@ nav a {
     padding: 60px 30px;
   }
 
-  .grid-categorias {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    max-width: 900px;
-  }
-
-  .card {
-    width: 100%;
-    aspect-ratio: auto;
-    height: 180px;
-    border-radius: 50px;
-  }
-
-  .card img {
-    width: 70px;
-  }
-
-  .card h4 {
-    font-size: 18px;
-  }
-
   .turismo {
     padding: 60px 30px;
   }
@@ -1174,14 +983,6 @@ nav a {
     gap: 40px;
   }
 
-  .modal-content {
-    padding: 2.5rem;
-  }
-
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
 }
 
 /* ========== DESKTOP (1024px+) ========== */
@@ -1237,20 +1038,6 @@ nav a {
     padding: 80px 50px;
   }
 
-  .grid-categorias {
-    gap: 50px;
-  }
-
-  .card {
-    width: 200px;
-    height: 190px;
-    border-radius: 70px;
-  }
-
-  .card img {
-    width: 90px;
-  }
-
   .turismo {
     padding: 80px 50px;
   }
@@ -1278,9 +1065,125 @@ nav a {
   }
 }
 
-/* ========== LARGE DESKTOP (1280px+) ========== */
-@media (min-width: 1280px) {
-  .grid-categorias {
-    gap: 80px;
+/* ========== VERY SMALL SCREENS (≤400px) ========== */
+@media (max-width: 400px) {
+  .texto-ayuda p {
+    font-size: 15px;
+  }
+
+  .cards {
+    padding: 20px 12px;
+    border-radius: 20px;
+  }
+
+  .card-ayuda img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .texto-card h3 {
+    font-size: 16px;
+  }
+
+  .texto-card p {
+    font-size: 13px;
+  }
+
+  .turismo {
+    padding: 30px 12px;
+  }
+
+  .texto-turismo h1 {
+    font-size: clamp(2rem, 8vw, 2.5rem);
+  }
+
+  .card-turismo img {
+    height: 140px;
+  }
+
+  .info {
+    padding: 10px;
+  }
+
+  .info h3 {
+    font-size: 14px;
+  }
+
+  .info p {
+    font-size: 13px;
+  }
+
+  .contacto {
+    padding: 30px 12px;
+  }
+
+  .columna h3 {
+    font-size: 14px;
+  }
+
+  .columna p {
+    font-size: 14px;
+  }
+
+  .titulo-contacto h1 {
+    font-size: 26px;
+  }
+
+  .item p {
+    font-size: 10px;
+  }
+
+  .cards-turismo {
+    gap: 14px;
+  }
+
+}
+
+/* ========== WHATSAPP FLOATING BUTTON ========== */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 16px;
+  z-index: 9998;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: pulse-wa 2s infinite;
+  text-decoration: none;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.55);
+}
+
+@keyframes pulse-wa {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 4px 28px rgba(37, 211, 102, 0.7);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  }
+}
+
+@media (min-width: 576px) {
+  .whatsapp-float {
+    bottom: 28px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
   }
 }

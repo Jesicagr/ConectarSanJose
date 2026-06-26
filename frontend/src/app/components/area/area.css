@@ -69,95 +69,225 @@
 /* ---- MODAL ---- */
 .modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    padding: 12px;
 }
 
 .modal-content {
-    background: white;
-    padding: 2rem;
-    border-radius: 28px;
-    width: 90%;
-    max-width: 550px;
-    max-height: 85vh;
+    background: #f8f8f8;
+    padding: 1.5rem;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 750px;
+    max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
     animation: aparecer 0.2s ease-out;
 }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 0.75rem;
-    margin-bottom: 1.5rem;
-}
-
-.modal-header h2 {
-    margin: 0;
-    font-size: 1.3rem;
-    color: #1e293b;
-}
-
-.btn-cerrar {
-    background: none;
+.btn-volver {
+    background: #9acb92;
+    color: #fff;
     border: none;
-    font-size: 1.8rem;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 16px;
     cursor: pointer;
-    color: #94a3b8;
-    transition: color 0.1s;
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: left;
 }
 
-.btn-cerrar:hover {
-    color: #ef4444;
+.btn-volver:hover {
+    background: #84b87d;
+}
+
+@media (min-width: 768px) {
+    .modal-content {
+        padding: 2rem;
+    }
+    .btn-volver {
+        width: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+    .modal-content {
+        padding: 2.5rem;
+    }
 }
 
 .modal-body {
     text-align: left;
 }
 
+.titulo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
 .area-avatar {
-    width: 80px;
-    height: 80px;
-    background-color: #f1f5f9;
+    width: 70px;
+    height: 70px;
+    background: #fff;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1rem auto;
+    margin-bottom: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
-.avatar-icono {
-    width: 48px;
-    height: 48px;
+.area-avatar img {
+    width: 40px;
+    height: 40px;
     object-fit: contain;
 }
 
-.modal-body h3 {
+.titulo-area h1 {
+    font-size: clamp(24px, 6vw, 55px);
+    color: #444;
+    line-height: 1.1;
     text-align: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
 }
 
-.area-descripcion {
-    color: #475569;
-    line-height: 1.6;
-    margin-bottom: 1rem;
+.accent-line {
+    width: 60px;
+    height: 4px;
+    border-radius: 10px;
+}
+
+.intro-area {
+    color: #737373;
+    font-size: clamp(16px, 3vw, 22px);
+    line-height: 1.5;
+    margin-bottom: 24px;
     text-align: center;
 }
 
-.area-detalles {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
+.cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+.card-info {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,.06);
+}
+
+.card-info h3 {
+    font-size: clamp(18px, 3vw, 26px);
+    margin-bottom: 10px;
+}
+
+.card-info p {
+    color: #737373;
+    font-size: clamp(14px, 2.5vw, 17px);
+    line-height: 1.5;
+}
+
+.tag-telefono {
+    display: inline-block;
+    background: #e2e8f0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    margin: 0.15rem 0.2rem;
+    font-size: 0.85rem;
+}
+
+.link-card,
+.link-value,
+.link-meta,
+.link-item {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+}
+
+.link-card:hover,
+.link-tag:hover,
+.link-value:hover span,
+.link-meta:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.link-tag {
+    text-decoration: none;
+    color: inherit;
+}
+
+.link-meta {
+    color: #2563eb;
+}
+
+.actividades-seccion {
+    margin-top: 8px;
+}
+
+.seccion-subtitle {
+    font-size: clamp(22px, 4vw, 32px);
+    margin-bottom: 12px;
+}
+
+.actividad-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,.06);
+}
+
+.actividad-card h3 {
+    font-size: clamp(16px, 3vw, 22px);
+    margin-bottom: 6px;
+}
+
+.actividad-sede {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.actividad-desc {
+    color: #737373;
+    font-size: 14px;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.actividad-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: #555;
+}
+
+.sin-actividades {
+    text-align: center;
+    color: #94a3b8;
+    margin-top: 0.75rem;
+    font-size: 16px;
 }
 
 .detalle-item {
@@ -275,23 +405,24 @@
 
 @media (max-width: 480px) {
     .grid-categorias {
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
     }
 
     .boton-area {
-        width: 140px;
-        height: 135px;
-        border-radius: 40px;
+        width: 110px;
+        height: 105px;
+        border-radius: 28px;
     }
 
     .boton-area img {
-        width: 60px;
-        height: 60px;
+        width: 44px;
+        height: 44px;
     }
 
     .boton-area .nombre-area {
-        font-size: 14px;
+        font-size: 11px;
+        max-width: 90px;
     }
 
     .modal-content {
@@ -303,5 +434,27 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.3rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .grid-categorias {
+        gap: 8px;
+    }
+
+    .boton-area {
+        width: 88px;
+        height: 82px;
+        border-radius: 20px;
+    }
+
+    .boton-area img {
+        width: 34px;
+        height: 34px;
+    }
+
+    .boton-area .nombre-area {
+        font-size: 9px;
+        max-width: 70px;
     }
 }

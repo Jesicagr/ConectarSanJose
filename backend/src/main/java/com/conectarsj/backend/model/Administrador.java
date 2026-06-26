@@ -1,10 +1,12 @@
 package com.conectarsj.backend.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLRestriction;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "administrador")
+@SQLRestriction("coalesce(activo, true) = true")
 public class Administrador {
 
     @Id
@@ -27,6 +29,8 @@ public class Administrador {
     @Column(name = "token_expiracion")
     private LocalDateTime tokenExpiracion;
 
+    private Boolean activo = true;
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -45,4 +49,7 @@ public class Administrador {
 
     public LocalDateTime getTokenExpiracion() { return tokenExpiracion; }
     public void setTokenExpiracion(LocalDateTime tokenExpiracion) { this.tokenExpiracion = tokenExpiracion; }
+
+    public Boolean getActivo() { return activo; }
+    public void setActivo(Boolean activo) { this.activo = activo; }
 }

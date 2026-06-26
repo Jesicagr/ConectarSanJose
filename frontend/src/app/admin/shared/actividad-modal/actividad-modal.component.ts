@@ -161,6 +161,12 @@ export class ActividadModalComponent {
     return dia.charAt(0).toUpperCase() + dia.slice(1).toLowerCase();
   }
 
+  onOverlayMouseDown(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeModal();
+    }
+  }
+
   closeModal(): void {
     this.isOpenChange.emit(false);
   }

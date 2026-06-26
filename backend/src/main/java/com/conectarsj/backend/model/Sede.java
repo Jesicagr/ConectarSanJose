@@ -2,11 +2,13 @@ package com.conectarsj.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLRestriction;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "sedes")
+@SQLRestriction("coalesce(activo, true) = true")
 public class Sede {
 
     @Id
@@ -36,6 +38,8 @@ public class Sede {
 
     @Column(name = "longitud")
     private Double longitud;
+
+    private Boolean activo = true;
 
     @OneToMany(mappedBy = "sede", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -67,6 +71,9 @@ public class Sede {
 
     public Double getLongitud() { return longitud; }
     public void setLongitud(Double longitud) { this.longitud = longitud; }
+
+    public Boolean getActivo() { return activo; }
+    public void setActivo(Boolean activo) { this.activo = activo; }
 
     public List<HorarioSede> getHorarios() { return horarios; }
     public void setHorarios(List<HorarioSede> horarios) { this.horarios = horarios; }

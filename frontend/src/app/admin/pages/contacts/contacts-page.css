@@ -197,6 +197,46 @@
   margin-left: 0;
 }
 
+/* ───── WhatsApp flotante config ───── */
+
+.wa-float-config {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--outline-soft);
+}
+
+.wa-float-config label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.wa-float-input {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid var(--outline-soft);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 14px;
+  min-height: 36px;
+  outline: 0;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+.wa-float-input:focus {
+  border-color: #25D366;
+}
+
 /* ───── Contact grid ───── */
 
 .contacts-grid {

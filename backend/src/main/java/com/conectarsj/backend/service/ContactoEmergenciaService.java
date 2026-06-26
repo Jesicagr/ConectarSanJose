@@ -37,6 +37,8 @@ public class ContactoEmergenciaService {
         guardar(crearContacto("Hospital San José", List.of(new TelefonoContacto("470894", false), new TelefonoContacto("(03447) 15 437111", true)), "Hospital público local. Atención médica de emergencia y consultas.", "local_hospital", "Salud", null));
         guardar(crearContacto("Urgencias de Salud Mental (Entre Ríos)", List.of(new TelefonoContacto("0800-777-2100", false)), "Línea provincial de contención y urgencias en salud mental. Atención las 24 horas.", "psychology", "Salud", 1));
         guardar(crearContacto("Centro de Asistencia al Suicida (Nacional)", List.of(new TelefonoContacto("0800-345-1435", false), new TelefonoContacto("135", false)), "Línea nacional de prevención del suicidio y contención emocional.", "help_center", "Salud", 2));
+        guardar(crearContacto("Niñez, Adolescencia y Familia", List.of(new TelefonoContacto("3447-146499", false), new TelefonoContacto("3447-146499", true)), "Protección y asistencia integral a la niñez, adolescencia y familia. Guardia 24hs.", "child_friendly", "Social", 3));
+        guardar(crearContacto("Mujeres, Género y Diversidad", List.of(new TelefonoContacto("3447-438343", false), new TelefonoContacto("3447-438343", true)), "Asistencia y acompañamiento a mujeres y diversidades en situaciones de violencia de género.", "female", "Social", 4));
     }
 
     private ContactoEmergencia crearContacto(String nombreInstitucion, List<TelefonoContacto> telefonos, String descripcion, String icono, String categoria, Integer ordenPrioridad) {
@@ -63,6 +65,9 @@ public class ContactoEmergenciaService {
     }
 
     public void eliminar(Integer id) {
-        contactoEmergenciaRepository.deleteById(id);
+        contactoEmergenciaRepository.findById(id).ifPresent(c -> {
+            c.setActivo(false);
+            contactoEmergenciaRepository.save(c);
+        });
     }
 }

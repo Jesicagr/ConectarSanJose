@@ -48,7 +48,7 @@ public class ActividadService {
     }
 
     public Page<ActividadResumenDTO> obtenerResumenPaginado(Pageable pageable) {
-        long total = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM actividades", Long.class);
+        long total = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM actividades WHERE activo = true", Long.class);
 
         String sql = """
             SELECT a.id, a.titulo, a.descripcion, a.fecha_inicio, a.fecha_fin,
@@ -70,6 +70,7 @@ public class ActividadService {
                     WHERE h.actividad_id = a.id) AS horario
             FROM actividades a
             JOIN sedes s ON s.id = a.sede_id
+            WHERE a.activo = true
             ORDER BY a.fecha_inicio DESC
             OFFSET ? LIMIT ?
         """;
@@ -162,7 +163,11 @@ public class ActividadService {
             .orElseThrow(() -> new RuntimeException("Actividad no encontrada con id: " + id));
     }
 
+    @Transactional
     public void eliminar(Long id) {
-        actividadRepository.deleteById(id);
+        actividadRepository.findById(id).ifPresent(a -> {
+            a.setActivo(false);
+            actividadRepository.save(a);
+        });
     }
 }

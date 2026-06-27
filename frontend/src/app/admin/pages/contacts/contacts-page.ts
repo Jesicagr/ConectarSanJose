@@ -33,12 +33,11 @@ export class ContactsPage implements OnInit {
   private logger = inject(LoggerService);
 
   loading = true;
-  searchTerm = '';
-  selectedCategory = '';
   isModalOpen = false;
   editId: number | null = null;
   saving = false;
   whatsappFlotanteNumero = '';
+  whatsappFlotanteLabel = '';
 
   iconos = [
     { icono: 'local_police', label: 'Policía' },
@@ -70,6 +69,7 @@ export class ContactsPage implements OnInit {
 
   ngOnInit(): void {
     this.whatsappFlotanteNumero = this.contactoService.getWhatsappFlotanteNumero();
+    this.whatsappFlotanteLabel = this.contactoService.getWhatsappFlotanteLabel();
     this.contactoService.obtenerTodos().subscribe({
       next: (data) => {
         this.contactsBackend = data;
@@ -95,32 +95,6 @@ export class ContactsPage implements OnInit {
       category: c.categoria || 'Servicios',
     };
   }
-
-  get categories(): string[] {
-    const cats = this.contacts.map((c) => c.category).filter(Boolean);
-    return ['Todos', ...new Set(cats)];
-  }
-
-  get filteredContacts(): ContactCard[] {
-    const query = this.normalize(this.searchTerm);
-    return this.contacts.filter((contact) => {
-      const categoryMatch = !this.selectedCategory || this.selectedCategory === 'Todos' || contact.category === this.selectedCategory;
-      const phonesText = contact.phones.map(p => p.numero).join(' ');
-      const searchable = this.normalize(`${contact.name} ${contact.description} ${phonesText} ${contact.category}`);
-      const searchMatch = !query || searchable.includes(query);
-      return categoryMatch && searchMatch;
-    });
-  }
-
-  selectCategory(category: string): void {
-    this.selectedCategory = this.selectedCategory === category ? '' : category;
-  }
-
-  clearFilters(): void {
-    this.searchTerm = '';
-    this.selectedCategory = '';
-  }
-
   openModal(): void {
     this.editId = null;
     this.newContact = { nombreInstitucion: '', telefonos: [{ numero: '', esWhatsapp: false }], descripcion: '', icono: '', categoria: '' };
@@ -258,5 +232,22 @@ export class ContactsPage implements OnInit {
 
   onWhatsappFlotanteChange(): void {
     this.contactoService.setWhatsappFlotanteNumero(this.whatsappFlotanteNumero);
+  }
+
+  onWhatsappFlotanteLabelChange(): void {
+    this.contactoService.setWhatsappFlotanteLabel(this.whatsappFlotanteLabel);
+  }
+
+  get whatsappHabilitado(): boolean {
+    return this.whatsappFlotanteNumero.length >= 6;
+  }
+
+  deshabilitarWhatsapp(): void {
+    this.whatsappFlotanteNumero = '';
+    this.onWhatsappFlotanteChange();
+  }
+
+  get filteredContacts(): ContactCard[] {
+    return this.contacts;
   }
 }

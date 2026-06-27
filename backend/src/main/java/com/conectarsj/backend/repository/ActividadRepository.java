@@ -7,6 +7,7 @@
 package com.conectarsj.backend.repository;
 
 import com.conectarsj.backend.model.Actividad;
+import com.conectarsj.backend.model.DiaSemana;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +21,9 @@ public interface ActividadRepository extends JpaRepository<Actividad, Long> {
 
     @Query("SELECT a FROM Actividad a ORDER BY a.fechaInicio DESC")
     List<Actividad> findAllOrdenadoPorAgenda();
+
+    @Query("SELECT DISTINCT a FROM Actividad a JOIN FETCH a.horarios h WHERE h.diaSemana = :dia ORDER BY a.fechaInicio DESC")
+    List<Actividad> findByDiaSemana(@Param("dia") DiaSemana dia);
 
     @Query("SELECT a FROM Actividad a JOIN a.areas ar WHERE ar.id = :areaId ORDER BY a.fechaInicio DESC")
     List<Actividad> findByAreaId(@Param("areaId") Integer areaId);

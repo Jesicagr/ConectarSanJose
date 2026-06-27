@@ -20,7 +20,7 @@ export class AdminLayout {
     { label: 'Actividades', icon: 'calendar_today', route: '/admin/activities' },
     { label: 'Sedes', icon: 'location_on', route: '/admin/sedes' },
     { label: 'Áreas', icon: 'apartment', route: '/admin/areas' },
-    { label: 'Contactos de Emergencia', icon: 'contacts', route: '/admin/contactos' },
+    { label: 'Contactos', icon: 'contacts', route: '/admin/contactos' },
   ];
 
   get navItemsAll() {

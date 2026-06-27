@@ -36,24 +36,28 @@ export class HomePage implements OnInit {
   mostrarModalAyuda: boolean = false;
   contactosEmergencia: Contacto[] = [];
   whatsappFlotanteNumero: string = '';
+  whatsappFlotanteLabel: string = '';
 
   constructor(private contactoService: ContactoService) {}
 
   ngOnInit(): void {
     this.whatsappFlotanteNumero = this.contactoService.getWhatsappFlotanteNumero();
+    this.whatsappFlotanteLabel = this.contactoService.getWhatsappFlotanteLabel();
     this.contactoService.obtenerTodos().subscribe({
       next: (contactos) => {
-        this.contactosEmergencia = [...contactos].sort((a, b) => {
-          const aHas135 = a.telefonos?.some(t => t.numero === '135');
-          const bHas135 = b.telefonos?.some(t => t.numero === '135');
-          if (aHas135) return -1;
-          if (bHas135) return 1;
-          const pa = (a as any).ordenPrioridad;
-          const pb = (b as any).ordenPrioridad;
-          if (pa != null && pb != null) return pa - pb;
-          if (pa != null) return -1;
-          if (pb != null) return 1;
-          return 0;
+        setTimeout(() => {
+          this.contactosEmergencia = [...contactos].sort((a, b) => {
+            const aHas135 = a.telefonos?.some(t => t.numero === '135');
+            const bHas135 = b.telefonos?.some(t => t.numero === '135');
+            if (aHas135) return -1;
+            if (bHas135) return 1;
+            const pa = (a as any).ordenPrioridad;
+            const pb = (b as any).ordenPrioridad;
+            if (pa != null && pb != null) return pa - pb;
+            if (pa != null) return -1;
+            if (pb != null) return 1;
+            return 0;
+          });
         });
       },
       error: () => this.contactosEmergencia = [],

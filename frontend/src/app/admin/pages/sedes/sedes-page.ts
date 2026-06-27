@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
@@ -15,7 +15,7 @@ import * as L from 'leaflet';
   templateUrl: './sedes-page.html',
   styleUrl: './sedes-page.css',
 })
-export class SedesPage implements OnInit {
+export class SedesPage implements OnInit, OnDestroy {
   private sedeService = inject(SedeService);
   private cdr = inject(ChangeDetectorRef);
   private toast = inject(ToastService);
@@ -30,7 +30,6 @@ export class SedesPage implements OnInit {
   geocoding = false;
   geocodingAll = false;
 
-  viewMode: 'grid' | 'map' = 'grid';
   map: L.Map | null = null;
   markers: L.Marker[] = [];
   selectedSedeForMap: Sede | null = null;
@@ -68,6 +67,10 @@ export class SedesPage implements OnInit {
     this.cargarSedes();
   }
 
+  ngOnDestroy(): void {
+    this.destroyMap();
+  }
+
   cargarSedes(): void {
     this.sedeService.obtenerTodas().subscribe({
       next: (sedes) => {
@@ -78,9 +81,7 @@ export class SedesPage implements OnInit {
         });
         this.loading = false;
         this.cdr.detectChanges();
-        if (this.viewMode === 'map') {
-          setTimeout(() => this.initMap(), 100);
-        }
+        setTimeout(() => this.initMap(), 100);
       },
       error: (err) => {
         this.logger.error('Error al cargar las sedes:', err);
@@ -88,17 +89,6 @@ export class SedesPage implements OnInit {
         this.cdr.detectChanges();
       }
     });
-  }
-
-  toggleView(mode: 'grid' | 'map'): void {
-    this.viewMode = mode;
-    this.selectedSedeForMap = null;
-    this.cdr.detectChanges();
-    if (mode === 'map') {
-      setTimeout(() => this.initMap(), 100);
-    } else {
-      this.destroyMap();
-    }
   }
 
   private initMap(): void {
@@ -167,11 +157,7 @@ export class SedesPage implements OnInit {
 
   verEnMapa(sede: Sede): void {
     this.selectedSedeForMap = sede;
-    if (this.viewMode !== 'map') {
-      this.toggleView('map');
-    } else {
-      this.flyToSede(sede);
-    }
+    this.flyToSede(sede);
   }
 
   private flyToSede(sede: Sede): void {

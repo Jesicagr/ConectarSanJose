@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActividadService } from '../../services/actividad.service';
 import { VisitaService } from '../../services/visita.service';
-import { Actividad, DiaSemana } from '../../models/actividad.model';
+import { Actividad } from '../../models/actividad.model';
 import { getPhoneLink, getAddressLink, isUrl } from '../../shared/link-utils';
 
 interface DiaAgenda {
@@ -22,9 +22,22 @@ interface DiaAgenda {
 })
 export class AgendaComponent implements OnInit {
   
-  listaActividades: Actividad[] = [];
-  actividadesFiltradas: Actividad[] = [];
-  
+  actividades: Actividad[] = [];
+  renderCount = 5;
+  readonly PAGE_SIZE = 5;
+
+  get actividadesMostradas(): Actividad[] {
+    return this.actividades.slice(0, this.renderCount);
+  }
+
+  get hayMasActividades(): boolean {
+    return this.renderCount < this.actividades.length;
+  }
+
+  cargarMas(): void {
+    this.renderCount += this.PAGE_SIZE;
+  }
+
   diasSemana: DiaAgenda[] = [];
   diaSeleccionado!: DiaAgenda;
   fechaCalendario: string = ''; // Enlace con el <input type="date">
@@ -53,19 +66,31 @@ export class AgendaComponent implements OnInit {
     this.actividadSeleccionada = null;
   }
 
-  private mapJsDiaAEnumJava: { [key: number]: DiaSemana } = {
-    1: DiaSemana.LUNES,
-    2: DiaSemana.MARTES,
-    3: DiaSemana.MIERCOLES,
-    4: DiaSemana.JUEVES,
-    5: DiaSemana.VIERNES,
-    6: DiaSemana.SABADO,
-    0: DiaSemana.DOMINGO
+  private mapJsDiaAString: { [key: number]: string } = {
+    1: 'LUNES', 2: 'MARTES', 3: 'MIERCOLES',
+    4: 'JUEVES', 5: 'VIERNES', 6: 'SABADO', 0: 'DOMINGO'
   };
+
+  cargarActividadesDelDia(): void {
+    const diaStr = this.mapJsDiaAString[this.diaSeleccionado.fechaCompleta.getDay()];
+    this.actividadService.obtenerPorDiaSemana(diaStr).subscribe({
+      next: (data) => {
+        this.actividades = data;
+        this.renderCount = this.PAGE_SIZE;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('[ConectarSanJose] ERROR Error al cargar actividades del día:', err);
+        this.actividades = [];
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   constructor(
     private actividadService: ActividadService,
-    private visitaService: VisitaService
+    private visitaService: VisitaService,
+    private cdr: ChangeDetectorRef
   ) {
     const hoy = new Date();
     this.mesCalendario = hoy.getMonth();
@@ -74,7 +99,7 @@ export class AgendaComponent implements OnInit {
 
   ngOnInit(): void {
     this.generarDiasSemana();
-    this.cargarActividadesDesdeBackend();
+    this.cargarActividadesDelDia();
   }
 
   generarDiasSemana(): void {
@@ -98,37 +123,17 @@ export class AgendaComponent implements OnInit {
     this.fechaCalendario = this.formatearFechaAInput(this.diaSeleccionado.fechaCompleta);
   }
 
-  cargarActividadesDesdeBackend(): void {
-    this.actividadService.obtenerTodas().subscribe({
-      next: (data) => {
-        console.info('[ConectarSanJose] INFO Actividades recibidas:', data.length);
-        data.forEach(a => {
-          console.log(`  - ${a.titulo} | horarios:`, JSON.stringify(a.horarios));
-        });
-        this.listaActividades = data;
-        this.filtrarActividades();
-      },
-      error: (err) => {
-        console.error('[ConectarSanJose] ERROR Error al conectar con Spring Boot:', err);
-        console.error('[ConectarSanJose] ERROR Status:', err.status, 'Mensaje:', err.message);
-        if (err.status === 0) {
-          console.warn('[ConectarSanJose] WARN Posible problema de CORS o de conexión con el backend.');
-        }
-      }
-    });
-  }
-
   navegarDias(direccion: number): void {
     this.offsetDias += direccion;
     this.generarDiasSemana();
-    this.filtrarActividades();
+    this.cargarActividadesDelDia();
   }
 
   // Al tocar un botón de la semana (LUN 14, MAR 15...)
   seleccionarDia(dia: DiaAgenda): void {
     this.diaSeleccionado = dia;
     this.fechaCalendario = this.formatearFechaAInput(dia.fechaCompleta);
-    this.filtrarActividades();
+    this.cargarActividadesDelDia();
   }
 
   alCambiarCalendario(event: any): void {
@@ -148,7 +153,7 @@ export class AgendaComponent implements OnInit {
       labelDiaCompleto: this.nombresCompletosDias[fechaElegida.getDay()]
     };
     this.fechaCalendario = this.formatearFechaAInput(fechaElegida);
-    this.filtrarActividades();
+    this.cargarActividadesDelDia();
   }
 
   abrirCalendario(): void {
@@ -197,17 +202,7 @@ export class AgendaComponent implements OnInit {
     };
     this.fechaCalendario = this.formatearFechaAInput(fecha);
     this.calendarAbierto = false;
-    this.filtrarActividades();
-  }
-
-  filtrarActividades(): void {
-    const numeroDiaSemanaJs = this.diaSeleccionado.fechaCompleta.getDay();
-    const enumDiaJava = this.mapJsDiaAEnumJava[numeroDiaSemanaJs];
-
-    this.actividadesFiltradas = this.listaActividades.filter(actividad => {
-      if (!actividad.horarios || actividad.horarios.length === 0) return false;
-      return actividad.horarios.some(h => h.diaSemana === enumDiaJava);
-    });
+    this.cargarActividadesDelDia();
   }
 
   phoneLink(numero: string, wa?: boolean): string {

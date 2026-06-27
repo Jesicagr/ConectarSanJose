@@ -21,5 +21,6 @@ public class MigrationService {
         entityManager.createNativeQuery("UPDATE sedes SET activo = true WHERE activo IS NULL").executeUpdate();
         entityManager.createNativeQuery("UPDATE administrador SET activo = true WHERE activo IS NULL").executeUpdate();
         entityManager.createNativeQuery("UPDATE visitas SET activo = true WHERE activo IS NULL").executeUpdate();
+        entityManager.createNativeQuery("UPDATE areas SET nombre = 'Inclusión' WHERE nombre = 'Discapacidad'").executeUpdate();
     }
 }

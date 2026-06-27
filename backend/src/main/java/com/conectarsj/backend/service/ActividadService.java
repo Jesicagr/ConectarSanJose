@@ -8,6 +8,7 @@ package com.conectarsj.backend.service;
 
 import com.conectarsj.backend.dto.ActividadResumenDTO;
 import com.conectarsj.backend.model.Actividad;
+import com.conectarsj.backend.model.DiaSemana;
 import com.conectarsj.backend.repository.ActividadRepository;
 import com.conectarsj.backend.exceptions.FechaInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class ActividadService {
     @Transactional(readOnly = true)
     public List<Actividad> obtenerTodasOrdenadas() {
         return actividadRepository.findAllOrdenadoPorAgenda();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Actividad> obtenerPorDiaSemana(DiaSemana dia) {
+        return actividadRepository.findByDiaSemana(dia);
     }
 
     @Transactional(readOnly = true)

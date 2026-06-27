@@ -26,8 +26,9 @@ public class ContactoEmergenciaService {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void seedData() {
-        entityManager.createNativeQuery("DELETE FROM contacto_telefonos").executeUpdate();
-        entityManager.createNativeQuery("DELETE FROM contactos_emergencia").executeUpdate();
+        if (contactoEmergenciaRepository.count() > 0) {
+            return;
+        }
 
         guardar(crearContacto("Policía San José", List.of(new TelefonoContacto("101", false)), "Emergencias, seguridad, control de tránsito y convivencia ciudadana.", "local_police", "Seguridad", null));
         guardar(crearContacto("Policía San José (líneas directas)", List.of(new TelefonoContacto("(03447) 470111", false), new TelefonoContacto("(0343) 15 4602245", true), new TelefonoContacto("(0343) 15 4690531", true)), "Líneas directas de la comisaría local.", "local_police", "Seguridad", null));

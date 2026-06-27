@@ -3,6 +3,7 @@ package com.conectarsj.backend.controller;
 import com.conectarsj.backend.dto.ActividadResumenDTO;
 import com.conectarsj.backend.dto.ErrorResponse;
 import com.conectarsj.backend.model.Actividad;
+import com.conectarsj.backend.model.DiaSemana;
 import com.conectarsj.backend.service.ActividadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,6 +39,12 @@ public class ActividadController {
     @GetMapping
     public List<Actividad> listarTodas() {
         return actividadService.obtenerTodasOrdenadas();
+    }
+
+    @Operation(summary = "Listar actividades por día de semana", description = "Devuelve actividades que tienen horarios en el día indicado (LUNES, MARTES, etc.)")
+    @GetMapping("/dia/{diaSemana}")
+    public List<Actividad> listarPorDiaSemana(@PathVariable DiaSemana diaSemana) {
+        return actividadService.obtenerPorDiaSemana(diaSemana);
     }
 
     @Operation(summary = "Contar actividades", description = "Devuelve el total de actividades registradas")

@@ -1,5 +1,5 @@
 // src/app/components/area/area.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AreaService, Area } from '../../services/area.service';
 import { ActividadService } from '../../services/actividad.service';
@@ -44,6 +44,7 @@ export class AreaComponent implements OnInit {
   constructor(
     private areaService: AreaService,
     private actividadService: ActividadService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +62,7 @@ export class AreaComponent implements OnInit {
           const bi = AREA_ORDER.findIndex(name => normalize(name) === bNorm);
           return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
         });
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('[ConectarSanJose] ERROR Error al cargar áreas:', err)
     });

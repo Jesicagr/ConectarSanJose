@@ -19,7 +19,7 @@ function ocultarSeccionesInternas() {
     document.querySelector('#seccionNinez').style.display = 'none';
     document.querySelector('#seccionMayores').style.display = 'none';
     document.querySelector('#seccionComunidad').style.display = 'none';
-    document.querySelector('#seccionDiscapacidad').style.display = 'none';
+    document.querySelector('#seccionInclusion').style.display = 'none';
     document.querySelector('#seccionSalud').style.display = 'none';
     document.querySelector('#seccionTrabajo').style.display = 'none';
     document.querySelector('#seccionDeportes').style.display = 'none';
@@ -67,11 +67,11 @@ function mostrarComunidad() {
     window.scrollTo(0, 0);
 }
 
-function mostrarDiscapacidad() {
+function mostrarInclusion() {
     ocultarPaginaPrincipal();
     ocultarSeccionesInternas();
 
-    document.querySelector('#seccionDiscapacidad').style.display = 'block';
+    document.querySelector('#seccionInclusion').style.display = 'block';
 
     window.scrollTo(0, 0);
 }

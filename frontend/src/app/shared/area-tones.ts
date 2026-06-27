@@ -56,7 +56,7 @@ export const WEBP_MAP: Record<string, string> = {
   'Niñez': 'assets/ninez.webp',
   'Personas Mayores': 'assets/mayores.webp',
   'Desarrollo Comunitario': 'assets/comunidad.webp',
-  'Inclusión': 'assets/discapacidad.webp',
+  'Inclusión': 'assets/inclusion.webp',
   'Salud': 'assets/salud.webp',
   'Salud Social y Comunitaria': 'assets/salud.webp',
   'Trabajo y Producción': 'assets/trabajo.webp',

@@ -613,20 +613,20 @@ html{
     color: #8fc6d9;
 }
 
-.seccion-discapacidad{
+.seccion-inclusion{
     display: none;
     min-height: 100vh;
     background: #f8f8f8;
     padding: 60px;
 }
 
-.seccion-discapacidad h1{
+.seccion-inclusion h1{
     font-size: 65px;
     color: #444;
     line-height: .9;
 }
 
-.seccion-discapacidad span{
+.seccion-inclusion span{
     color: #d6c75d;
 }
 
@@ -1154,7 +1154,7 @@ html{
     .seccion-ninez,
     .seccion-mayores,
     .seccion-comunidad,
-    .seccion-discapacidad,
+    .seccion-inclusion,
     .seccion-salud,
     .seccion-trabajo,
     .seccion-deportes,
@@ -1167,7 +1167,7 @@ html{
     .seccion-ninez h1,
     .seccion-mayores h1,
     .seccion-comunidad h1,
-    .seccion-discapacidad h1,
+    .seccion-inclusion h1,
     .seccion-salud h1,
     .seccion-trabajo h1,
     .seccion-deportes h1,

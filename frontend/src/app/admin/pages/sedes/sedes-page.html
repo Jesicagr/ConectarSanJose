@@ -27,30 +27,21 @@
     </div>
   </header>
 
-  <div class="view-toggle">
-    <button type="button" class="toggle-btn" [class.active]="viewMode === 'grid'" (click)="toggleView('grid')">
-      <span class="material-symbols-outlined">grid_view</span> Grilla
-    </button>
-    <button type="button" class="toggle-btn" [class.active]="viewMode === 'map'" (click)="toggleView('map')">
-      <span class="material-symbols-outlined">map</span> Mapa
-    </button>
-  </div>
+  <div class="page-content">
+    <section class="filters-card" aria-label="Búsqueda">
+      <label class="search-box">
+        <span class="material-symbols-outlined">search</span>
+        <input
+          type="search"
+          placeholder="Buscar por nombre o dirección..."
+          aria-label="Buscar sedes"
+          [(ngModel)]="searchTerm"
+        >
+      </label>
+      <span class="result-counter">{{ filteredSedes.length }} sedes</span>
+    </section>
 
-  @if (viewMode === 'grid') {
-    <div class="page-content">
-      <section class="filters-card" aria-label="Búsqueda">
-        <label class="search-box">
-          <span class="material-symbols-outlined">search</span>
-          <input
-            type="search"
-            placeholder="Buscar por nombre o dirección..."
-            aria-label="Buscar sedes"
-            [(ngModel)]="searchTerm"
-          >
-        </label>
-        <span class="result-counter">{{ filteredSedes.length }} sedes</span>
-      </section>
-
+    <div class="content-split">
       <section class="sedes-grid" aria-label="Listado de sedes">
         @for (sede of filteredSedes; track sede.id) {
           <article class="sede-card">
@@ -107,12 +98,12 @@
           <div class="empty-state">No se encontraron sedes cargadas en el sistema.</div>
         }
       </section>
+
+      <div class="map-wrapper">
+        <div id="sedes-map" class="leaflet-container-sedes"></div>
+      </div>
     </div>
-  } @else {
-    <div class="map-wrapper">
-      <div id="sedes-map" class="leaflet-container-sedes"></div>
-    </div>
-  }
+  </div>
 </section>
 
 @if (isModalOpen) {

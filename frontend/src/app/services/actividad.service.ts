@@ -28,6 +28,10 @@ export class ActividadService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
+  obtenerPorDiaSemana(dia: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/dia/${dia}`);
+  }
+
   obtenerPaginadas(page: number, size: number): Observable<{ content: any[]; totalPages: number; totalElements: number }> {
     return this.http.get<{ content: any[]; totalPages: number; totalElements: number }>(
       `${this.apiUrl}/paginated?page=${page}&size=${size}`

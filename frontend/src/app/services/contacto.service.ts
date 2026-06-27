@@ -51,6 +51,7 @@ export class ContactoService {
   }
 
   private static readonly WA_FLOAT_KEY = 'conectar_whatsapp_flotante_numero';
+  private static readonly WA_LABEL_KEY = 'conectar_whatsapp_flotante_label';
 
   getWhatsappFlotanteNumero(): string {
     return localStorage.getItem(ContactoService.WA_FLOAT_KEY) || '';
@@ -61,6 +62,18 @@ export class ContactoService {
       localStorage.setItem(ContactoService.WA_FLOAT_KEY, numero);
     } else {
       localStorage.removeItem(ContactoService.WA_FLOAT_KEY);
+    }
+  }
+
+  getWhatsappFlotanteLabel(): string {
+    return localStorage.getItem(ContactoService.WA_LABEL_KEY) || 'Mesa de Entrada';
+  }
+
+  setWhatsappFlotanteLabel(label: string): void {
+    if (label) {
+      localStorage.setItem(ContactoService.WA_LABEL_KEY, label);
+    } else {
+      localStorage.removeItem(ContactoService.WA_LABEL_KEY);
     }
   }
 }

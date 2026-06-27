@@ -8,7 +8,7 @@
 <section class="contacts-page">
   <header class="page-header">
     <div>
-      <h1>Contactos de Emergencia</h1>
+      <h1>Contactos</h1>
       <p>Gestiona los contactos esenciales de la Municipalidad de San José.</p>
     </div>
     <button type="button" class="primary-button" (click)="openModal()">
@@ -18,45 +18,64 @@
   </header>
 
   <section class="toolbar-card">
-    <label class="search-box">
-      <span class="material-symbols-outlined">search</span>
-      <input
-        type="search"
-        placeholder="Buscar contacto o servicio..."
-        aria-label="Buscar contacto o servicio"
-        [(ngModel)]="searchTerm"
-      >
-    </label>
 
-    <div class="toolbar-actions">
-      @for (category of categories; track category) {
-        <button
-          type="button"
-          class="filter-chip"
-          [class.active]="selectedCategory === category || (category === 'Todos' && !selectedCategory)"
-          (click)="selectCategory(category)"
-        >
-          {{ category }}
-        </button>
+  <section class="wa-section">
+    <div class="wa-section-header">
+      <div class="wa-section-title">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#25D366"><path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.4-.56-.41-.14-.01-.31-.01-.48-.01-.17 0-.44.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.28z"/></svg>
+        <span>WhatsApp flotante — botón de la página de inicio</span>
+      </div>
+      @if (whatsappHabilitado) {
+        <span class="wa-badge active">Activado</span>
+      } @else {
+        <span class="wa-badge inactive">Desactivado</span>
       }
-      <button type="button" class="clear-btn" (click)="clearFilters()">
-        <span class="material-symbols-outlined">filter_alt_off</span>
-        Limpiar
-      </button>
     </div>
 
-    <div class="wa-float-config">
-      <label>
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="#25D366"><path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.4-.56-.41-.14-.01-.31-.01-.48-.01-.17 0-.44.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.28z"/></svg>
-        <span>WhatsApp flotante</span>
-      </label>
-      <input type="tel" inputmode="numeric" placeholder="Número de WhatsApp" class="wa-float-input"
-        [ngModel]="whatsappFlotanteNumero" (ngModelChange)="whatsappFlotanteNumero = soloNumeros($event); onWhatsappFlotanteChange()"
-        name="whatsappFlotante" />
+    <div class="wa-section-body">
+      <div class="wa-input-group">
+        <span class="material-symbols-outlined wa-prefix">badge</span>
+        <input
+          type="text"
+          placeholder="Mesa de Entrada"
+          class="wa-input"
+          [ngModel]="whatsappFlotanteLabel"
+          (ngModelChange)="whatsappFlotanteLabel = $event; onWhatsappFlotanteLabelChange()"
+          name="whatsappFlotanteLabel"
+        />
+      </div>
+
+      <div class="wa-number-block">
+        <div class="wa-input-group">
+          <span class="wa-prefix">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="#25D366"><path d="M19.05 4.91A9.816 9.816 0 0 0 12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c.02 4.54-3.68 8.23-8.22 8.23zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.4-.56-.41-.14-.01-.31-.01-.48-.01-.17 0-.44.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.07-.1-.23-.16-.48-.28z"/></svg>
+          </span>
+          <input
+            type="tel"
+            inputmode="numeric"
+            placeholder="5491123456789"
+            class="wa-input"
+            [ngModel]="whatsappFlotanteNumero"
+            (ngModelChange)="whatsappFlotanteNumero = soloNumeros($event); onWhatsappFlotanteChange()"
+            name="whatsappFlotante"
+          />
+        </div>
+
+        <div class="wa-hint">
+          <span class="material-symbols-outlined">info</span>
+          <span>Incluí el código de país sin el signo <strong>+</strong>. Ej: <strong>54911</strong> para Argentina.</span>
+        </div>
+      </div>
+
+      @if (whatsappHabilitado) {
+        <button type="button" class="wa-clear-btn" (click)="deshabilitarWhatsapp()" title="Deshabilitar WhatsApp flotante">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      }
     </div>
   </section>
 
-  <h2 class="section-title">Listado de Contactos de Emergencia</h2>
+  <h2 class="section-title">Listado de Contactos</h2>
 
   <div class="contacts-grid">
     @for (contact of filteredContacts; track $index) {

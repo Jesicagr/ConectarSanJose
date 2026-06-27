@@ -23,7 +23,7 @@ public class DataSeeder implements CommandLineRunner {
                     crearArea("Niñez", "child_care"),
                     crearArea("Personas Mayores", "elderly"),
                     crearArea("Desarrollo Comunitario", "campaign"),
-                    crearArea("Discapacidad", "accessible"),
+                    crearArea("Inclusión", "accessible"),
                     crearArea("Salud", "monitor_heart"),
                     crearArea("Trabajo", "engineering"),
                     crearArea("Deportes", "sports_rugby"),

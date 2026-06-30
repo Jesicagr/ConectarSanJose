@@ -19,11 +19,17 @@ import java.util.List;
 @Repository
 public interface ActividadRepository extends JpaRepository<Actividad, Long> {
 
-    @Query("SELECT a FROM Actividad a ORDER BY a.fechaInicio DESC")
+    @Query("SELECT a FROM Actividad a JOIN FETCH a.sede ORDER BY a.fechaInicio DESC")
     List<Actividad> findAllOrdenadoPorAgenda();
 
-    @Query("SELECT DISTINCT a FROM Actividad a JOIN FETCH a.horarios h WHERE h.diaSemana = :dia ORDER BY a.fechaInicio DESC")
+    @Query("SELECT DISTINCT a FROM Actividad a JOIN FETCH a.sede JOIN a.horarios h WHERE h.diaSemana = :dia ORDER BY a.fechaInicio DESC")
     List<Actividad> findByDiaSemana(@Param("dia") DiaSemana dia);
+
+    @Query("SELECT DISTINCT a FROM Actividad a LEFT JOIN FETCH a.horarios WHERE a IN :activities")
+    List<Actividad> findWithHorarios(@Param("activities") List<Actividad> activities);
+
+    @Query("SELECT DISTINCT a FROM Actividad a LEFT JOIN FETCH a.areas WHERE a IN :activities")
+    List<Actividad> findWithAreas(@Param("activities") List<Actividad> activities);
 
     @Query("SELECT a FROM Actividad a JOIN a.areas ar WHERE ar.id = :areaId ORDER BY a.fechaInicio DESC")
     List<Actividad> findByAreaId(@Param("areaId") Integer areaId);

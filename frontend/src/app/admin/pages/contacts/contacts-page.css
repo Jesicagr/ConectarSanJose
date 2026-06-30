@@ -222,6 +222,12 @@
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
+  min-width: 0;
+}
+
+.wa-section-title span:last-child {
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .wa-badge {
@@ -249,6 +255,7 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .wa-number-block {
@@ -354,6 +361,7 @@
   gap: 16px;
   padding: 20px;
   transition: transform 200ms ease, box-shadow 200ms ease;
+  min-width: 0;
 }
 
 .contact-card:hover {
@@ -403,6 +411,12 @@
   width: 36px;
 }
 
+.contact-body {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
+}
+
 .contact-body h3 {
   color: var(--text);
   font-size: 20px;
@@ -415,16 +429,23 @@
   margin: 0;
 }
 
+.contact-phones {
+  min-width: 0;
+}
+
 .contact-phone {
   align-items: center;
   color: var(--text-accent);
   display: flex;
   gap: 8px;
+  min-width: 0;
 }
 
 .contact-phone strong {
   font-family: Outfit, sans-serif;
   font-size: 20px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .call-btn {
@@ -826,6 +847,26 @@ select.form-input {
 @media (min-width: 1201px) {
   .contacts-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ───── ≤ 640px ───── */
+@media (max-width: 640px) {
+  .wa-section {
+    padding: 16px;
+  }
+
+  .wa-section-body {
+    flex-direction: column;
+  }
+
+  .wa-section-body > .wa-input-group,
+  .wa-section-body > .wa-number-block {
+    width: 100%;
+  }
+
+  .wa-clear-btn {
+    align-self: flex-end;
   }
 }
 

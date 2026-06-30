@@ -3,13 +3,8 @@ package com.conectarsj.backend.service;
 import com.conectarsj.backend.model.ContactoEmergencia;
 import com.conectarsj.backend.model.TelefonoContacto;
 import com.conectarsj.backend.repository.ContactoEmergenciaRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +15,6 @@ public class ContactoEmergenciaService {
     @Autowired
     private ContactoEmergenciaRepository contactoEmergenciaRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @EventListener(ApplicationReadyEvent.class)
-    @Transactional
     public void seedData() {
         if (contactoEmergenciaRepository.count() > 0) {
             return;

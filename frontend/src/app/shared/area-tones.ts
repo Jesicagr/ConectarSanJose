@@ -1,5 +1,20 @@
 export const AREA_TONES = ['rose', 'amber', 'purple', 'teal', 'blue', 'emerald', 'indigo', 'orange', 'cyan', 'red', 'pink', 'violet'] as const;
 
+export const TONE_HEX: Record<string, string> = {
+  rose: '#f43f5e',
+  amber: '#f59e0b',
+  purple: '#a855f7',
+  teal: '#14b8a6',
+  blue: '#3b82f6',
+  emerald: '#10b981',
+  indigo: '#6366f1',
+  orange: '#f97316',
+  cyan: '#06b6d4',
+  red: '#ef4444',
+  pink: '#ec4899',
+  violet: '#8b5cf6',
+};
+
 export const AREA_TONE_MAP: Record<string, string> = {
   'Mujeres Género y Diversidad': 'rose',
   'Mujer': 'rose',

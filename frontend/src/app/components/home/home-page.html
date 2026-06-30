@@ -1,4 +1,4 @@
-<header>
+<div class="page-wrapper"><header>
   <img src="logo.png" class="logo" (click)="irInicio()" style="cursor:pointer">
 
   <button class="hamburger" [class.open]="menuAbierto" (click)="toggleMenu()" aria-label="Menú">
@@ -16,22 +16,78 @@
   </nav>
 </header>
 
-<section id="inicio" class="hero">
-  <div class="contenedor-texto">
-    <img src="gotas.png" class="decoracion">
+<section id="inicio" class="hero redes-carousel">
 
-    <div class="texto">
-      <h1>DESCUBRÍ</h1>
+  <div class="carousel-slide" [class.active]="currentSlide === 0">
+    <div class="contenedor-texto">
+      <img src="gotas.png" class="decoracion">
+      <div class="texto">
+        <h1>DESCUBRÍ</h1>
 
-      <p class="subtitulo">lo que</p>
+        <p class="subtitulo">lo que</p>
 
-      <h2>SAN JOSÉ</h2>
+        <h2>SAN JOSÉ</h2>
 
-      <p class="subtitulo2">tiene para vos</p>
+        <p class="subtitulo2">tiene para vos</p>
+      </div>
+    </div>
+
+    <a href="https://sanjose.gob.ar/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcASsrExleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAafN7N24P9le6JWtW98VgKLC0MalQcS-UG3aIBRjyzmwKtifYw8WYHK8-zkxaQ_aem_rvSckFOYVaMXOXU06cF1Fg" target="_blank" rel="noopener" class="hero-imagen-link">
+      <img src="monumento.jpg" class="imagen">
+    </a>
+  </div>
+
+  <div class="carousel-slide" [class.active]="currentSlide === 1">
+    <div class="contenedor-texto">
+      <div class="texto">
+        <h1>SEGUINOS EN</h1>
+
+        <p class="subtitulo">nuestras redes</p>
+
+        <h2>SOCIALES</h2>
+      </div>
+    </div>
+
+    <div class="hero-insta-grid">
+      <a *ngFor="let acc of instagramAccounts"
+         class="hero-insta-card"
+         [href]="acc.url"
+         target="_blank"
+         rel="noopener">
+        <div class="hero-insta-thumb">
+          <img *ngIf="acc.post?.imageUrl" [src]="acc.post?.imageUrl" [alt]="acc.label" loading="lazy">
+          <div class="hero-insta-fallback" *ngIf="!acc.post?.imageUrl">
+            <span>📷</span>
+          </div>
+          <span class="hero-insta-label">@{{ acc.username }}</span>
+        </div>
+      </a>
     </div>
   </div>
 
-  <img src="monumento.jpg" class="imagen">
+  <div class="carousel-dots">
+    <span class="dot" [class.active]="currentSlide === 0" (click)="goToSlide(0)"></span>
+    <span class="dot" [class.active]="currentSlide === 1" (click)="goToSlide(1)"></span>
+  </div>
+
+  <div class="carousel-nav prev" (click)="prevSlide()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M15 18l-6-6 6-6"/>
+    </svg>
+  </div>
+
+  <div class="carousel-nav next" (click)="nextSlide()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 18l6-6-6-6"/>
+    </svg>
+  </div>
+
+  <div class="carousel-progress-bar">
+    <div class="carousel-progress-fill"></div>
+  </div>
+
+  
+
 </section>
 
 <section id="ayuda" class="ayuda">
@@ -262,6 +318,7 @@
     </div>
   </div>
 </section>
+</div>
 
 <div class="whatsapp-wrapper">
   <div class="whatsapp-chip">

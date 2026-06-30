@@ -5,6 +5,7 @@ import { ActividadService } from '../../services/actividad.service';
 import { VisitaService } from '../../services/visita.service';
 import { Actividad } from '../../models/actividad.model';
 import { getPhoneLink, getAddressLink, isUrl } from '../../shared/link-utils';
+import { getAreaTone, TONE_HEX } from '../../shared/area-tones';
 
 interface DiaAgenda {
   nombreCorto: string; // "LUN", "MAR"
@@ -23,6 +24,7 @@ interface DiaAgenda {
 export class AgendaComponent implements OnInit {
   
   actividades: Actividad[] = [];
+  cargandoActividades = false;
   renderCount = 5;
   readonly PAGE_SIZE = 5;
 
@@ -72,16 +74,19 @@ export class AgendaComponent implements OnInit {
   };
 
   cargarActividadesDelDia(): void {
+    this.cargandoActividades = true;
     const diaStr = this.mapJsDiaAString[this.diaSeleccionado.fechaCompleta.getDay()];
     this.actividadService.obtenerPorDiaSemana(diaStr).subscribe({
       next: (data) => {
         this.actividades = data;
         this.renderCount = this.PAGE_SIZE;
+        this.cargandoActividades = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('[ConectarSanJose] ERROR Error al cargar actividades del día:', err);
         this.actividades = [];
+        this.cargandoActividades = false;
         this.cdr.detectChanges();
       }
     });
@@ -215,6 +220,13 @@ export class AgendaComponent implements OnInit {
 
   isUrl(str: string): boolean {
     return isUrl(str);
+  }
+
+  getAreaColor(act: Actividad): string {
+    const area = act.areas?.[0];
+    if (!area) return '#dfeceb';
+    const tone = getAreaTone(area.nombre, area.id ?? 0);
+    return TONE_HEX[tone] || '#dfeceb';
   }
 
   private offsetParaFecha(fecha: Date): number {

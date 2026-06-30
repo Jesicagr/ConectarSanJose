@@ -1,5 +1,6 @@
 package com.conectarsj.backend.controller;
 
+import com.conectarsj.backend.dto.ActividadAgendaDTO;
 import com.conectarsj.backend.dto.ActividadResumenDTO;
 import com.conectarsj.backend.dto.ErrorResponse;
 import com.conectarsj.backend.model.Actividad;
@@ -37,13 +38,13 @@ public class ActividadController {
     @Operation(summary = "Listar todas las actividades", description = "Devuelve todas las actividades ordenadas por agenda")
     @ApiResponse(responseCode = "200", description = "Lista de actividades", content = @Content(schema = @Schema(implementation = Actividad.class)))
     @GetMapping
-    public List<Actividad> listarTodas() {
+    public List<ActividadAgendaDTO> listarTodas() {
         return actividadService.obtenerTodasOrdenadas();
     }
 
     @Operation(summary = "Listar actividades por día de semana", description = "Devuelve actividades que tienen horarios en el día indicado (LUNES, MARTES, etc.)")
     @GetMapping("/dia/{diaSemana}")
-    public List<Actividad> listarPorDiaSemana(@PathVariable DiaSemana diaSemana) {
+    public List<ActividadAgendaDTO> listarPorDiaSemana(@PathVariable DiaSemana diaSemana) {
         return actividadService.obtenerPorDiaSemana(diaSemana);
     }
 

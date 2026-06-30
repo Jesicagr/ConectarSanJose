@@ -40,6 +40,76 @@
 
 
 
+  <section class="widgets-row">
+    <section class="instagram-section" aria-label="Cuentas de Instagram">
+      <div class="instagram-card">
+        <div class="instagram-header">
+          <h2>Cuentas de Instagram</h2>
+          <button type="button" class="ig-refresh-all" (click)="refrescarInstagram('todas')" title="Refrescar todas">
+            <span class="material-symbols-outlined">refresh</span>
+          </button>
+        </div>
+        <div class="instagram-grid">
+          @for (cuenta of instagramSlots(); track $index) {
+            <div class="ig-card" [class.ig-card--inactive]="cuenta && !cuenta.activo">
+              <span class="ig-card-num">{{ $index + 1 }}</span>
+              @if (cuenta; as c) {
+                <input
+                  class="ig-card-input"
+                  type="text"
+                  [value]="instagramEditando()[c.id]"
+                  (input)="onInstagramInput(c, $event)"
+                  (keyup.enter)="guardarInstagram(c)"
+                  placeholder="@usuario"
+                />
+                <button
+                  type="button"
+                  class="ig-btn ig-btn-toggle"
+                  [class.ig-btn--on]="c.activo"
+                  (click)="toggleActivo(c)"
+                  [title]="c.activo ? 'Desactivar' : 'Activar'"
+                >
+                  <span class="material-symbols-outlined">check_circle</span>
+                </button>
+                @if (instagramEditando()[c.id] !== c.username) {
+                  <button type="button" class="ig-btn ig-btn-save" (click)="guardarInstagram(c)" title="Guardar">
+                    <span class="material-symbols-outlined">save</span>
+                  </button>
+                }
+                <button type="button" class="ig-btn ig-btn-refresh" (click)="refrescarInstagram(c.username)" title="Refrescar">
+                  <span class="material-symbols-outlined">refresh</span>
+                </button>
+              } @else {
+                <span class="ig-card-placeholder">Slot vacío</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="visitas-section" aria-label="Visitas por actividad">
+    <div class="visitas-card">
+      <div class="visitas-header">
+        <h2>Más Visitadas</h2>
+      </div>
+      <div class="visitas-scroll" (scroll)="onVisitasScroll($event)">
+        @for (item of displayedVisitas(); track item.id) {
+          <div class="visita-row" [style]="'--area-color: var(--' + categoryTone(item.categories[0]) + ')'">
+            <span class="visita-name">{{ item.title }}</span>
+            <span class="visita-count">
+              <span class="material-symbols-outlined">visibility</span>
+              {{ item.visitas }}
+            </span>
+          </div>
+        } @empty {
+          <p class="empty-state">Cargando datos de visitas…</p>
+        }
+      </div>
+    </div>
+  </section>
+  </section>
+
   <section class="filters" aria-label="Filtros">
     <div class="section-heading">
       <h2>Filtros por Categoría</h2>

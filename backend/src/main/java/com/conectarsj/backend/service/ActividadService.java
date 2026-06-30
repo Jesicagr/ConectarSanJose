@@ -6,9 +6,12 @@
  */
 package com.conectarsj.backend.service;
 
+import com.conectarsj.backend.dto.ActividadAgendaDTO;
 import com.conectarsj.backend.dto.ActividadResumenDTO;
 import com.conectarsj.backend.model.Actividad;
+import com.conectarsj.backend.model.Area;
 import com.conectarsj.backend.model.DiaSemana;
+import com.conectarsj.backend.model.HorarioActividad;
 import com.conectarsj.backend.repository.ActividadRepository;
 import com.conectarsj.backend.exceptions.FechaInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ActividadService {
@@ -35,13 +39,58 @@ public class ActividadService {
     private JdbcTemplate jdbcTemplate;
 
     @Transactional(readOnly = true)
-    public List<Actividad> obtenerTodasOrdenadas() {
-        return actividadRepository.findAllOrdenadoPorAgenda();
+    public List<ActividadAgendaDTO> obtenerTodasOrdenadas() {
+        List<Actividad> actividades = actividadRepository.findAllOrdenadoPorAgenda();
+        return toAgendaDTOs(actividades);
     }
 
     @Transactional(readOnly = true)
-    public List<Actividad> obtenerPorDiaSemana(DiaSemana dia) {
-        return actividadRepository.findByDiaSemana(dia);
+    public List<ActividadAgendaDTO> obtenerPorDiaSemana(DiaSemana dia) {
+        List<Actividad> actividades = actividadRepository.findByDiaSemana(dia);
+        return toAgendaDTOs(actividades);
+    }
+
+    private List<ActividadAgendaDTO> toAgendaDTOs(List<Actividad> actividades) {
+        if (actividades.isEmpty()) return List.of();
+        actividadRepository.findWithHorarios(actividades);
+        actividadRepository.findWithAreas(actividades);
+        return actividades.stream().map(this::toAgendaDTO).collect(Collectors.toList());
+    }
+
+    private ActividadAgendaDTO toAgendaDTO(Actividad a) {
+        var sede = a.getSede();
+        var areas = a.getAreas();
+        var horarios = a.getHorarios();
+        return new ActividadAgendaDTO(
+            a.getId(),
+            a.getTitulo(),
+            a.getDescripcion(),
+            a.getDescripcion_corta(),
+            a.getFechaInicio(),
+            a.getFechaFin(),
+            a.getTelefono(),
+            a.getEncargado(),
+            a.getStatus(),
+            sede != null ? new ActividadAgendaDTO.SedeDTO(
+                sede.getId(),
+                sede.getNombre(),
+                sede.getDireccion(),
+                sede.getTelefono(),
+                sede.getEsWhatsapp(),
+                sede.getIcono()
+            ) : null,
+            areas != null ? areas.stream()
+                .filter(ar -> ar != null)
+                .map(ar -> new ActividadAgendaDTO.AreaDTO(ar.getId(), ar.getNombre()))
+                .collect(Collectors.toList()) : List.of(),
+            horarios != null ? horarios.stream()
+                .filter(h -> h != null)
+                .map(h -> new ActividadAgendaDTO.HorarioDTO(
+                    h.getDiaSemana() != null ? h.getDiaSemana().name() : null,
+                    h.getHoraInicio() != null ? h.getHoraInicio().toString() : null,
+                    h.getHoraFin() != null ? h.getHoraFin().toString() : null))
+                .collect(Collectors.toList()) : List.of()
+        );
     }
 
     @Transactional(readOnly = true)

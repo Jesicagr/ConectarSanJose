@@ -2,6 +2,8 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActividadService } from '../../../services/actividad.service';
 import { AreaService } from '../../../services/area.service';
+import { VisitaService } from '../../../services/visita.service';
+import { InstagramService, CuentaInstagram } from '../../../services/instagram.service';
 
 import { getAreaTone, sortByAreaOrder, WEBP_MAP } from '../../../shared/area-tones';
 import { DateFormatPipe } from '../../../shared/date-format.pipe';
@@ -20,6 +22,7 @@ interface DashboardActivity {
   status: string;
   statusTone: string;
   telefono?: string;
+  visitas: number;
 }
 
 interface Metric {
@@ -48,6 +51,8 @@ interface CategoryFilter {
 export class DashboardPage implements OnInit {
   private actividadService = inject(ActividadService);
   private areaService = inject(AreaService);
+  private visitaService = inject(VisitaService);
+  private instagramService = inject(InstagramService);
   private toast = inject(ToastService);
   private logger = inject(LoggerService);
 
@@ -62,13 +67,54 @@ export class DashboardPage implements OnInit {
   metrics = signal<Metric[]>([
     { label: 'Actividades Totales', value: '0', icon: 'confirmation_number', tone: 'primary', detail: 'Cargando...', change: '' },
     { label: 'En Revisión', value: '0', icon: 'history_edu', tone: 'warning', detail: 'Requieren validación técnica', badge: 'Pendientes' },
+    { label: 'Visitas a la Web', value: '0', icon: 'travel_explore', tone: 'info', detail: 'Cargando...', change: '' },
   ]);
 
   categories = signal<CategoryFilter[]>([]);
   activities = signal<DashboardActivity[]>([]);
+  instagramCuentas = signal<CuentaInstagram[]>([]);
+  instagramEditando = signal<Record<number, string>>({});
+
+  instagramSlots = computed(() => {
+    const list = this.instagramCuentas();
+    const slots: (CuentaInstagram | null)[] = [];
+    for (let i = 0; i < 10; i++) {
+      slots.push(list[i] ?? null);
+    }
+    return slots;
+  });
+
+  private buildInstagramEditMap(cuentas: CuentaInstagram[]): Record<number, string> {
+    const map: Record<number, string> = {};
+    for (const c of cuentas) {
+      map[c.id] = c.username;
+    }
+    return map;
+  }
 
 
   private areaToneMap: Record<string, string> = {};
+  visitasLimit = signal(6);
+
+  topVisited = computed(() =>
+    this.activities().slice().sort((a, b) => b.visitas - a.visitas)
+  );
+
+  displayedVisitas = computed(() =>
+    this.topVisited().slice(0, this.visitasLimit())
+  );
+
+  loadMoreVisitas(): void {
+    this.visitasLimit.update(v => Math.min(v + 6, this.topVisited().length));
+  }
+
+  onVisitasScroll(event: Event): void {
+    const el = event.target as HTMLElement;
+    const threshold = 20;
+    if (el.scrollHeight - el.scrollTop - el.clientHeight < threshold) {
+      this.loadMoreVisitas();
+    }
+  }
 
   filteredActivities = computed(() => {
     const query = this.normalize(this.searchTerm());
@@ -112,6 +158,23 @@ export class DashboardPage implements OnInit {
       },
       error: () => {}
     });
+    this.visitaService.obtenerStats().subscribe({
+      next: (stats) => {
+        this.metrics.update(m => {
+          m[2].value = stats.total.toLocaleString();
+          m[2].detail = `${stats.hoy} hoy · ${stats.semana} esta semana`;
+          return [...m];
+        });
+      },
+      error: () => {}
+    });
+    this.visitaService.visitasPorActividad().subscribe({
+      next: (visitasMap) => {
+        this.activities.update(list => list.map(a => ({ ...a, visitas: visitasMap[a.id] || 0 })));
+      },
+      error: () => {}
+    });
+
     this.actividadService.obtenerPaginadas(0, 100).subscribe({
       next: (page) => {
         const mapped = page.content.map((a: any) => ({
@@ -125,6 +188,7 @@ export class DashboardPage implements OnInit {
           status: a.status || 'Confirmado',
           statusTone: 'success',
           telefono: a.telefono || '',
+          visitas: 0,
         }));
         this.activities.set(mapped);
 
@@ -149,6 +213,7 @@ export class DashboardPage implements OnInit {
         this.loading.set(false);
       },
     });
+    this.cargarInstagram();
   }
 
   categoryTone(category: string): string {
@@ -243,5 +308,64 @@ export class DashboardPage implements OnInit {
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  private cargarInstagram(): void {
+    this.instagramService.obtenerCuentas().subscribe({
+      next: (cuentas) => {
+        this.instagramCuentas.set(cuentas);
+        this.instagramEditando.set(this.buildInstagramEditMap(cuentas));
+      },
+      error: () => {},
+    });
+  }
+
+  onInstagramInput(cuenta: CuentaInstagram, event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.instagramEditando.update(m => {
+      m[cuenta.id] = value;
+      return m;
+    });
+  }
+
+  guardarInstagram(cuenta: CuentaInstagram): void {
+    const nuevo = this.instagramEditando()[cuenta.id]?.trim();
+    if (!nuevo || nuevo === cuenta.username) return;
+    this.instagramService.actualizarCuenta(cuenta.id, nuevo).subscribe({
+      next: () => {
+        this.cargarInstagram();
+        this.toast.show(`Cuenta actualizada a @${nuevo}`, 'success');
+      },
+      error: (err) => {
+        this.toast.show(err.error?.error || 'Error al actualizar', 'error');
+        this.cargarInstagram();
+      },
+    });
+  }
+
+  toggleActivo(cuenta: CuentaInstagram): void {
+    this.instagramService.actualizarCuenta(cuenta.id, undefined, !cuenta.activo).subscribe({
+      next: () => {
+        this.cargarInstagram();
+        this.toast.show(cuenta.activo ? 'Cuenta desactivada' : 'Cuenta activada', 'success');
+      },
+      error: () => {
+        this.toast.show('Error al cambiar estado', 'error');
+      },
+    });
+  }
+
+  refrescarInstagram(username: string): void {
+    if (username === 'todas') {
+      this.instagramService.refrescarTodas().subscribe({
+        next: () => this.toast.show('Refrescando todas las cuentas…', 'info'),
+        error: () => this.toast.show('Error al refrescar', 'error'),
+      });
+      return;
+    }
+    this.instagramService.refrescarCuenta(username).subscribe({
+      next: () => this.toast.show(`Refrescando @${username}…`, 'info'),
+      error: () => this.toast.show('Error al refrescar', 'error'),
+    });
   }
 }

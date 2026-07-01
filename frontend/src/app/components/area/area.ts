@@ -1,6 +1,7 @@
 // src/app/components/area/area.ts
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 import { AreaService, Area } from '../../services/area.service';
 import { ActividadService } from '../../services/actividad.service';
 import { Actividad } from '../../models/actividad.model';
@@ -40,6 +41,7 @@ export class AreaComponent implements OnInit {
   areaSeleccionada: Area | null = null;
   actividadesPorArea: Actividad[] = [];
   private modalRequestId = 0;
+  cargandoActividades: boolean = false;
 
   constructor(
     private areaService: AreaService,
@@ -80,20 +82,23 @@ export class AreaComponent implements OnInit {
       this.mostrarModal = true;
     }
 
-    this.areaService.obtenerPorId(areaId).subscribe({
-      next: (areaCompleta) => {
-        if (requestId !== this.modalRequestId) return;
-        this.areaSeleccionada = areaCompleta;
-      },
-      error: (err) => console.error('[ConectarSanJose] ERROR Error al traer detalles del área:', err)
-    });
+    this.cargandoActividades = true;
 
-    this.actividadService.obtenerActividadesPorArea(areaId).subscribe({
-      next: (actividades) => {
+    forkJoin({
+      area: this.areaService.obtenerPorId(areaId),
+      actividades: this.actividadService.obtenerActividadesPorArea(areaId)
+    }).subscribe({
+      next: ({ area, actividades }) => {
         if (requestId !== this.modalRequestId) return;
+        this.areaSeleccionada = area;
         this.actividadesPorArea = actividades;
+        this.cargandoActividades = false;
       },
-      error: (err) => console.error('[ConectarSanJose] ERROR Error al cargar actividades del área:', err)
+      error: (err) => {
+        if (requestId !== this.modalRequestId) return;
+        console.error('[ConectarSanJose] ERROR Error al cargar datos del área:', err);
+        this.cargandoActividades = false;
+      }
     });
   }
 
@@ -102,6 +107,7 @@ export class AreaComponent implements OnInit {
     this.mostrarModal = false;
     this.areaSeleccionada = null;
     this.actividadesPorArea = [];
+    this.cargandoActividades = false;
   }
 
   getIconPath(area: Area): string {

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 
 export interface ActividadPayload {
   titulo: string;
@@ -23,6 +23,7 @@ export interface ActividadPayload {
 export class ActividadService {
   private http = inject(HttpClient);
   private apiUrl = '/api/actividades';
+  private areaActivitiesCache = new Map<number, Observable<any[]>>();
 
   obtenerTodas(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
@@ -43,7 +44,10 @@ export class ActividadService {
   }
 
   obtenerActividadesPorArea(areaId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/area/${areaId}`);
+    if (!this.areaActivitiesCache.has(areaId)) {
+      this.areaActivitiesCache.set(areaId, this.http.get<any[]>(`${this.apiUrl}/area/${areaId}`).pipe(shareReplay(1)));
+    }
+    return this.areaActivitiesCache.get(areaId)!;
   }
 
   obtenerPorId(id: number): Observable<any> {
@@ -51,14 +55,21 @@ export class ActividadService {
   }
 
   crear(actividad: ActividadPayload): Observable<any> {
+    this.invalidateAreaCache();
     return this.http.post<any>(this.apiUrl, actividad);
   }
 
   actualizar(id: number, actividad: ActividadPayload): Observable<any> {
+    this.invalidateAreaCache();
     return this.http.put<any>(`${this.apiUrl}/${id}`, actividad);
   }
 
   eliminar(id: number): Observable<void> {
+    this.invalidateAreaCache();
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  private invalidateAreaCache(): void {
+    this.areaActivitiesCache.clear();
   }
 }

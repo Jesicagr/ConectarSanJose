@@ -32,6 +32,7 @@ export class AreaService {
   private http = inject(HttpClient);
   private apiUrl = '/api/areas';
   private cache$: Observable<Area[]> | null = null;
+  private detailCache = new Map<number, Observable<Area>>();
 
   obtenerTodas(): Observable<Area[]> {
     if (!this.cache$) {
@@ -41,7 +42,10 @@ export class AreaService {
   }
 
   obtenerPorId(id: number): Observable<Area> {
-    return this.http.get<Area>(`${this.apiUrl}/${id}`);
+    if (!this.detailCache.has(id)) {
+      this.detailCache.set(id, this.http.get<Area>(`${this.apiUrl}/${id}`).pipe(shareReplay(1)));
+    }
+    return this.detailCache.get(id)!;
   }
 
   crear(area: Partial<Area>): Observable<Area> {

@@ -17,7 +17,12 @@
       <button class="btn-volver" (click)="cerrarModal()">← Volver</button>
 
       <main class="modal-body" *ngIf="areaSeleccionada">
-        <div class="titulo-area">
+        <div class="actividades-loading" *ngIf="cargandoActividades">
+          <div class="spinner"></div>
+          <p>Cargando actividades...</p>
+        </div>
+        
+        <div class="titulo-area" *ngIf="!cargandoActividades">
           <div class="area-avatar">
             <img [src]="getIconPath(areaSeleccionada)" alt="{{ areaSeleccionada.nombre }}" (error)="onImgError($event)">
           </div>
@@ -74,7 +79,7 @@
           </div>
         </div>
 
-        <div class="actividades-seccion" *ngIf="actividadesPorArea.length > 0">
+        <div class="actividades-seccion" *ngIf="!cargandoActividades && actividadesPorArea.length > 0">
           <h2 class="seccion-subtitle" [style.color]="getAccentColor(areaSeleccionada)">Actividades</h2>
           <div class="cards-grid">
             <div class="card-info actividad-card" *ngFor="let act of actividadesPorArea">
@@ -94,7 +99,7 @@
           </div>
         </div>
 
-        <p class="sin-actividades" *ngIf="actividadesPorArea.length === 0">
+        <p class="sin-actividades" *ngIf="!cargandoActividades && actividadesPorArea.length === 0">
           No hay actividades disponibles para esta área.
         </p>
       </main>
